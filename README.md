@@ -4,10 +4,10 @@ Smart Home is a web app that focuses on giving the user the possibility to monit
 
 ## Team
 
-**Team Manager**: Daniel Carvalho
-**Product Owner**: Diogo Alves
-**Architect**: Bruna Simões
-**DevOps master**: Artur Correia
+- **Team Manager**: Daniel Carvalho
+- **Product Owner**: Diogo Alves
+- **Architect**: Bruna Simões
+- **DevOps master**: Artur Correia
 
 Everyone is in the developer team!
 
