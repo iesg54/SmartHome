@@ -43,21 +43,27 @@ def all_temperatures_by_hour(base_temperature):
 
 
 
-def all_temperatures_by_minute(temperatures):
+def all_temperatures_humidities_by_minute(base_temperature, temperatures):
     all_temperatures= []
+    all_humidities= []
     for hour in range(0, 24):
         temp_min= []
+        humiditie_min= []
         temperature_hour= temperatures[hour]
         next_temperature_hour= temperatures[(hour + 1) % 24]
         temperatures_minute= temperature_by_minute(temperature_hour, next_temperature_hour)
         
         for t in temperatures_minute:
-            temp_min.append(t + random.randint(0, 10)/50)
+            temp= t + random.randint(0, 10)/50
+            temp_min.append(temp)
+
+            humidity= base_temperature + (base_temperature - t) + random.randint(0, 10)/50
+            humiditie_min.append(humidity)
             #------------------------------------------------------------------ TODO send to broker here
         all_temperatures += temp_min
-        #all_temperatures += temperatures_minute # slightly less random but faster
+        all_humidities += humiditie_min
        
-    return all_temperatures
+    return all_temperatures, all_humidities
 
 
 
@@ -66,12 +72,14 @@ def all_temperatures_by_minute(temperatures):
 def main():
 
     base_temperature= random.randint(10, 20) # random every day
+    print(base_temperature)
 
     temps_by_hour= all_temperatures_by_hour(base_temperature)
 
-    temps_by_minute= all_temperatures_by_minute(temps_by_hour)
+    temps_by_minute, hum_by_minute= all_temperatures_humidities_by_minute(base_temperature, temps_by_hour)
 
     plt.plot (temps_by_minute, 'ro')
+    plt.plot (hum_by_minute, 'bo')
     plt.show()
 
     # right now its just showing in a graph 
