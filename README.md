@@ -11,8 +11,14 @@ Smart Home is a web app that focuses on giving the user the possibility to monit
 
 Everyone is in the developer team!
 
-## Requirements
+## HOW TO RUN SMARTHOME
 
+1. Install NodeJS
+https://github.com/nvm-sh/nvm
 
-
-
+2. Run this commands
+```
+cd SmartHome/
+npm install
+npm run dev
+```
