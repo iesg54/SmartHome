@@ -1,34 +1,79 @@
 {
-  "name": "smarthome",
+  "name": "material-dashboard-2-react",
+  "version": "2.1.0",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+  "author": "Creative Tim",
+  "license": "See license in https://www.creative-tim.com/license",
+  "description": "React version of Material Dashboard 2 by Creative Tim",
+  "bugs": {
+    "url": "https://github.com/creativetimofficial/material-dashboard-react/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/creativetimofficial/material-dashboard-react.git"
+  },
+  "engines": {
+    "node": "14 || 15 || 16",
+    "npm": ">=6"
   },
   "dependencies": {
-    "@emotion/react": "^11.10.5",
-    "@emotion/styled": "^11.10.5",
-    "@fontsource/roboto": "^4.5.8",
-    "@mui/icons-material": "^5.10.16",
-    "@mui/material": "^5.10.16",
-    "@tanstack/react-table": "^8.7.0",
-    "chart.js": "^4.0.1",
-    "chroma-js": "^2.4.2",
-    "dropzone": "^6.0.0-beta.2",
-    "formik": "^2.2.9",
-    "react": "^18.2.0",
-    "react-chartjs-2": "^5.0.1",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.4.3",
-    "uuid": "^9.0.0"
+    "@emotion/cache": "11.7.1",
+    "@emotion/react": "11.7.1",
+    "@emotion/styled": "11.6.0",
+    "@mui/icons-material": "5.4.1",
+    "@mui/material": "5.4.1",
+    "@mui/styled-engine": "5.4.1",
+    "@testing-library/jest-dom": "5.16.2",
+    "@testing-library/react": "12.1.2",
+    "@testing-library/user-event": "13.5.0",
+    "chart.js": "3.4.1",
+    "chroma-js": "2.4.2",
+    "prop-types": "15.8.1",
+    "react": "17.0.2",
+    "react-chartjs-2": "3.0.4",
+    "react-dom": "17.0.2",
+    "react-github-btn": "1.2.1",
+    "react-router-dom": "6.2.1",
+    "react-scripts": "5.0.0",
+    "react-table": "7.7.0",
+    "stylis": "4.0.13",
+    "web-vitals": "2.1.4",
+    "yup": "0.32.11"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
   "devDependencies": {
-    "@types/react": "^18.0.24",
-    "@types/react-dom": "^18.0.8",
-    "@vitejs/plugin-react": "^2.2.0",
-    "vite": "^3.2.3"
+    "eslint": "8.8.0",
+    "eslint-config-airbnb": "19.0.4",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-plugin-import": "2.25.4",
+    "eslint-plugin-jsx-a11y": "6.5.1",
+    "eslint-plugin-prettier": "4.0.0",
+    "eslint-plugin-react": "7.28.0",
+    "eslint-plugin-react-hooks": "4.3.0",
+    "prettier": "2.5.1"
   }
 }
