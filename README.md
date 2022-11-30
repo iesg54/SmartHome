@@ -13,12 +13,15 @@ Everyone is in the developer team!
 
 ## HOW TO RUN SMARTHOME
 
-1. Install NodeJS
+1. Install NodeJS:
 https://github.com/nvm-sh/nvm
 
 2. Run this commands
 ```
 cd SmartHome/
 npm install
-npm run dev
+npm start
 ```
+
+3. App should be available at:
+https://localhost:3000
