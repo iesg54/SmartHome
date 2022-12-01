@@ -27,7 +27,9 @@ sudo systemctl start rabbitmq-server
 ```
 
 3. Verificar se o rabbitmq esta a correr:
+```
 sudo systemctl status rabbitmq-server
+```
 
 
 ## HOW TO RUN SMARTHOME
