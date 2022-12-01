@@ -11,6 +11,25 @@ Smart Home is a web app that focuses on giving the user the possibility to monit
 
 Everyone is in the developer team!
 
+## INSTALLING RABBIT MQ:
+
+1. Instalar o rabbitmq:
+```
+sudo apt-get update
+sudo apt-get install erlang
+sudo apt-get install rabbitmq-server
+```
+
+2. Inicializar o servidor:
+```
+sudo systemctl enable rabbitmq-server
+sudo systemctl start rabbitmq-server
+```
+
+3. Verificar se o rabbitmq esta a correr:
+sudo systemctl status rabbitmq-server
+
+
 ## HOW TO RUN SMARTHOME
 
 1. Install NodeJS:
