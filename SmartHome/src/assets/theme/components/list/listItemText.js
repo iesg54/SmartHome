@@ -14,12 +14,12 @@ Coded by www.creative-tim.com
 */
 
 const listItemText = {
-  styleOverrides: {
-    root: {
-      marginTop: 0,
-      marginBottom: 0,
+    styleOverrides: {
+        root: {
+            marginTop: 0,
+            marginBottom: 0,
+        },
     },
-  },
 };
 
 export default listItemText;

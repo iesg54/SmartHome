@@ -33,81 +33,81 @@ import MDTypography from "components/MDTypography";
 import configs from "examples/Charts/PieChart/configs";
 
 function PieChart({ icon, title, description, height, chart }) {
-  const { data, options } = configs(chart.labels || [], chart.datasets || {});
+    const { data, options } = configs(chart.labels || [], chart.datasets || {});
 
-  const renderChart = (
-    <MDBox py={2} pr={2} pl={icon.component ? 1 : 2}>
-      {title || description ? (
-        <MDBox display="flex" px={description ? 1 : 0} pt={description ? 1 : 0}>
-          {icon.component && (
-            <MDBox
-              width="4rem"
-              height="4rem"
-              bgColor={icon.color || "info"}
-              variant="gradient"
-              coloredShadow={icon.color || "info"}
-              borderRadius="xl"
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              color="white"
-              mt={-5}
-              mr={2}
-            >
-              <Icon fontSize="medium">{icon.component}</Icon>
-            </MDBox>
-          )}
-          <MDBox mt={icon.component ? -2 : 0}>
-            {title && <MDTypography variant="h6">{title}</MDTypography>}
-            <MDBox mb={2}>
-              <MDTypography component="div" variant="button" color="text">
-                {description}
-              </MDTypography>
-            </MDBox>
-          </MDBox>
+    const renderChart = (
+        <MDBox py={2} pr={2} pl={icon.component ? 1 : 2}>
+            {title || description ? (
+                <MDBox display="flex" px={description ? 1 : 0} pt={description ? 1 : 0}>
+                    {icon.component && (
+                        <MDBox
+                            width="4rem"
+                            height="4rem"
+                            bgColor={icon.color || "info"}
+                            variant="gradient"
+                            coloredShadow={icon.color || "info"}
+                            borderRadius="xl"
+                            display="flex"
+                            justifyContent="center"
+                            alignItems="center"
+                            color="white"
+                            mt={-5}
+                            mr={2}
+                        >
+                            <Icon fontSize="medium">{icon.component}</Icon>
+                        </MDBox>
+                    )}
+                    <MDBox mt={icon.component ? -2 : 0}>
+                        {title && <MDTypography variant="h6">{title}</MDTypography>}
+                        <MDBox mb={2}>
+                            <MDTypography component="div" variant="button" color="text">
+                                {description}
+                            </MDTypography>
+                        </MDBox>
+                    </MDBox>
+                </MDBox>
+            ) : null}
+            {useMemo(
+                () => (
+                    <MDBox height={height}>
+                        <Pie data={data} options={options} />
+                    </MDBox>
+                ),
+                [chart, height]
+            )}
         </MDBox>
-      ) : null}
-      {useMemo(
-        () => (
-          <MDBox height={height}>
-            <Pie data={data} options={options} />
-          </MDBox>
-        ),
-        [chart, height]
-      )}
-    </MDBox>
-  );
+    );
 
-  return title || description ? <Card>{renderChart}</Card> : renderChart;
+    return title || description ? <Card>{renderChart}</Card> : renderChart;
 }
 
 // Setting default values for the props of PieChart
 PieChart.defaultProps = {
-  icon: { color: "info", component: "" },
-  title: "",
-  description: "",
-  height: "19.125rem",
+    icon: { color: "info", component: "" },
+    title: "",
+    description: "",
+    height: "19.125rem",
 };
 
 // Typechecking props for the PieChart
 PieChart.propTypes = {
-  icon: PropTypes.shape({
-    color: PropTypes.oneOf([
-      "primary",
-      "secondary",
-      "info",
-      "success",
-      "warning",
-      "error",
-      "light",
-      "dark",
-    ]),
-    component: PropTypes.node,
-  }),
-  title: PropTypes.string,
-  description: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  chart: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.array, PropTypes.object])).isRequired,
+    icon: PropTypes.shape({
+        color: PropTypes.oneOf([
+            "primary",
+            "secondary",
+            "info",
+            "success",
+            "warning",
+            "error",
+            "light",
+            "dark",
+        ]),
+        component: PropTypes.node,
+    }),
+    title: PropTypes.string,
+    description: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+    height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    chart: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.array, PropTypes.object])).isRequired,
 };
 
 export default PieChart;

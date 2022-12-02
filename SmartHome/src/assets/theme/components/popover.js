@@ -26,14 +26,14 @@ const { lg } = boxShadows;
 const { borderRadius } = borders;
 
 const popover = {
-  styleOverrides: {
-    paper: {
-      backgroundColor: transparent.main,
-      boxShadow: lg,
-      padding: pxToRem(8),
-      borderRadius: borderRadius.md,
+    styleOverrides: {
+        paper: {
+            backgroundColor: transparent.main,
+            boxShadow: lg,
+            padding: pxToRem(8),
+            borderRadius: borderRadius.md,
+        },
     },
-  },
 };
 
 export default popover;

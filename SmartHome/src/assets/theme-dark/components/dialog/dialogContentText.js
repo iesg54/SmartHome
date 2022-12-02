@@ -24,12 +24,12 @@ const { size } = typography;
 const { white } = colors;
 
 const dialogContentText = {
-  styleOverrides: {
-    root: {
-      fontSize: size.md,
-      color: rgba(white.main, 0.8),
+    styleOverrides: {
+        root: {
+            fontSize: size.md,
+            color: rgba(white.main, 0.8),
+        },
     },
-  },
 };
 
 export default dialogContentText;

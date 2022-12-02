@@ -21,16 +21,16 @@ const { borderRadius } = borders;
 const { xxl } = boxShadows;
 
 const dialog = {
-  styleOverrides: {
-    paper: {
-      borderRadius: borderRadius.lg,
-      boxShadow: xxl,
-    },
+    styleOverrides: {
+        paper: {
+            borderRadius: borderRadius.lg,
+            boxShadow: xxl,
+        },
 
-    paperFullScreen: {
-      borderRadius: 0,
+        paperFullScreen: {
+            borderRadius: 0,
+        },
     },
-  },
 };
 
 export default dialog;

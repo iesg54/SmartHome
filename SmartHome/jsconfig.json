@@ -1,8 +1,8 @@
 {
-  "compilerOptions": {
-    "baseUrl": "src",
-    "paths": {
-      "*": ["public/src/*"]
+    "compilerOptions": {
+        "baseUrl": "src",
+        "paths": {
+            "*": ["public/src/*"]
+        }
     }
-  }
 }
