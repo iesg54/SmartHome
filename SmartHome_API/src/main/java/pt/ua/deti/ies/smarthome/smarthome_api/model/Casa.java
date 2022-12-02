@@ -20,5 +20,35 @@ public class Casa {
     private List<Divisao> divisoesCasa = new ArrayList<>();
 
     // Getters e Setters
+    public Integer getId() {
+        return id;
+    }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getMorada() {
+        return morada;
+    }
+
+    public void setMorada(String morada) {
+        this.morada = morada;
+    }
+
+    public List<Utilizador> getUtilizadoresCasa() {
+        return utilizadoresCasa;
+    }
+
+    public void setUtilizadoresCasa(List<Utilizador> utilizadoresCasa) {
+        this.utilizadoresCasa = utilizadoresCasa;
+    }
+
+    public List<Divisao> getDivisoesCasa() {
+        return divisoesCasa;
+    }
+
+    public void setDivisoesCasa(List<Divisao> divisoesCasa) {
+        this.divisoesCasa = divisoesCasa;
+    }
 }

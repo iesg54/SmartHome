@@ -1,4 +1,8 @@
 Para correrem a base de dados correta:
 
-1. Criem a base de dados no vosso computador através do SQL dump.
-2. Em application.properties mudem os valores de spring.datasource.username e spring.datasource.password para baterem certo com o perfil que utilizaram ao criarem a base de dados no mysql. Se for com o root basta meter root no username (?)
+1. Criem a base de dados no vosso computador através do SQL dump (na root do projeto)
+2. Criem um utilizador com o nome "springuser" e pass "password"
+     ``` $ create user 'springuser'@'%' identified by 'password'; ``` 
+3. Dar permissões de edição da tabela ao novo utilizador
+   ``` $ grant all on SmartHome.* to 'springuser'@'%'; ```
+

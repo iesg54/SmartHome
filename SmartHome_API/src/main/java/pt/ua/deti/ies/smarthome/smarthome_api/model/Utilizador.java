@@ -22,7 +22,6 @@ public class Utilizador {
 
 
     // Getters e Setters
-
     public Integer getId() {
         return id;
     }
