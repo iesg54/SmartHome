@@ -6,6 +6,7 @@ services:
     image: rabbitmq:3.9.7
     ports:
       - 5672:5672
+      - 15672:15672
     restart: always
     environment:
       - RABBITMQ_USER=guest
