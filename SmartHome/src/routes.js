@@ -59,10 +59,10 @@ const routes = [
     },
     {
         type: "collapse",
-        name: "Division",
+        name: "Divisões",
         key: "division",
         icon: <Icon fontSize="small">home</Icon>,
-        route: "/division/",
+        route: "/division/:name",
         component: <Division />,
     },
     {

@@ -58,7 +58,7 @@ function Dashboard() {
                                     description="800W"
                                     action={{
                                         type: "internal",
-                                        route: `/division/${division.id}`,
+                                        route: `/division/${division.name}`,
                                         color: "dark",
                                         label: "Ver divisão",
                                     }}

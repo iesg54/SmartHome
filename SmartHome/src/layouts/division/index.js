@@ -8,12 +8,15 @@ import Tab from "@mui/material/Tab";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
-import MDTypography from "components/MDTypography";
 
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
+
+// Divion Coponents
+import DivionStats from "layouts/division/components/Stats";
+import DivisionDisp from "layouts/division/components/Dispositivos";
 
 function Division() {
     const [tabIndex, setTabIndex] = React.useState(0);
@@ -34,11 +37,9 @@ function Division() {
                         </Tabs>
                     </Grid>
                 </Grid>
-                <Grid container justifyContent="center" mb={4}>
-                    <Grid item xs={12} sm={12} md={6}>
-                        {tabIndex === 0 && <MDTypography variant="h2">Estatísticas</MDTypography>}
-                        {tabIndex === 1 && <MDTypography variant="h2">Dispositivos</MDTypography>}
-                    </Grid>
+                <Grid container mb={4}>
+                    {tabIndex === 0 && <DivionStats />}
+                    {tabIndex === 1 && <DivisionDisp />}
                 </Grid>
             </MDBox>
             <Divider />
