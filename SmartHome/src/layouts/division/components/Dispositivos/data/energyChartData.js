@@ -1,6 +1,6 @@
 const energyChartData = {
     icon: {
-        color: "primary",
+        color: "warning",
         component: "bolt",
     },
     title: "Energia Consumida",
@@ -10,7 +10,7 @@ const energyChartData = {
         datasets: [
             {
                 label: "Energia",
-                color: "primary",
+                color: "dark",
                 data: [300, 500, 100, 400, 300, 200, 100],
             },
         ],

@@ -1,3 +1,5 @@
+import React from "react";
+
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -15,15 +17,33 @@ import ComplexStatisticsCard from "examples/Cards/StatisticsCards/ComplexStatist
 
 // Dispositivos Data
 import energyChartData from "./data/energyChartData";
+import devices from "./data/devicesData";
 
-function DivisionDisp() {
+// Dispositivos Component
+import DeviceCard from "./components/DeviceCard";
+
+function DivisionDevices() {
+    const [devicesState, setDevicesState] = React.useState(devices);
+
+    /* eslint-disable no-param-reassign */
+    const handleDeviceState = (id) => {
+        const newDevicesState = devicesState.map((device) => {
+            if (device.id === id) {
+                device.state = !device.state;
+            }
+            return device;
+        });
+        setDevicesState(newDevicesState);
+    };
+    /* eslint-disable no-param-reassign */
+
     return (
         <>
             <Grid container justifyContent="center" mt={4}>
                 <MDTypography variant="h2">Consumo Energético</MDTypography>
             </Grid>
             <Grid container mt={4} spacing={2}>
-                <Grid item xs={12} sm={12} md={6}>
+                <Grid item xs={12} sm={12} md={8}>
                     <VerticalBarChart
                         icon={energyChartData.icon}
                         title={energyChartData.title}
@@ -31,7 +51,7 @@ function DivisionDisp() {
                         chart={energyChartData.chart}
                     />
                 </Grid>
-                <Grid item xs={12} sm={12} md={6}>
+                <Grid item xs={12} sm={12} md={4}>
                     <Card>
                         <MDBox
                             mx={2}
@@ -51,7 +71,10 @@ function DivisionDisp() {
                             <MDBox bgColor="light" borderRadius="xl" px={0.5} py={0.5} mb={2}>
                                 <ComplexStatisticsCard
                                     title="Previsão de Consumo na próxima hora"
-                                    count="1000"
+                                    count={devices
+                                        .filter((device) => device.state)
+                                        .map((device) => device.consumption)
+                                        .reduce((a, b) => a + b, 0)}
                                     icon="bolt"
                                     color="warning"
                                 />
@@ -59,7 +82,7 @@ function DivisionDisp() {
                             <MDBox bgColor="light" borderRadius="xl" px={0.5} py={0.5} mb={2}>
                                 <ComplexStatisticsCard
                                     title="Dispositivos Ligados"
-                                    count="10"
+                                    count={devicesState.filter((device) => device.state).length}
                                     icon="power"
                                     color="dark"
                                 />
@@ -69,16 +92,33 @@ function DivisionDisp() {
                 </Grid>
             </Grid>
             <Divider />
-            <Grid container mt={4}>
-                <Grid item xs={12} sm={12} md={6}>
+            <Grid container mt={4} spacing={2}>
+                <Grid item>
                     <MDTypography variant="h2">Dispositivos Ligados</MDTypography>
+                </Grid>
+                <Grid item>
                     <MDButton variant="gradient" color="primary" size="large">
                         <Icon>add</Icon>
                     </MDButton>
                 </Grid>
             </Grid>
+            <Grid container mt={4} spacing={3}>
+                {devices.map((device) => (
+                    <Grid item xs={12} sm={12} md={3} key={device.id}>
+                        <DeviceCard
+                            color="dark"
+                            icon={device.icon}
+                            type={device.type}
+                            name={device.name}
+                            state={device.state}
+                            consumption={device.consumption}
+                            deviceStateHandler={() => handleDeviceState(device.id)}
+                        />
+                    </Grid>
+                ))}
+            </Grid>
         </>
     );
 }
 
-export default DivisionDisp;
+export default DivisionDevices;
