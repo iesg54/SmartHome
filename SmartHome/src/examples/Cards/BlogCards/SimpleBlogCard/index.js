@@ -73,7 +73,9 @@ function SimpleBlogCard({ image, title, description, action }) {
                         {description}
                     </MDTypography>
                 </MDBox>
-                {action.type === "external" ? (
+                {action === false ? (
+                    <></>
+                ) : action.type === "external" ? (
                     <MuiLink href={action.route} target="_blank" rel="noreferrer">
                         <MDButton color={action.color ? action.color : "dark"}>
                             {action.label}
@@ -97,8 +99,8 @@ SimpleBlogCard.propTypes = {
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     action: PropTypes.shape({
-        type: PropTypes.oneOf(["external", "internal"]).isRequired,
-        route: PropTypes.string.isRequired,
+        type: PropTypes.oneOf(["external", "internal"]),
+        route: PropTypes.string,
         color: PropTypes.oneOf([
             "primary",
             "secondary",
@@ -110,8 +112,12 @@ SimpleBlogCard.propTypes = {
             "light",
             "default",
         ]),
-        label: PropTypes.string.isRequired,
-    }).isRequired,
+        label: PropTypes.string,
+    }),
+};
+
+SimpleBlogCard.defaultProps = {
+    action: false,
 };
 
 export default SimpleBlogCard;
