@@ -588,6 +588,206 @@ INSERT INTO `sensor_externo_seq` VALUES (1);
 UNLOCK TABLES;
 
 --
+-- Table structure for table `sensor_measurements_cozinha`
+--
+
+DROP TABLE IF EXISTS `sensor_measurements_cozinha`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sensor_measurements_cozinha` (
+  `id` int NOT NULL,
+  `timestamp` datetime(6) DEFAULT NULL,
+  `tipo` varchar(255) DEFAULT NULL,
+  `valor` double DEFAULT NULL,
+  `id_div` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK7q6746329pgh0ndm5480ecmh6` (`id_div`),
+  CONSTRAINT `FK7q6746329pgh0ndm5480ecmh6` FOREIGN KEY (`id_div`) REFERENCES `divisao` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sensor_measurements_cozinha`
+--
+
+LOCK TABLES `sensor_measurements_cozinha` WRITE;
+/*!40000 ALTER TABLE `sensor_measurements_cozinha` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sensor_measurements_cozinha` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `sensor_measurements_cozinha_seq`
+--
+
+DROP TABLE IF EXISTS `sensor_measurements_cozinha_seq`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sensor_measurements_cozinha_seq` (
+  `next_val` bigint DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sensor_measurements_cozinha_seq`
+--
+
+LOCK TABLES `sensor_measurements_cozinha_seq` WRITE;
+/*!40000 ALTER TABLE `sensor_measurements_cozinha_seq` DISABLE KEYS */;
+INSERT INTO `sensor_measurements_cozinha_seq` VALUES (1);
+/*!40000 ALTER TABLE `sensor_measurements_cozinha_seq` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `sensor_measurements_externo`
+--
+
+DROP TABLE IF EXISTS `sensor_measurements_externo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sensor_measurements_externo` (
+  `id` int NOT NULL,
+  `timestamp` datetime(6) DEFAULT NULL,
+  `tipo` varchar(255) DEFAULT NULL,
+  `valor` double DEFAULT NULL,
+  `id_div` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK8s3oq1joss5kvyd6ow0mfyqbl` (`id_div`),
+  CONSTRAINT `FK8s3oq1joss5kvyd6ow0mfyqbl` FOREIGN KEY (`id_div`) REFERENCES `divisao` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sensor_measurements_externo`
+--
+
+LOCK TABLES `sensor_measurements_externo` WRITE;
+/*!40000 ALTER TABLE `sensor_measurements_externo` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sensor_measurements_externo` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `sensor_measurements_externo_seq`
+--
+
+DROP TABLE IF EXISTS `sensor_measurements_externo_seq`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sensor_measurements_externo_seq` (
+  `next_val` bigint DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sensor_measurements_externo_seq`
+--
+
+LOCK TABLES `sensor_measurements_externo_seq` WRITE;
+/*!40000 ALTER TABLE `sensor_measurements_externo_seq` DISABLE KEYS */;
+INSERT INTO `sensor_measurements_externo_seq` VALUES (1);
+/*!40000 ALTER TABLE `sensor_measurements_externo_seq` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `sensor_measurements_quarto`
+--
+
+DROP TABLE IF EXISTS `sensor_measurements_quarto`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sensor_measurements_quarto` (
+  `id` int NOT NULL,
+  `timestamp` datetime(6) DEFAULT NULL,
+  `tipo` varchar(255) DEFAULT NULL,
+  `valor` double DEFAULT NULL,
+  `id_div` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKlb7aq9ekrf2ert6mcj1uh1ctq` (`id_div`),
+  CONSTRAINT `FKlb7aq9ekrf2ert6mcj1uh1ctq` FOREIGN KEY (`id_div`) REFERENCES `divisao` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sensor_measurements_quarto`
+--
+
+LOCK TABLES `sensor_measurements_quarto` WRITE;
+/*!40000 ALTER TABLE `sensor_measurements_quarto` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sensor_measurements_quarto` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `sensor_measurements_quarto_seq`
+--
+
+DROP TABLE IF EXISTS `sensor_measurements_quarto_seq`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sensor_measurements_quarto_seq` (
+  `next_val` bigint DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sensor_measurements_quarto_seq`
+--
+
+LOCK TABLES `sensor_measurements_quarto_seq` WRITE;
+/*!40000 ALTER TABLE `sensor_measurements_quarto_seq` DISABLE KEYS */;
+INSERT INTO `sensor_measurements_quarto_seq` VALUES (1);
+/*!40000 ALTER TABLE `sensor_measurements_quarto_seq` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `sensor_measurements_sala`
+--
+
+DROP TABLE IF EXISTS `sensor_measurements_sala`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sensor_measurements_sala` (
+  `id` int NOT NULL,
+  `timestamp` datetime(6) DEFAULT NULL,
+  `tipo` varchar(255) DEFAULT NULL,
+  `valor` double DEFAULT NULL,
+  `id_div` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKbu8k19ihij8g9nql7dasi3i1w` (`id_div`),
+  CONSTRAINT `FKbu8k19ihij8g9nql7dasi3i1w` FOREIGN KEY (`id_div`) REFERENCES `divisao` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sensor_measurements_sala`
+--
+
+LOCK TABLES `sensor_measurements_sala` WRITE;
+/*!40000 ALTER TABLE `sensor_measurements_sala` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sensor_measurements_sala` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `sensor_measurements_sala_seq`
+--
+
+DROP TABLE IF EXISTS `sensor_measurements_sala_seq`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sensor_measurements_sala_seq` (
+  `next_val` bigint DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sensor_measurements_sala_seq`
+--
+
+LOCK TABLES `sensor_measurements_sala_seq` WRITE;
+/*!40000 ALTER TABLE `sensor_measurements_sala_seq` DISABLE KEYS */;
+INSERT INTO `sensor_measurements_sala_seq` VALUES (1);
+/*!40000 ALTER TABLE `sensor_measurements_sala_seq` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `sensor_quarto`
 --
 
@@ -688,6 +888,54 @@ INSERT INTO `sensor_sala_seq` VALUES (1);
 UNLOCK TABLES;
 
 --
+-- Table structure for table `sensors`
+--
+
+DROP TABLE IF EXISTS `sensors`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sensors` (
+  `id` int NOT NULL,
+  `tipo` varchar(255) NOT NULL,
+  `id_div` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK36ygvj9c1dlfq9t7r8lcw1ke4` (`id_div`),
+  CONSTRAINT `FK36ygvj9c1dlfq9t7r8lcw1ke4` FOREIGN KEY (`id_div`) REFERENCES `divisao` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sensors`
+--
+
+LOCK TABLES `sensors` WRITE;
+/*!40000 ALTER TABLE `sensors` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sensors` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `sensors_seq`
+--
+
+DROP TABLE IF EXISTS `sensors_seq`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sensors_seq` (
+  `next_val` bigint DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sensors_seq`
+--
+
+LOCK TABLES `sensors_seq` WRITE;
+/*!40000 ALTER TABLE `sensors_seq` DISABLE KEYS */;
+INSERT INTO `sensors_seq` VALUES (1);
+/*!40000 ALTER TABLE `sensors_seq` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tomada`
 --
 
@@ -772,4 +1020,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-12-02 20:48:42
+-- Dump completed on 2022-12-06 15:59:28

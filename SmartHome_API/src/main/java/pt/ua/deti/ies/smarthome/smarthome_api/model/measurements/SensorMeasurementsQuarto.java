@@ -7,8 +7,9 @@ import jakarta.persistence.OneToOne;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Divisao;
 
 @Entity
-public class SensorCozinha extends Sensor {
+public class SensorMeasurementsQuarto extends SensorMeasurements {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_div", referencedColumnName = "id")
     private Divisao div;
+
 }

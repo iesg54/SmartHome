@@ -23,15 +23,18 @@ public class Divisao {
     @OneToMany(mappedBy = "div", cascade = CascadeType.ALL)
     private List<Alerta> alertas = new ArrayList<>();
 
+    @OneToMany(mappedBy = "div", cascade = CascadeType.ALL)
+    private List<Sensors> sensorsDiv = new ArrayList<>();
+
     // Atributos de Relações One-To-One
     @OneToOne(mappedBy = "div")
-    private SensorQuarto sensorQuarto;
+    private SensorMeasurementsQuarto sensorQuarto;
     @OneToOne(mappedBy = "div")
-    private SensorCozinha sensorCozinha;
+    private SensorMeasurementsCozinha sensorCozinha;
     @OneToOne(mappedBy = "div")
-    private SensorSala sensorSala;
+    private SensorMeasurementsSala sensorSala;
     @OneToOne(mappedBy = "div")
-    private SensorExterno sensorExterno;
+    private SensorMeasurementsExterno sensorExterno;
     @OneToOne(mappedBy = "div")
     private ConsumoCozinha consumoCozinha;
     @OneToOne(mappedBy = "div")
@@ -82,35 +85,35 @@ public class Divisao {
         this.alertas = alertas;
     }
 
-    public SensorQuarto getSensorQuarto() {
+    public SensorMeasurementsQuarto getSensorQuarto() {
         return sensorQuarto;
     }
 
-    public void setSensorQuarto(SensorQuarto sensorQuarto) {
+    public void setSensorQuarto(SensorMeasurementsQuarto sensorQuarto) {
         this.sensorQuarto = sensorQuarto;
     }
 
-    public SensorCozinha getSensorCozinha() {
+    public SensorMeasurementsCozinha getSensorCozinha() {
         return sensorCozinha;
     }
 
-    public void setSensorCozinha(SensorCozinha sensorCozinha) {
+    public void setSensorCozinha(SensorMeasurementsCozinha sensorCozinha) {
         this.sensorCozinha = sensorCozinha;
     }
 
-    public SensorSala getSensorSala() {
+    public SensorMeasurementsSala getSensorSala() {
         return sensorSala;
     }
 
-    public void setSensorSala(SensorSala sensorSala) {
+    public void setSensorSala(SensorMeasurementsSala sensorSala) {
         this.sensorSala = sensorSala;
     }
 
-    public SensorExterno getSensorExterno() {
+    public SensorMeasurementsExterno getSensorExterno() {
         return sensorExterno;
     }
 
-    public void setSensorExterno(SensorExterno sensorExterno) {
+    public void setSensorExterno(SensorMeasurementsExterno sensorExterno) {
         this.sensorExterno = sensorExterno;
     }
 
@@ -144,5 +147,13 @@ public class Divisao {
 
     public void setConsumoQuarto(ConsumoQuarto consumoQuarto) {
         this.consumoQuarto = consumoQuarto;
+    }
+
+    public List<Sensors> getSensorsDiv() {
+        return sensorsDiv;
+    }
+
+    public void setSensorsDiv(List<Sensors> sensorsDiv) {
+        this.sensorsDiv = sensorsDiv;
     }
 }
