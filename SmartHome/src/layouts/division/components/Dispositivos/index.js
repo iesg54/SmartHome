@@ -92,12 +92,12 @@ function DivisionDevices() {
                 </Grid>
             </Grid>
             <Divider />
-            <Grid container mt={4} spacing={2}>
+            <Grid container mt={4} spacing={2} alignItems="center">
                 <Grid item>
                     <MDTypography variant="h2">Dispositivos Ligados</MDTypography>
                 </Grid>
                 <Grid item>
-                    <MDButton variant="gradient" color="primary" size="large">
+                    <MDButton variant="gradient" color="dark" iconOnly size="large" circular>
                         <Icon>add</Icon>
                     </MDButton>
                 </Grid>
