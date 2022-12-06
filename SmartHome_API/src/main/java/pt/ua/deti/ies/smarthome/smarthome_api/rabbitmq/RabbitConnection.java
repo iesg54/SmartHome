@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
+import org.springframework.context.annotation.Bean;
 
 public class RabbitConnection {
     

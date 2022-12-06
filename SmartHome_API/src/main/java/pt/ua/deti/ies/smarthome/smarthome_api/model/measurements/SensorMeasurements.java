@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.sql.Timestamp;
 
 @MappedSuperclass
-public class Sensor {
+public class SensorMeasurements {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
