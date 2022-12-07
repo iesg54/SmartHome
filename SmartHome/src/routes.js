@@ -45,6 +45,8 @@ import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 import Division from "layouts/division";
 import Users from "layouts/users";
+import AdicionarEquipamento from "layouts/equipamento";
+import EditarPerfil from "layouts/editarPerfil";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -73,6 +75,22 @@ const routes = [
         icon: <Icon fontSize="small">person</Icon>,
         route: "/users",
         component: <Users />,
+    },
+    {
+        type: "collapse",
+        name: "AdicionarEquipamento",
+        key: "adicionarEquipamento",
+        icon: <Icon fontSize="small">devices</Icon>,
+        route: "/adicionarEquipamento",
+        component: <AdicionarEquipamento />,
+    },
+    {
+        type: "collapse",
+        name: "EditarPerfil",
+        key: "editarPerfil",
+        icon: <Icon fontSize="small">person</Icon>,
+        route: "/editarPerfil",
+        component: <EditarPerfil />,
     },
     {
         type: "collapse",

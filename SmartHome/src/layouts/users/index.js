@@ -14,13 +14,13 @@ import Button from "@mui/material/Button";
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDButton from "components/MDButton";
+import MDTypography from "components/MDTypography";
 
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import SimpleBlogCard from "examples/Cards/BlogCards/SimpleBlogCard";
-import MDTypography from "components/MDTypography";
 
 // Data
 import usersData from "layouts/users/data/usersData";
