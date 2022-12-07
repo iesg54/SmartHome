@@ -2,8 +2,17 @@ package pt.ua.deti.ies.smarthome.smarthome_api.model.dispositivos;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import pt.ua.deti.ies.smarthome.smarthome_api.model.Divisao;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class AC extends Dispositivo{
     @Column(name = "tAtual")
     private double tempAtual;
@@ -11,5 +20,4 @@ public class AC extends Dispositivo{
     private double tempMin;
     @Column(name = "tMax")
     private double tempMax;
-
 }
