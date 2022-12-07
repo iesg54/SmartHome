@@ -7,19 +7,17 @@ import java.sql.Timestamp;
 @Entity
 public class Alerta {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
     @ManyToOne
     @JoinColumn(name ="id_divisao", nullable = false)
     private Divisao div;
     @Column(nullable = false)
-    private String mensagem;
-    @Column(nullable = false)
     private String sensor;
     @Column(nullable = false)
     private Double valor;
     @Column
-    private Timestamp timestamp;
+    private Timestamp stamp;
 
     // Setters e Getters
     public Integer getId() {
@@ -38,14 +36,6 @@ public class Alerta {
         this.div = div;
     }
 
-    public String getMensagem() {
-        return mensagem;
-    }
-
-    public void setMensagem(String mensagem) {
-        this.mensagem = mensagem;
-    }
-
     public String getSensor() {
         return sensor;
     }
@@ -62,11 +52,11 @@ public class Alerta {
         this.valor = valor;
     }
 
-    public Timestamp getTimestamp() {
-        return timestamp;
+    public Timestamp getStamp() {
+        return stamp;
     }
 
-    public void setTimestamp(Timestamp timestamp) {
-        this.timestamp = timestamp;
+    public void setStamp(Timestamp timestamp) {
+        this.stamp = timestamp;
     }
 }

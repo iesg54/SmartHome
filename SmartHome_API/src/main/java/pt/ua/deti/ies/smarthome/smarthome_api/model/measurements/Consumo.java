@@ -7,12 +7,12 @@ import java.sql.Timestamp;
 @MappedSuperclass
 public class Consumo {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
     @Column
     private Date dia;
     @Column
-    private Timestamp timestamp;
+    private Timestamp stamp;
     @Column
     private Double valor;
 
@@ -33,12 +33,12 @@ public class Consumo {
         this.dia = dia;
     }
 
-    public Timestamp getTimestamp() {
-        return timestamp;
+    public Timestamp getStamp() {
+        return stamp;
     }
 
-    public void setTimestamp(Timestamp timestamp) {
-        this.timestamp = timestamp;
+    public void setStamp(Timestamp timestamp) {
+        this.stamp = timestamp;
     }
 
     public Double getValor() {
