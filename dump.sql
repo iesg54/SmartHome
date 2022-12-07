@@ -38,6 +38,7 @@ CREATE TABLE `ac` (
 
 LOCK TABLES `ac` WRITE;
 /*!40000 ALTER TABLE `ac` DISABLE KEYS */;
+INSERT INTO `ac` VALUES (21.2,30,10,5),(22.5,31,9,11),(23.5,30.5,9.5,20);
 /*!40000 ALTER TABLE `ac` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -49,16 +50,15 @@ DROP TABLE IF EXISTS `alerta`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `alerta` (
-  `id` int NOT NULL,
-  `mensagem` varchar(255) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `sensor` varchar(255) NOT NULL,
-  `timestamp` datetime(6) DEFAULT NULL,
+  `stamp` datetime(6) DEFAULT NULL,
   `valor` double NOT NULL,
   `id_divisao` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FKly5lw30ev4fhbw6s3rvv6tvi2` (`id_divisao`),
   CONSTRAINT `FKly5lw30ev4fhbw6s3rvv6tvi2` FOREIGN KEY (`id_divisao`) REFERENCES `divisao` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,29 +67,8 @@ CREATE TABLE `alerta` (
 
 LOCK TABLES `alerta` WRITE;
 /*!40000 ALTER TABLE `alerta` DISABLE KEYS */;
+INSERT INTO `alerta` VALUES (1,'temperatura','2022-12-13 23:53:00.000000',100,2),(2,'temperatura','2022-12-13 23:53:00.000000',100,2);
 /*!40000 ALTER TABLE `alerta` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `alerta_seq`
---
-
-DROP TABLE IF EXISTS `alerta_seq`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `alerta_seq` (
-  `next_val` bigint DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `alerta_seq`
---
-
-LOCK TABLES `alerta_seq` WRITE;
-/*!40000 ALTER TABLE `alerta_seq` DISABLE KEYS */;
-INSERT INTO `alerta_seq` VALUES (1);
-/*!40000 ALTER TABLE `alerta_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -100,11 +79,11 @@ DROP TABLE IF EXISTS `casa`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `casa` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `morada` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_dpeed42aw30mviipypb9q6i5h` (`morada`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -113,29 +92,8 @@ CREATE TABLE `casa` (
 
 LOCK TABLES `casa` WRITE;
 /*!40000 ALTER TABLE `casa` DISABLE KEYS */;
+INSERT INTO `casa` VALUES (1,'Rua Aviacão Naval, Aveiro');
 /*!40000 ALTER TABLE `casa` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `casa_seq`
---
-
-DROP TABLE IF EXISTS `casa_seq`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `casa_seq` (
-  `next_val` bigint DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `casa_seq`
---
-
-LOCK TABLES `casa_seq` WRITE;
-/*!40000 ALTER TABLE `casa_seq` DISABLE KEYS */;
-INSERT INTO `casa_seq` VALUES (1);
-/*!40000 ALTER TABLE `casa_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -146,15 +104,15 @@ DROP TABLE IF EXISTS `consumo_cozinha`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `consumo_cozinha` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `dia` date DEFAULT NULL,
-  `timestamp` datetime(6) DEFAULT NULL,
+  `stamp` datetime(6) DEFAULT NULL,
   `valor` double DEFAULT NULL,
   `id_div` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKtf3n9drlmnb6g03x6yoq05m94` (`id_div`),
   CONSTRAINT `FKtf3n9drlmnb6g03x6yoq05m94` FOREIGN KEY (`id_div`) REFERENCES `divisao` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -163,29 +121,8 @@ CREATE TABLE `consumo_cozinha` (
 
 LOCK TABLES `consumo_cozinha` WRITE;
 /*!40000 ALTER TABLE `consumo_cozinha` DISABLE KEYS */;
+INSERT INTO `consumo_cozinha` VALUES (1,'2022-10-08','2022-10-08 21:00:00.000000',1705,2),(2,'2022-10-09','2022-10-09 21:00:00.000000',2310,2),(3,'2022-10-10','2022-10-10 21:00:00.000000',1597,2),(4,'2022-10-11','2022-10-11 21:00:00.000000',1183,2),(5,'2022-10-12','2022-10-12 21:00:00.000000',2560,2),(6,'2022-10-13','2022-10-13 21:00:00.000000',1417,2),(7,'2022-10-14','2022-10-14 21:00:00.000000',2152,2),(8,'2022-10-15','2022-10-15 21:00:00.000000',2250,2),(9,'2022-10-16','2022-10-16 21:00:00.000000',710,2),(10,'2022-10-17','2022-10-17 21:00:00.000000',2489,2),(11,'2022-10-18','2022-10-18 21:00:00.000000',2461,2),(12,'2022-10-19','2022-10-19 21:00:00.000000',2002,2),(13,'2022-10-20','2022-10-20 21:00:00.000000',1544,2),(14,'2022-10-21','2022-10-21 21:00:00.000000',2037,2),(15,'2022-10-22','2022-10-22 21:00:00.000000',1328,2),(16,'2022-10-23','2022-10-23 21:00:00.000000',789,2),(17,'2022-10-24','2022-10-24 21:00:00.000000',1501,2),(18,'2022-10-25','2022-10-25 21:00:00.000000',2183,2),(19,'2022-10-26','2022-10-26 21:00:00.000000',1422,2),(20,'2022-10-27','2022-10-27 21:00:00.000000',2477,2),(21,'2022-10-28','2022-10-28 21:00:00.000000',2990,2),(22,'2022-10-29','2022-10-29 21:00:00.000000',2025,2),(23,'2022-10-30','2022-10-30 21:00:00.000000',2302,2),(24,'2022-10-31','2022-10-31 21:00:00.000000',2367,2),(25,'2022-11-01','2022-11-01 21:00:00.000000',1102,2),(26,'2022-11-02','2022-11-02 21:00:00.000000',2628,2),(27,'2022-11-03','2022-11-03 21:00:00.000000',1759,2),(28,'2022-11-04','2022-11-04 21:00:00.000000',1924,2),(29,'2022-11-05','2022-11-05 21:00:00.000000',2252,2),(30,'2022-11-06','2022-11-06 21:00:00.000000',2364,2),(31,'2022-11-07','2022-11-07 21:00:00.000000',749,2),(32,'2022-11-08','2022-11-08 21:00:00.000000',1924,2),(33,'2022-11-09','2022-11-09 21:00:00.000000',819,2),(34,'2022-11-10','2022-11-10 21:00:00.000000',2530,2),(35,'2022-11-11','2022-11-11 21:00:00.000000',2964,2),(36,'2022-11-12','2022-11-12 21:00:00.000000',2422,2),(37,'2022-11-13','2022-11-13 21:00:00.000000',2556,2),(38,'2022-11-14','2022-11-14 21:00:00.000000',2141,2),(39,'2022-11-15','2022-11-15 21:00:00.000000',667,2),(40,'2022-11-16','2022-11-16 21:00:00.000000',2172,2),(41,'2022-11-17','2022-11-17 21:00:00.000000',1691,2),(42,'2022-11-18','2022-11-18 21:00:00.000000',1913,2),(43,'2022-11-19','2022-11-19 21:00:00.000000',2600,2),(44,'2022-11-20','2022-11-20 21:00:00.000000',1672,2),(45,'2022-11-21','2022-11-21 21:00:00.000000',1884,2),(46,'2022-11-22','2022-11-22 21:00:00.000000',754,2),(47,'2022-11-23','2022-11-23 21:00:00.000000',2986,2),(48,'2022-11-24','2022-11-24 21:00:00.000000',963,2),(49,'2022-11-25','2022-11-25 21:00:00.000000',2383,2),(50,'2022-11-26','2022-11-26 21:00:00.000000',2448,2),(51,'2022-11-27','2022-11-27 21:00:00.000000',1558,2),(52,'2022-11-28','2022-11-28 21:00:00.000000',1056,2),(53,'2022-11-29','2022-11-29 21:00:00.000000',2555,2),(54,'2022-11-30','2022-11-30 21:00:00.000000',2665,2),(55,'2022-12-01','2022-12-01 21:00:00.000000',1978,2),(56,'2022-12-02','2022-12-02 21:00:00.000000',2521,2),(57,'2022-12-03','2022-12-03 21:00:00.000000',2216,2),(58,'2022-12-04','2022-12-04 21:00:00.000000',2648,2),(59,'2022-12-05','2022-12-05 21:00:00.000000',1752,2),(60,'2022-12-06','2022-12-06 21:00:00.000000',2983,2);
 /*!40000 ALTER TABLE `consumo_cozinha` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `consumo_cozinha_seq`
---
-
-DROP TABLE IF EXISTS `consumo_cozinha_seq`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `consumo_cozinha_seq` (
-  `next_val` bigint DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `consumo_cozinha_seq`
---
-
-LOCK TABLES `consumo_cozinha_seq` WRITE;
-/*!40000 ALTER TABLE `consumo_cozinha_seq` DISABLE KEYS */;
-INSERT INTO `consumo_cozinha_seq` VALUES (1);
-/*!40000 ALTER TABLE `consumo_cozinha_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -196,15 +133,15 @@ DROP TABLE IF EXISTS `consumo_externo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `consumo_externo` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `dia` date DEFAULT NULL,
-  `timestamp` datetime(6) DEFAULT NULL,
+  `stamp` datetime(6) DEFAULT NULL,
   `valor` double DEFAULT NULL,
   `id_div` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKlpate87q5hp6wqso2hpykloy0` (`id_div`),
   CONSTRAINT `FKlpate87q5hp6wqso2hpykloy0` FOREIGN KEY (`id_div`) REFERENCES `divisao` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -213,29 +150,8 @@ CREATE TABLE `consumo_externo` (
 
 LOCK TABLES `consumo_externo` WRITE;
 /*!40000 ALTER TABLE `consumo_externo` DISABLE KEYS */;
+INSERT INTO `consumo_externo` VALUES (1,'2022-10-08','2022-10-08 21:00:00.000000',288,3),(2,'2022-10-09','2022-10-09 21:00:00.000000',722,3),(3,'2022-10-10','2022-10-10 21:00:00.000000',665,3),(4,'2022-10-11','2022-10-11 21:00:00.000000',948,3),(5,'2022-10-12','2022-10-12 21:00:00.000000',1212,3),(6,'2022-10-13','2022-10-13 21:00:00.000000',1182,3),(7,'2022-10-14','2022-10-14 21:00:00.000000',1225,3),(8,'2022-10-15','2022-10-15 21:00:00.000000',724,3),(9,'2022-10-16','2022-10-16 21:00:00.000000',378,3),(10,'2022-10-17','2022-10-17 21:00:00.000000',1460,3),(11,'2022-10-18','2022-10-18 21:00:00.000000',356,3),(12,'2022-10-19','2022-10-19 21:00:00.000000',1110,3),(13,'2022-10-20','2022-10-20 21:00:00.000000',327,3),(14,'2022-10-21','2022-10-21 21:00:00.000000',315,3),(15,'2022-10-22','2022-10-22 21:00:00.000000',263,3),(16,'2022-10-23','2022-10-23 21:00:00.000000',268,3),(17,'2022-10-24','2022-10-24 21:00:00.000000',703,3),(18,'2022-10-25','2022-10-25 21:00:00.000000',888,3),(19,'2022-10-26','2022-10-26 21:00:00.000000',1343,3),(20,'2022-10-27','2022-10-27 21:00:00.000000',1084,3),(21,'2022-10-28','2022-10-28 21:00:00.000000',1170,3),(22,'2022-10-29','2022-10-29 21:00:00.000000',473,3),(23,'2022-10-30','2022-10-30 21:00:00.000000',1207,3),(24,'2022-10-31','2022-10-31 21:00:00.000000',1366,3),(25,'2022-11-01','2022-11-01 21:00:00.000000',439,3),(26,'2022-11-02','2022-11-02 21:00:00.000000',1467,3),(27,'2022-11-03','2022-11-03 21:00:00.000000',1357,3),(28,'2022-11-04','2022-11-04 21:00:00.000000',751,3),(29,'2022-11-05','2022-11-05 21:00:00.000000',1328,3),(30,'2022-11-06','2022-11-06 21:00:00.000000',1103,3),(31,'2022-11-07','2022-11-07 21:00:00.000000',917,3),(32,'2022-11-08','2022-11-08 21:00:00.000000',866,3),(33,'2022-11-09','2022-11-09 21:00:00.000000',353,3),(34,'2022-11-10','2022-11-10 21:00:00.000000',1072,3),(35,'2022-11-11','2022-11-11 21:00:00.000000',1139,3),(36,'2022-11-12','2022-11-12 21:00:00.000000',1233,3),(37,'2022-11-13','2022-11-13 21:00:00.000000',844,3),(38,'2022-11-14','2022-11-14 21:00:00.000000',1156,3),(39,'2022-11-15','2022-11-15 21:00:00.000000',1459,3),(40,'2022-11-16','2022-11-16 21:00:00.000000',804,3),(41,'2022-11-17','2022-11-17 21:00:00.000000',1220,3),(42,'2022-11-18','2022-11-18 21:00:00.000000',281,3),(43,'2022-11-19','2022-11-19 21:00:00.000000',1182,3),(44,'2022-11-20','2022-11-20 21:00:00.000000',1290,3),(45,'2022-11-21','2022-11-21 21:00:00.000000',1139,3),(46,'2022-11-22','2022-11-22 21:00:00.000000',937,3),(47,'2022-11-23','2022-11-23 21:00:00.000000',1103,3),(48,'2022-11-24','2022-11-24 21:00:00.000000',1118,3),(49,'2022-11-25','2022-11-25 21:00:00.000000',569,3),(50,'2022-11-26','2022-11-26 21:00:00.000000',1059,3),(51,'2022-11-27','2022-11-27 21:00:00.000000',784,3),(52,'2022-11-28','2022-11-28 21:00:00.000000',555,3),(53,'2022-11-29','2022-11-29 21:00:00.000000',268,3),(54,'2022-11-30','2022-11-30 21:00:00.000000',663,3),(55,'2022-12-01','2022-12-01 21:00:00.000000',1129,3),(56,'2022-12-02','2022-12-02 21:00:00.000000',500,3),(57,'2022-12-03','2022-12-03 21:00:00.000000',1341,3),(58,'2022-12-04','2022-12-04 21:00:00.000000',1212,3),(59,'2022-12-05','2022-12-05 21:00:00.000000',370,3),(60,'2022-12-06','2022-12-06 21:00:00.000000',1326,3);
 /*!40000 ALTER TABLE `consumo_externo` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `consumo_externo_seq`
---
-
-DROP TABLE IF EXISTS `consumo_externo_seq`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `consumo_externo_seq` (
-  `next_val` bigint DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `consumo_externo_seq`
---
-
-LOCK TABLES `consumo_externo_seq` WRITE;
-/*!40000 ALTER TABLE `consumo_externo_seq` DISABLE KEYS */;
-INSERT INTO `consumo_externo_seq` VALUES (1);
-/*!40000 ALTER TABLE `consumo_externo_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -246,15 +162,15 @@ DROP TABLE IF EXISTS `consumo_quarto`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `consumo_quarto` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `dia` date DEFAULT NULL,
-  `timestamp` datetime(6) DEFAULT NULL,
+  `stamp` datetime(6) DEFAULT NULL,
   `valor` double DEFAULT NULL,
   `id_div` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKtajdeowp6gcagper0nsv1xhbu` (`id_div`),
   CONSTRAINT `FKtajdeowp6gcagper0nsv1xhbu` FOREIGN KEY (`id_div`) REFERENCES `divisao` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -263,29 +179,8 @@ CREATE TABLE `consumo_quarto` (
 
 LOCK TABLES `consumo_quarto` WRITE;
 /*!40000 ALTER TABLE `consumo_quarto` DISABLE KEYS */;
+INSERT INTO `consumo_quarto` VALUES (1,'2022-10-08','2022-10-08 21:00:00.000000',1489,4),(2,'2022-10-09','2022-10-09 21:00:00.000000',1275,4),(3,'2022-10-10','2022-10-10 21:00:00.000000',720,4),(4,'2022-10-11','2022-10-11 21:00:00.000000',631,4),(5,'2022-10-12','2022-10-12 21:00:00.000000',1325,4),(6,'2022-10-13','2022-10-13 21:00:00.000000',271,4),(7,'2022-10-14','2022-10-14 21:00:00.000000',314,4),(8,'2022-10-15','2022-10-15 21:00:00.000000',398,4),(9,'2022-10-16','2022-10-16 21:00:00.000000',1103,4),(10,'2022-10-17','2022-10-17 21:00:00.000000',693,4),(11,'2022-10-18','2022-10-18 21:00:00.000000',1000,4),(12,'2022-10-19','2022-10-19 21:00:00.000000',320,4),(13,'2022-10-20','2022-10-20 21:00:00.000000',1007,4),(14,'2022-10-21','2022-10-21 21:00:00.000000',346,4),(15,'2022-10-22','2022-10-22 21:00:00.000000',732,4),(16,'2022-10-23','2022-10-23 21:00:00.000000',623,4),(17,'2022-10-24','2022-10-24 21:00:00.000000',942,4),(18,'2022-10-25','2022-10-25 21:00:00.000000',1489,4),(19,'2022-10-26','2022-10-26 21:00:00.000000',664,4),(20,'2022-10-27','2022-10-27 21:00:00.000000',1032,4),(21,'2022-10-28','2022-10-28 21:00:00.000000',468,4),(22,'2022-10-29','2022-10-29 21:00:00.000000',923,4),(23,'2022-10-30','2022-10-30 21:00:00.000000',601,4),(24,'2022-10-31','2022-10-31 21:00:00.000000',1337,4),(25,'2022-11-01','2022-11-01 21:00:00.000000',944,4),(26,'2022-11-02','2022-11-02 21:00:00.000000',1299,4),(27,'2022-11-03','2022-11-03 21:00:00.000000',1408,4),(28,'2022-11-04','2022-11-04 21:00:00.000000',327,4),(29,'2022-11-05','2022-11-05 21:00:00.000000',1348,4),(30,'2022-11-06','2022-11-06 21:00:00.000000',301,4),(31,'2022-11-07','2022-11-07 21:00:00.000000',763,4),(32,'2022-11-08','2022-11-08 21:00:00.000000',499,4),(33,'2022-11-09','2022-11-09 21:00:00.000000',389,4),(34,'2022-11-10','2022-11-10 21:00:00.000000',409,4),(35,'2022-11-11','2022-11-11 21:00:00.000000',1291,4),(36,'2022-11-12','2022-11-12 21:00:00.000000',201,4),(37,'2022-11-13','2022-11-13 21:00:00.000000',208,4),(38,'2022-11-14','2022-11-14 21:00:00.000000',889,4),(39,'2022-11-15','2022-11-15 21:00:00.000000',353,4),(40,'2022-11-16','2022-11-16 21:00:00.000000',956,4),(41,'2022-11-17','2022-11-17 21:00:00.000000',1297,4),(42,'2022-11-18','2022-11-18 21:00:00.000000',443,4),(43,'2022-11-19','2022-11-19 21:00:00.000000',569,4),(44,'2022-11-20','2022-11-20 21:00:00.000000',1469,4),(45,'2022-11-21','2022-11-21 21:00:00.000000',432,4),(46,'2022-11-22','2022-11-22 21:00:00.000000',798,4),(47,'2022-11-23','2022-11-23 21:00:00.000000',917,4),(48,'2022-11-24','2022-11-24 21:00:00.000000',1258,4),(49,'2022-11-25','2022-11-25 21:00:00.000000',598,4),(50,'2022-11-26','2022-11-26 21:00:00.000000',729,4),(51,'2022-11-27','2022-11-27 21:00:00.000000',420,4),(52,'2022-11-28','2022-11-28 21:00:00.000000',1389,4),(53,'2022-11-29','2022-11-29 21:00:00.000000',378,4),(54,'2022-11-30','2022-11-30 21:00:00.000000',208,4),(55,'2022-12-01','2022-12-01 21:00:00.000000',759,4),(56,'2022-12-02','2022-12-02 21:00:00.000000',784,4),(57,'2022-12-03','2022-12-03 21:00:00.000000',1335,4),(58,'2022-12-04','2022-12-04 21:00:00.000000',465,4),(59,'2022-12-05','2022-12-05 21:00:00.000000',909,4),(60,'2022-12-06','2022-12-06 21:00:00.000000',1094,4);
 /*!40000 ALTER TABLE `consumo_quarto` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `consumo_quarto_seq`
---
-
-DROP TABLE IF EXISTS `consumo_quarto_seq`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `consumo_quarto_seq` (
-  `next_val` bigint DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `consumo_quarto_seq`
---
-
-LOCK TABLES `consumo_quarto_seq` WRITE;
-/*!40000 ALTER TABLE `consumo_quarto_seq` DISABLE KEYS */;
-INSERT INTO `consumo_quarto_seq` VALUES (1);
-/*!40000 ALTER TABLE `consumo_quarto_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -296,15 +191,15 @@ DROP TABLE IF EXISTS `consumo_sala`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `consumo_sala` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `dia` date DEFAULT NULL,
-  `timestamp` datetime(6) DEFAULT NULL,
+  `stamp` datetime(6) DEFAULT NULL,
   `valor` double DEFAULT NULL,
   `id_div` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKcwvwe4w313ol5mmqwneqgeo3q` (`id_div`),
   CONSTRAINT `FKcwvwe4w313ol5mmqwneqgeo3q` FOREIGN KEY (`id_div`) REFERENCES `divisao` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -313,29 +208,8 @@ CREATE TABLE `consumo_sala` (
 
 LOCK TABLES `consumo_sala` WRITE;
 /*!40000 ALTER TABLE `consumo_sala` DISABLE KEYS */;
+INSERT INTO `consumo_sala` VALUES (1,'2022-10-08','2022-10-08 21:00:00.000000',2465,1),(2,'2022-10-09','2022-10-09 21:00:00.000000',2153,1),(3,'2022-10-10','2022-10-10 21:00:00.000000',2354,1),(4,'2022-10-11','2022-10-11 21:00:00.000000',2551,1),(5,'2022-10-12','2022-10-12 21:00:00.000000',1517,1),(6,'2022-10-13','2022-10-13 21:00:00.000000',2988,1),(7,'2022-10-14','2022-10-14 21:00:00.000000',2688,1),(8,'2022-10-15','2022-10-15 21:00:00.000000',2495,1),(9,'2022-10-16','2022-10-16 21:00:00.000000',2172,1),(10,'2022-10-17','2022-10-17 21:00:00.000000',2811,1),(11,'2022-10-18','2022-10-18 21:00:00.000000',2409,1),(12,'2022-10-19','2022-10-19 21:00:00.000000',767,1),(13,'2022-10-20','2022-10-20 21:00:00.000000',2389,1),(14,'2022-10-21','2022-10-21 21:00:00.000000',1499,1),(15,'2022-10-22','2022-10-22 21:00:00.000000',1657,1),(16,'2022-10-23','2022-10-23 21:00:00.000000',1124,1),(17,'2022-10-24','2022-10-24 21:00:00.000000',2930,1),(18,'2022-10-25','2022-10-25 21:00:00.000000',1026,1),(19,'2022-10-26','2022-10-26 21:00:00.000000',2345,1),(20,'2022-10-27','2022-10-27 21:00:00.000000',1883,1),(21,'2022-10-28','2022-10-28 21:00:00.000000',1751,1),(22,'2022-10-29','2022-10-29 21:00:00.000000',2618,1),(23,'2022-10-30','2022-10-30 21:00:00.000000',971,1),(24,'2022-10-31','2022-10-31 21:00:00.000000',640,1),(25,'2022-11-01','2022-11-01 21:00:00.000000',2794,1),(26,'2022-11-02','2022-11-02 21:00:00.000000',1079,1),(27,'2022-11-03','2022-11-03 21:00:00.000000',2943,1),(28,'2022-11-04','2022-11-04 21:00:00.000000',1607,1),(29,'2022-11-05','2022-11-05 21:00:00.000000',2173,1),(30,'2022-11-06','2022-11-06 21:00:00.000000',2375,1),(31,'2022-11-07','2022-11-07 21:00:00.000000',1507,1),(32,'2022-11-08','2022-11-08 21:00:00.000000',2811,1),(33,'2022-11-09','2022-11-09 21:00:00.000000',1642,1),(34,'2022-11-10','2022-11-10 21:00:00.000000',2979,1),(35,'2022-11-11','2022-11-11 21:00:00.000000',1683,1),(36,'2022-11-12','2022-11-12 21:00:00.000000',2679,1),(37,'2022-11-13','2022-11-13 21:00:00.000000',1022,1),(38,'2022-11-14','2022-11-14 21:00:00.000000',672,1),(39,'2022-11-15','2022-11-15 21:00:00.000000',2510,1),(40,'2022-11-16','2022-11-16 21:00:00.000000',1174,1),(41,'2022-11-17','2022-11-17 21:00:00.000000',1930,1),(42,'2022-11-18','2022-11-18 21:00:00.000000',1646,1),(43,'2022-11-19','2022-11-19 21:00:00.000000',1974,1),(44,'2022-11-20','2022-11-20 21:00:00.000000',2163,1),(45,'2022-11-21','2022-11-21 21:00:00.000000',894,1),(46,'2022-11-22','2022-11-22 21:00:00.000000',1637,1),(47,'2022-11-23','2022-11-23 21:00:00.000000',1915,1),(48,'2022-11-24','2022-11-24 21:00:00.000000',679,1),(49,'2022-11-25','2022-11-25 21:00:00.000000',670,1),(50,'2022-11-26','2022-11-26 21:00:00.000000',2907,1),(51,'2022-11-27','2022-11-27 21:00:00.000000',2529,1),(52,'2022-11-28','2022-11-28 21:00:00.000000',2794,1),(53,'2022-11-29','2022-11-29 21:00:00.000000',1815,1),(54,'2022-11-30','2022-11-30 21:00:00.000000',1225,1),(55,'2022-12-01','2022-12-01 21:00:00.000000',1125,1),(56,'2022-12-02','2022-12-02 21:00:00.000000',1482,1),(57,'2022-12-03','2022-12-03 21:00:00.000000',654,1),(58,'2022-12-04','2022-12-04 21:00:00.000000',2330,1),(59,'2022-12-05','2022-12-05 21:00:00.000000',1952,1),(60,'2022-12-06','2022-12-06 21:00:00.000000',742,1);
 /*!40000 ALTER TABLE `consumo_sala` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `consumo_sala_seq`
---
-
-DROP TABLE IF EXISTS `consumo_sala_seq`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `consumo_sala_seq` (
-  `next_val` bigint DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `consumo_sala_seq`
---
-
-LOCK TABLES `consumo_sala_seq` WRITE;
-/*!40000 ALTER TABLE `consumo_sala_seq` DISABLE KEYS */;
-INSERT INTO `consumo_sala_seq` VALUES (1);
-/*!40000 ALTER TABLE `consumo_sala_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -346,15 +220,14 @@ DROP TABLE IF EXISTS `dispositivo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `dispositivo` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `consumo_energy` double NOT NULL,
   `estado` bit(1) NOT NULL,
-  `nome` varchar(255) NOT NULL,
   `id_divisao` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FKc5tesiy4nfpu29qhttx7u5l9a` (`id_divisao`),
   CONSTRAINT `FKc5tesiy4nfpu29qhttx7u5l9a` FOREIGN KEY (`id_divisao`) REFERENCES `divisao` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -363,29 +236,8 @@ CREATE TABLE `dispositivo` (
 
 LOCK TABLES `dispositivo` WRITE;
 /*!40000 ALTER TABLE `dispositivo` DISABLE KEYS */;
+INSERT INTO `dispositivo` VALUES (1,140.03,_binary '',1),(2,231.11,_binary '',1),(3,164.82,_binary '\0',1),(4,163.58,_binary '\0',1),(5,313.74,_binary '\0',1),(6,598.06,_binary '',1),(7,108.29,_binary '',1),(8,166.39,_binary '',2),(9,151.36,_binary '\0',2),(10,214.43,_binary '\0',2),(11,205.12,_binary '\0',2),(12,261.27,_binary '',2),(13,224.62,_binary '\0',2),(14,461.32,_binary '\0',2),(15,252.49,_binary '',3),(16,100.1,_binary '\0',3),(17,166.12,_binary '',4),(18,160.67,_binary '',4),(19,188.63,_binary '\0',4),(20,238.63,_binary '',4),(21,144.84,_binary '\0',4),(22,140.03,_binary '',1),(23,231.11,_binary '',1),(24,164.82,_binary '\0',1),(25,163.58,_binary '\0',1),(26,313.74,_binary '\0',1),(27,598.06,_binary '',1),(28,108.29,_binary '',1),(29,166.39,_binary '',2),(30,151.36,_binary '\0',2),(31,214.43,_binary '\0',2),(32,205.12,_binary '\0',2),(33,261.27,_binary '',2),(34,224.62,_binary '\0',2),(35,461.32,_binary '\0',2),(36,252.49,_binary '',3),(37,100.1,_binary '\0',3),(38,166.12,_binary '',4),(39,160.67,_binary '',4),(40,188.63,_binary '\0',4),(41,238.63,_binary '',4),(42,144.84,_binary '\0',4),(43,140.03,_binary '',1),(44,231.11,_binary '',1),(45,164.82,_binary '\0',1),(46,163.58,_binary '\0',1),(47,313.74,_binary '\0',1),(48,598.06,_binary '',1),(49,108.29,_binary '',1),(50,166.39,_binary '',2),(51,151.36,_binary '\0',2),(52,214.43,_binary '\0',2),(53,205.12,_binary '\0',2),(54,261.27,_binary '',2),(55,224.62,_binary '\0',2),(56,461.32,_binary '\0',2),(57,252.49,_binary '',3),(58,100.1,_binary '\0',3),(59,166.12,_binary '',4),(60,160.67,_binary '',4),(61,188.63,_binary '\0',4),(62,238.63,_binary '',4),(63,144.84,_binary '\0',4);
 /*!40000 ALTER TABLE `dispositivo` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `dispositivo_seq`
---
-
-DROP TABLE IF EXISTS `dispositivo_seq`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `dispositivo_seq` (
-  `next_val` bigint DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `dispositivo_seq`
---
-
-LOCK TABLES `dispositivo_seq` WRITE;
-/*!40000 ALTER TABLE `dispositivo_seq` DISABLE KEYS */;
-INSERT INTO `dispositivo_seq` VALUES (1);
-/*!40000 ALTER TABLE `dispositivo_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -396,13 +248,13 @@ DROP TABLE IF EXISTS `divisao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `divisao` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `nome` varchar(255) NOT NULL,
   `id_casa` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FKj4awjxssbhlvnmx22qomxsquu` (`id_casa`),
   CONSTRAINT `FKj4awjxssbhlvnmx22qomxsquu` FOREIGN KEY (`id_casa`) REFERENCES `casa` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -411,29 +263,8 @@ CREATE TABLE `divisao` (
 
 LOCK TABLES `divisao` WRITE;
 /*!40000 ALTER TABLE `divisao` DISABLE KEYS */;
+INSERT INTO `divisao` VALUES (1,'sala',1),(2,'cozinha',1),(3,'exterior',1),(4,'quarto1',1),(5,'sala',1),(6,'cozinha',1),(7,'exterior',1),(8,'quarto1',1),(9,'sala',1),(10,'cozinha',1),(11,'exterior',1),(12,'quarto1',1);
 /*!40000 ALTER TABLE `divisao` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `divisao_seq`
---
-
-DROP TABLE IF EXISTS `divisao_seq`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `divisao_seq` (
-  `next_val` bigint DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `divisao_seq`
---
-
-LOCK TABLES `divisao_seq` WRITE;
-/*!40000 ALTER TABLE `divisao_seq` DISABLE KEYS */;
-INSERT INTO `divisao_seq` VALUES (1);
-/*!40000 ALTER TABLE `divisao_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -444,9 +275,9 @@ DROP TABLE IF EXISTS `lampada`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `lampada` (
-  `end_time` datetime(6) DEFAULT NULL,
+  `end_time` time DEFAULT NULL,
   `luminosidade` double NOT NULL,
-  `start_time` datetime(6) DEFAULT NULL,
+  `start_time` time DEFAULT NULL,
   `id` int NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `FK9en0kckfgskkxsksjj5mdf5x6` FOREIGN KEY (`id`) REFERENCES `dispositivo` (`id`)
@@ -459,6 +290,7 @@ CREATE TABLE `lampada` (
 
 LOCK TABLES `lampada` WRITE;
 /*!40000 ALTER TABLE `lampada` DISABLE KEYS */;
+INSERT INTO `lampada` VALUES ('18:00:00',90,'09:00:00',3),('18:00:00',80,'09:00:00',4),('18:00:00',75,'09:00:00',10),('18:00:00',83,'09:00:00',15),('18:00:00',77,'09:00:00',19);
 /*!40000 ALTER TABLE `lampada` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -470,8 +302,8 @@ DROP TABLE IF EXISTS `regador`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `regador` (
-  `end_time` datetime(6) DEFAULT NULL,
-  `start_time` datetime(6) DEFAULT NULL,
+  `end_time` time DEFAULT NULL,
+  `start_time` time DEFAULT NULL,
   `id` int NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `FKsokiemasmqs363gtjloevc99t` FOREIGN KEY (`id`) REFERENCES `dispositivo` (`id`)
@@ -484,107 +316,8 @@ CREATE TABLE `regador` (
 
 LOCK TABLES `regador` WRITE;
 /*!40000 ALTER TABLE `regador` DISABLE KEYS */;
+INSERT INTO `regador` VALUES ('19:00:00','20:00:00',16);
 /*!40000 ALTER TABLE `regador` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `sensor_cozinha`
---
-
-DROP TABLE IF EXISTS `sensor_cozinha`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `sensor_cozinha` (
-  `id` int NOT NULL,
-  `timestamp` datetime(6) DEFAULT NULL,
-  `tipo` varchar(255) DEFAULT NULL,
-  `valor` double DEFAULT NULL,
-  `id_div` int DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK4wa40qbtqurlwyvms5p8tqsai` (`id_div`),
-  CONSTRAINT `FK4wa40qbtqurlwyvms5p8tqsai` FOREIGN KEY (`id_div`) REFERENCES `divisao` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `sensor_cozinha`
---
-
-LOCK TABLES `sensor_cozinha` WRITE;
-/*!40000 ALTER TABLE `sensor_cozinha` DISABLE KEYS */;
-/*!40000 ALTER TABLE `sensor_cozinha` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `sensor_cozinha_seq`
---
-
-DROP TABLE IF EXISTS `sensor_cozinha_seq`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `sensor_cozinha_seq` (
-  `next_val` bigint DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `sensor_cozinha_seq`
---
-
-LOCK TABLES `sensor_cozinha_seq` WRITE;
-/*!40000 ALTER TABLE `sensor_cozinha_seq` DISABLE KEYS */;
-INSERT INTO `sensor_cozinha_seq` VALUES (1);
-/*!40000 ALTER TABLE `sensor_cozinha_seq` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `sensor_externo`
---
-
-DROP TABLE IF EXISTS `sensor_externo`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `sensor_externo` (
-  `id` int NOT NULL,
-  `timestamp` datetime(6) DEFAULT NULL,
-  `tipo` varchar(255) DEFAULT NULL,
-  `valor` double DEFAULT NULL,
-  `id_div` int DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FKs8vp9orpna65xcuhbc9hfaq6y` (`id_div`),
-  CONSTRAINT `FKs8vp9orpna65xcuhbc9hfaq6y` FOREIGN KEY (`id_div`) REFERENCES `divisao` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `sensor_externo`
---
-
-LOCK TABLES `sensor_externo` WRITE;
-/*!40000 ALTER TABLE `sensor_externo` DISABLE KEYS */;
-/*!40000 ALTER TABLE `sensor_externo` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `sensor_externo_seq`
---
-
-DROP TABLE IF EXISTS `sensor_externo_seq`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `sensor_externo_seq` (
-  `next_val` bigint DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `sensor_externo_seq`
---
-
-LOCK TABLES `sensor_externo_seq` WRITE;
-/*!40000 ALTER TABLE `sensor_externo_seq` DISABLE KEYS */;
-INSERT INTO `sensor_externo_seq` VALUES (1);
-/*!40000 ALTER TABLE `sensor_externo_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -595,15 +328,16 @@ DROP TABLE IF EXISTS `sensor_measurements_cozinha`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sensor_measurements_cozinha` (
-  `id` int NOT NULL,
-  `timestamp` datetime(6) DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `dia` date DEFAULT NULL,
+  `stamp` datetime(6) DEFAULT NULL,
   `tipo` varchar(255) DEFAULT NULL,
   `valor` double DEFAULT NULL,
   `id_div` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK7q6746329pgh0ndm5480ecmh6` (`id_div`),
   CONSTRAINT `FK7q6746329pgh0ndm5480ecmh6` FOREIGN KEY (`id_div`) REFERENCES `divisao` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=337 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -612,29 +346,8 @@ CREATE TABLE `sensor_measurements_cozinha` (
 
 LOCK TABLES `sensor_measurements_cozinha` WRITE;
 /*!40000 ALTER TABLE `sensor_measurements_cozinha` DISABLE KEYS */;
+INSERT INTO `sensor_measurements_cozinha` VALUES (1,'2022-12-07','2022-12-07 00:00:00.000000','temperatura',11,2),(2,'2022-12-07','2022-12-07 00:00:00.000000','humidade',23.08,2),(3,'2022-12-07','2022-12-07 01:00:00.000000','temperatura',12.319999999999999,2),(4,'2022-12-07','2022-12-07 01:00:00.000000','humidade',21.96,2),(5,'2022-12-07','2022-12-07 02:00:00.000000','temperatura',12.64,2),(6,'2022-12-07','2022-12-07 02:00:00.000000','humidade',21.54,2),(7,'2022-12-07','2022-12-07 03:00:00.000000','temperatura',14.239999999999998,2),(8,'2022-12-07','2022-12-07 03:00:00.000000','humidade',19.88,2),(9,'2022-12-07','2022-12-07 04:00:00.000000','temperatura',13.34,2),(10,'2022-12-07','2022-12-07 04:00:00.000000','humidade',20.86,2),(11,'2022-12-07','2022-12-07 05:00:00.000000','temperatura',13.319999999999999,2),(12,'2022-12-07','2022-12-07 05:00:00.000000','humidade',20.84,2),(13,'2022-12-07','2022-12-07 06:00:00.000000','temperatura',15.96,2),(14,'2022-12-07','2022-12-07 06:00:00.000000','humidade',18.220000000000002,2),(15,'2022-12-07','2022-12-07 07:00:00.000000','temperatura',15.84,2),(16,'2022-12-07','2022-12-07 07:00:00.000000','humidade',18.32,2),(17,'2022-12-07','2022-12-07 08:00:00.000000','temperatura',15.899999999999999,2),(18,'2022-12-07','2022-12-07 08:00:00.000000','humidade',18.3,2),(19,'2022-12-07','2022-12-07 09:00:00.000000','temperatura',18.44,2),(20,'2022-12-07','2022-12-07 09:00:00.000000','humidade',15.739999999999998,2),(21,'2022-12-07','2022-12-07 10:00:00.000000','temperatura',18.26,2),(22,'2022-12-07','2022-12-07 10:00:00.000000','humidade',15.939999999999998,2),(23,'2022-12-07','2022-12-07 11:00:00.000000','temperatura',18.84,2),(24,'2022-12-07','2022-12-07 11:00:00.000000','humidade',15.219999999999999,2),(25,'2022-12-07','2022-12-07 12:00:00.000000','temperatura',20.52,2),(26,'2022-12-07','2022-12-07 12:00:00.000000','humidade',13.780000000000001,2),(27,'2022-12-07','2022-12-07 13:00:00.000000','temperatura',19.419999999999998,2),(28,'2022-12-07','2022-12-07 13:00:00.000000','humidade',14.660000000000002,2),(29,'2022-12-07','2022-12-07 14:00:00.000000','temperatura',20.6,2),(30,'2022-12-07','2022-12-07 14:00:00.000000','humidade',13.459999999999999,2),(31,'2022-12-07','2022-12-07 15:00:00.000000','temperatura',19.06,2),(32,'2022-12-07','2022-12-07 15:00:00.000000','humidade',15.12,2),(33,'2022-12-07','2022-12-07 16:00:00.000000','temperatura',18.200000000000003,2),(34,'2022-12-07','2022-12-07 16:00:00.000000','humidade',15.999999999999998,2),(35,'2022-12-07','2022-12-07 17:00:00.000000','temperatura',18.979999999999997,2),(36,'2022-12-07','2022-12-07 17:00:00.000000','humidade',15.14,2),(37,'2022-12-07','2022-12-07 18:00:00.000000','temperatura',17.18,2),(38,'2022-12-07','2022-12-07 18:00:00.000000','humidade',17.12,2),(39,'2022-12-07','2022-12-07 19:00:00.000000','temperatura',17.04,2),(40,'2022-12-07','2022-12-07 19:00:00.000000','humidade',17.12,2),(41,'2022-12-07','2022-12-07 20:00:00.000000','temperatura',17,2),(42,'2022-12-07','2022-12-07 20:00:00.000000','humidade',17.02,2),(43,'2022-12-07','2022-12-07 21:00:00.000000','temperatura',14,2),(44,'2022-12-07','2022-12-07 21:00:00.000000','humidade',20.14,2),(45,'2022-12-07','2022-12-07 22:00:00.000000','temperatura',13.52,2),(46,'2022-12-07','2022-12-07 22:00:00.000000','humidade',20.8,2),(47,'2022-12-07','2022-12-07 23:00:00.000000','temperatura',14.18,2),(48,'2022-12-07','2022-12-07 23:00:00.000000','humidade',20.12,2),(49,'2022-12-08','2022-12-08 00:00:00.000000','temperatura',11.1,2),(50,'2022-12-08','2022-12-08 00:00:00.000000','humidade',23.08,2),(51,'2022-12-08','2022-12-08 01:00:00.000000','temperatura',12.379999999999999,2),(52,'2022-12-08','2022-12-08 01:00:00.000000','humidade',22,2),(53,'2022-12-08','2022-12-08 02:00:00.000000','temperatura',12.6,2),(54,'2022-12-08','2022-12-08 02:00:00.000000','humidade',21.66,2),(55,'2022-12-08','2022-12-08 03:00:00.000000','temperatura',14.379999999999999,2),(56,'2022-12-08','2022-12-08 03:00:00.000000','humidade',19.82,2),(57,'2022-12-08','2022-12-08 04:00:00.000000','temperatura',13.239999999999998,2),(58,'2022-12-08','2022-12-08 04:00:00.000000','humidade',20.88,2),(59,'2022-12-08','2022-12-08 05:00:00.000000','temperatura',13.26,2),(60,'2022-12-08','2022-12-08 05:00:00.000000','humidade',20.88,2),(61,'2022-12-08','2022-12-08 06:00:00.000000','temperatura',15.92,2),(62,'2022-12-08','2022-12-08 06:00:00.000000','humidade',18.28,2),(63,'2022-12-08','2022-12-08 07:00:00.000000','temperatura',15.719999999999999,2),(64,'2022-12-08','2022-12-08 07:00:00.000000','humidade',18.3,2),(65,'2022-12-08','2022-12-08 08:00:00.000000','temperatura',15.86,2),(66,'2022-12-08','2022-12-08 08:00:00.000000','humidade',18.400000000000002,2),(67,'2022-12-08','2022-12-08 09:00:00.000000','temperatura',18.32,2),(68,'2022-12-08','2022-12-08 09:00:00.000000','humidade',15.7,2),(69,'2022-12-08','2022-12-08 10:00:00.000000','temperatura',18.220000000000002,2),(70,'2022-12-08','2022-12-08 10:00:00.000000','humidade',15.899999999999999,2),(71,'2022-12-08','2022-12-08 11:00:00.000000','temperatura',18.98,2),(72,'2022-12-08','2022-12-08 11:00:00.000000','humidade',15.34,2),(73,'2022-12-08','2022-12-08 12:00:00.000000','temperatura',20.4,2),(74,'2022-12-08','2022-12-08 12:00:00.000000','humidade',13.740000000000002,2),(75,'2022-12-08','2022-12-08 13:00:00.000000','temperatura',19.58,2),(76,'2022-12-08','2022-12-08 13:00:00.000000','humidade',14.600000000000001,2),(77,'2022-12-08','2022-12-08 14:00:00.000000','temperatura',20.62,2),(78,'2022-12-08','2022-12-08 14:00:00.000000','humidade',13.459999999999999,2),(79,'2022-12-08','2022-12-08 15:00:00.000000','temperatura',19.2,2),(80,'2022-12-08','2022-12-08 15:00:00.000000','humidade',15.02,2),(81,'2022-12-08','2022-12-08 16:00:00.000000','temperatura',18.14,2),(82,'2022-12-08','2022-12-08 16:00:00.000000','humidade',15.999999999999998,2),(83,'2022-12-08','2022-12-08 17:00:00.000000','temperatura',19.08,2),(84,'2022-12-08','2022-12-08 17:00:00.000000','humidade',15.180000000000001,2),(85,'2022-12-08','2022-12-08 18:00:00.000000','temperatura',17.06,2),(86,'2022-12-08','2022-12-08 18:00:00.000000','humidade',17.08,2),(87,'2022-12-08','2022-12-08 19:00:00.000000','temperatura',17.14,2),(88,'2022-12-08','2022-12-08 19:00:00.000000','humidade',17.02,2),(89,'2022-12-08','2022-12-08 20:00:00.000000','temperatura',17.06,2),(90,'2022-12-08','2022-12-08 20:00:00.000000','humidade',17.06,2),(91,'2022-12-08','2022-12-08 21:00:00.000000','temperatura',14.1,2),(92,'2022-12-08','2022-12-08 21:00:00.000000','humidade',20.06,2),(93,'2022-12-08','2022-12-08 22:00:00.000000','temperatura',13.5,2),(94,'2022-12-08','2022-12-08 22:00:00.000000','humidade',20.8,2),(95,'2022-12-08','2022-12-08 23:00:00.000000','temperatura',14.1,2),(96,'2022-12-08','2022-12-08 23:00:00.000000','humidade',20.18,2),(97,'2022-12-09','2022-12-09 00:00:00.000000','temperatura',11.1,2),(98,'2022-12-09','2022-12-09 00:00:00.000000','humidade',23.06,2),(99,'2022-12-09','2022-12-09 01:00:00.000000','temperatura',12.379999999999999,2),(100,'2022-12-09','2022-12-09 01:00:00.000000','humidade',21.92,2),(101,'2022-12-09','2022-12-09 02:00:00.000000','temperatura',12.68,2),(102,'2022-12-09','2022-12-09 02:00:00.000000','humidade',21.62,2),(103,'2022-12-09','2022-12-09 03:00:00.000000','temperatura',14.399999999999999,2),(104,'2022-12-09','2022-12-09 03:00:00.000000','humidade',19.92,2),(105,'2022-12-09','2022-12-09 04:00:00.000000','temperatura',13.219999999999999,2),(106,'2022-12-09','2022-12-09 04:00:00.000000','humidade',20.88,2),(107,'2022-12-09','2022-12-09 05:00:00.000000','temperatura',13.34,2),(108,'2022-12-09','2022-12-09 05:00:00.000000','humidade',21,2),(109,'2022-12-09','2022-12-09 06:00:00.000000','temperatura',16.1,2),(110,'2022-12-09','2022-12-09 06:00:00.000000','humidade',18.26,2),(111,'2022-12-09','2022-12-09 07:00:00.000000','temperatura',15.78,2),(112,'2022-12-09','2022-12-09 07:00:00.000000','humidade',18.400000000000002,2),(113,'2022-12-09','2022-12-09 08:00:00.000000','temperatura',15.76,2),(114,'2022-12-09','2022-12-09 08:00:00.000000','humidade',18.36,2),(115,'2022-12-09','2022-12-09 09:00:00.000000','temperatura',18.34,2),(116,'2022-12-09','2022-12-09 09:00:00.000000','humidade',15.819999999999999,2),(117,'2022-12-09','2022-12-09 10:00:00.000000','temperatura',18.3,2),(118,'2022-12-09','2022-12-09 10:00:00.000000','humidade',16.08,2),(119,'2022-12-09','2022-12-09 11:00:00.000000','temperatura',19,2),(120,'2022-12-09','2022-12-09 11:00:00.000000','humidade',15.2,2),(121,'2022-12-09','2022-12-09 12:00:00.000000','temperatura',20.52,2),(122,'2022-12-09','2022-12-09 12:00:00.000000','humidade',13.680000000000001,2),(123,'2022-12-09','2022-12-09 13:00:00.000000','temperatura',19.479999999999997,2),(124,'2022-12-09','2022-12-09 13:00:00.000000','humidade',14.8,2),(125,'2022-12-09','2022-12-09 14:00:00.000000','temperatura',20.740000000000002,2),(126,'2022-12-09','2022-12-09 14:00:00.000000','humidade',13.419999999999998,2),(127,'2022-12-09','2022-12-09 15:00:00.000000','temperatura',19.04,2),(128,'2022-12-09','2022-12-09 15:00:00.000000','humidade',15.02,2),(129,'2022-12-09','2022-12-09 16:00:00.000000','temperatura',18.240000000000002,2),(130,'2022-12-09','2022-12-09 16:00:00.000000','humidade',15.939999999999998,2),(131,'2022-12-09','2022-12-09 17:00:00.000000','temperatura',19.04,2),(132,'2022-12-09','2022-12-09 17:00:00.000000','humidade',15.200000000000001,2),(133,'2022-12-09','2022-12-09 18:00:00.000000','temperatura',17.12,2),(134,'2022-12-09','2022-12-09 18:00:00.000000','humidade',17.18,2),(135,'2022-12-09','2022-12-09 19:00:00.000000','temperatura',17.14,2),(136,'2022-12-09','2022-12-09 19:00:00.000000','humidade',17.14,2),(137,'2022-12-09','2022-12-09 20:00:00.000000','temperatura',17.04,2),(138,'2022-12-09','2022-12-09 20:00:00.000000','humidade',17.04,2),(139,'2022-12-09','2022-12-09 21:00:00.000000','temperatura',14.06,2),(140,'2022-12-09','2022-12-09 21:00:00.000000','humidade',20.2,2),(141,'2022-12-09','2022-12-09 22:00:00.000000','temperatura',13.46,2),(142,'2022-12-09','2022-12-09 22:00:00.000000','humidade',20.8,2),(143,'2022-12-09','2022-12-09 23:00:00.000000','temperatura',14.16,2),(144,'2022-12-09','2022-12-09 23:00:00.000000','humidade',20.16,2),(145,'2022-12-10','2022-12-10 00:00:00.000000','temperatura',11.08,2),(146,'2022-12-10','2022-12-10 00:00:00.000000','humidade',23.2,2),(147,'2022-12-10','2022-12-10 01:00:00.000000','temperatura',12.28,2),(148,'2022-12-10','2022-12-10 01:00:00.000000','humidade',21.88,2),(149,'2022-12-10','2022-12-10 02:00:00.000000','temperatura',12.58,2),(150,'2022-12-10','2022-12-10 02:00:00.000000','humidade',21.7,2),(151,'2022-12-10','2022-12-10 03:00:00.000000','temperatura',14.34,2),(152,'2022-12-10','2022-12-10 03:00:00.000000','humidade',19.88,2),(153,'2022-12-10','2022-12-10 04:00:00.000000','temperatura',13.219999999999999,2),(154,'2022-12-10','2022-12-10 04:00:00.000000','humidade',20.92,2),(155,'2022-12-10','2022-12-10 05:00:00.000000','temperatura',13.239999999999998,2),(156,'2022-12-10','2022-12-10 05:00:00.000000','humidade',20.96,2),(157,'2022-12-10','2022-12-10 06:00:00.000000','temperatura',16.1,2),(158,'2022-12-10','2022-12-10 06:00:00.000000','humidade',18.18,2),(159,'2022-12-10','2022-12-10 07:00:00.000000','temperatura',15.819999999999999,2),(160,'2022-12-10','2022-12-10 07:00:00.000000','humidade',18.42,2),(161,'2022-12-10','2022-12-10 08:00:00.000000','temperatura',15.799999999999999,2),(162,'2022-12-10','2022-12-10 08:00:00.000000','humidade',18.3,2),(163,'2022-12-10','2022-12-10 09:00:00.000000','temperatura',18.400000000000002,2),(164,'2022-12-10','2022-12-10 09:00:00.000000','humidade',15.76,2),(165,'2022-12-10','2022-12-10 10:00:00.000000','temperatura',18.200000000000003,2),(166,'2022-12-10','2022-12-10 10:00:00.000000','humidade',15.919999999999998,2),(167,'2022-12-10','2022-12-10 11:00:00.000000','temperatura',18.92,2),(168,'2022-12-10','2022-12-10 11:00:00.000000','humidade',15.2,2),(169,'2022-12-10','2022-12-10 12:00:00.000000','temperatura',20.479999999999997,2),(170,'2022-12-10','2022-12-10 12:00:00.000000','humidade',13.600000000000001,2),(171,'2022-12-10','2022-12-10 13:00:00.000000','temperatura',19.56,2),(172,'2022-12-10','2022-12-10 13:00:00.000000','humidade',14.64,2),(173,'2022-12-10','2022-12-10 14:00:00.000000','temperatura',20.62,2),(174,'2022-12-10','2022-12-10 14:00:00.000000','humidade',13.559999999999999,2),(175,'2022-12-10','2022-12-10 15:00:00.000000','temperatura',19.14,2),(176,'2022-12-10','2022-12-10 15:00:00.000000','humidade',15.04,2),(177,'2022-12-10','2022-12-10 16:00:00.000000','temperatura',18.14,2),(178,'2022-12-10','2022-12-10 16:00:00.000000','humidade',15.959999999999999,2),(179,'2022-12-10','2022-12-10 17:00:00.000000','temperatura',18.979999999999997,2),(180,'2022-12-10','2022-12-10 17:00:00.000000','humidade',15.160000000000002,2),(181,'2022-12-10','2022-12-10 18:00:00.000000','temperatura',17.16,2),(182,'2022-12-10','2022-12-10 18:00:00.000000','humidade',17.18,2),(183,'2022-12-10','2022-12-10 19:00:00.000000','temperatura',17.04,2),(184,'2022-12-10','2022-12-10 19:00:00.000000','humidade',17,2),(185,'2022-12-10','2022-12-10 20:00:00.000000','temperatura',17,2),(186,'2022-12-10','2022-12-10 20:00:00.000000','humidade',17.2,2),(187,'2022-12-10','2022-12-10 21:00:00.000000','temperatura',14.18,2),(188,'2022-12-10','2022-12-10 21:00:00.000000','humidade',20.04,2),(189,'2022-12-10','2022-12-10 22:00:00.000000','temperatura',13.540000000000001,2),(190,'2022-12-10','2022-12-10 22:00:00.000000','humidade',20.6,2),(191,'2022-12-10','2022-12-10 23:00:00.000000','temperatura',14.04,2),(192,'2022-12-10','2022-12-10 23:00:00.000000','humidade',20.08,2),(193,'2022-12-11','2022-12-11 00:00:00.000000','temperatura',11.18,2),(194,'2022-12-11','2022-12-11 00:00:00.000000','humidade',23.06,2),(195,'2022-12-11','2022-12-11 01:00:00.000000','temperatura',12.399999999999999,2),(196,'2022-12-11','2022-12-11 01:00:00.000000','humidade',21.94,2),(197,'2022-12-11','2022-12-11 02:00:00.000000','temperatura',12.52,2),(198,'2022-12-11','2022-12-11 02:00:00.000000','humidade',21.62,2),(199,'2022-12-11','2022-12-11 03:00:00.000000','temperatura',14.2,2),(200,'2022-12-11','2022-12-11 03:00:00.000000','humidade',19.900000000000002,2),(201,'2022-12-11','2022-12-11 04:00:00.000000','temperatura',13.299999999999999,2),(202,'2022-12-11','2022-12-11 04:00:00.000000','humidade',20.92,2),(203,'2022-12-11','2022-12-11 05:00:00.000000','temperatura',13.299999999999999,2),(204,'2022-12-11','2022-12-11 05:00:00.000000','humidade',20.86,2),(205,'2022-12-11','2022-12-11 06:00:00.000000','temperatura',16.04,2),(206,'2022-12-11','2022-12-11 06:00:00.000000','humidade',18.200000000000003,2),(207,'2022-12-11','2022-12-11 07:00:00.000000','temperatura',15.7,2),(208,'2022-12-11','2022-12-11 07:00:00.000000','humidade',18.44,2),(209,'2022-12-11','2022-12-11 08:00:00.000000','temperatura',15.76,2),(210,'2022-12-11','2022-12-11 08:00:00.000000','humidade',18.32,2),(211,'2022-12-11','2022-12-11 09:00:00.000000','temperatura',18.38,2),(212,'2022-12-11','2022-12-11 09:00:00.000000','humidade',15.899999999999999,2),(213,'2022-12-11','2022-12-11 10:00:00.000000','temperatura',18.200000000000003,2),(214,'2022-12-11','2022-12-11 10:00:00.000000','humidade',15.959999999999999,2),(215,'2022-12-11','2022-12-11 11:00:00.000000','temperatura',18.94,2),(216,'2022-12-11','2022-12-11 11:00:00.000000','humidade',15.319999999999999,2),(217,'2022-12-11','2022-12-11 12:00:00.000000','temperatura',20.56,2),(218,'2022-12-11','2022-12-11 12:00:00.000000','humidade',13.700000000000001,2),(219,'2022-12-11','2022-12-11 13:00:00.000000','temperatura',19.419999999999998,2),(220,'2022-12-11','2022-12-11 13:00:00.000000','humidade',14.8,2),(221,'2022-12-11','2022-12-11 14:00:00.000000','temperatura',20.8,2),(222,'2022-12-11','2022-12-11 14:00:00.000000','humidade',13.419999999999998,2),(223,'2022-12-11','2022-12-11 15:00:00.000000','temperatura',19,2),(224,'2022-12-11','2022-12-11 15:00:00.000000','humidade',15.1,2),(225,'2022-12-11','2022-12-11 16:00:00.000000','temperatura',18.3,2),(226,'2022-12-11','2022-12-11 16:00:00.000000','humidade',16.099999999999998,2),(227,'2022-12-11','2022-12-11 17:00:00.000000','temperatura',18.959999999999997,2),(228,'2022-12-11','2022-12-11 17:00:00.000000','humidade',15.3,2),(229,'2022-12-11','2022-12-11 18:00:00.000000','temperatura',17.2,2),(230,'2022-12-11','2022-12-11 18:00:00.000000','humidade',17.12,2),(231,'2022-12-11','2022-12-11 19:00:00.000000','temperatura',17.14,2),(232,'2022-12-11','2022-12-11 19:00:00.000000','humidade',17.08,2),(233,'2022-12-11','2022-12-11 20:00:00.000000','temperatura',17.16,2),(234,'2022-12-11','2022-12-11 20:00:00.000000','humidade',17.18,2),(235,'2022-12-11','2022-12-11 21:00:00.000000','temperatura',14.14,2),(236,'2022-12-11','2022-12-11 21:00:00.000000','humidade',20.18,2),(237,'2022-12-11','2022-12-11 22:00:00.000000','temperatura',13.540000000000001,2),(238,'2022-12-11','2022-12-11 22:00:00.000000','humidade',20.720000000000002,2),(239,'2022-12-11','2022-12-11 23:00:00.000000','temperatura',14.02,2),(240,'2022-12-11','2022-12-11 23:00:00.000000','humidade',20.1,2),(241,'2022-12-12','2022-12-12 00:00:00.000000','temperatura',11.14,2),(242,'2022-12-12','2022-12-12 00:00:00.000000','humidade',23.02,2),(243,'2022-12-12','2022-12-12 01:00:00.000000','temperatura',12.299999999999999,2),(244,'2022-12-12','2022-12-12 01:00:00.000000','humidade',21.8,2),(245,'2022-12-12','2022-12-12 02:00:00.000000','temperatura',12.64,2),(246,'2022-12-12','2022-12-12 02:00:00.000000','humidade',21.6,2),(247,'2022-12-12','2022-12-12 03:00:00.000000','temperatura',14.28,2),(248,'2022-12-12','2022-12-12 03:00:00.000000','humidade',19.96,2),(249,'2022-12-12','2022-12-12 04:00:00.000000','temperatura',13.34,2),(250,'2022-12-12','2022-12-12 04:00:00.000000','humidade',20.86,2),(251,'2022-12-12','2022-12-12 05:00:00.000000','temperatura',13.319999999999999,2),(252,'2022-12-12','2022-12-12 05:00:00.000000','humidade',21,2),(253,'2022-12-12','2022-12-12 06:00:00.000000','temperatura',16.02,2),(254,'2022-12-12','2022-12-12 06:00:00.000000','humidade',18.1,2),(255,'2022-12-12','2022-12-12 07:00:00.000000','temperatura',15.819999999999999,2),(256,'2022-12-12','2022-12-12 07:00:00.000000','humidade',18.32,2),(257,'2022-12-12','2022-12-12 08:00:00.000000','temperatura',15.76,2),(258,'2022-12-12','2022-12-12 08:00:00.000000','humidade',18.46,2),(259,'2022-12-12','2022-12-12 09:00:00.000000','temperatura',18.42,2),(260,'2022-12-12','2022-12-12 09:00:00.000000','humidade',15.739999999999998,2),(261,'2022-12-12','2022-12-12 10:00:00.000000','temperatura',18.14,2),(262,'2022-12-12','2022-12-12 10:00:00.000000','humidade',15.939999999999998,2),(263,'2022-12-12','2022-12-12 11:00:00.000000','temperatura',19,2),(264,'2022-12-12','2022-12-12 11:00:00.000000','humidade',15.219999999999999,2),(265,'2022-12-12','2022-12-12 12:00:00.000000','temperatura',20.56,2),(266,'2022-12-12','2022-12-12 12:00:00.000000','humidade',13.8,2),(267,'2022-12-12','2022-12-12 13:00:00.000000','temperatura',19.459999999999997,2),(268,'2022-12-12','2022-12-12 13:00:00.000000','humidade',14.72,2),(269,'2022-12-12','2022-12-12 14:00:00.000000','temperatura',20.8,2),(270,'2022-12-12','2022-12-12 14:00:00.000000','humidade',13.559999999999999,2),(271,'2022-12-12','2022-12-12 15:00:00.000000','temperatura',19,2),(272,'2022-12-12','2022-12-12 15:00:00.000000','humidade',15.04,2),(273,'2022-12-12','2022-12-12 16:00:00.000000','temperatura',18.28,2),(274,'2022-12-12','2022-12-12 16:00:00.000000','humidade',15.999999999999998,2),(275,'2022-12-12','2022-12-12 17:00:00.000000','temperatura',18.939999999999998,2),(276,'2022-12-12','2022-12-12 17:00:00.000000','humidade',15.14,2),(277,'2022-12-12','2022-12-12 18:00:00.000000','temperatura',17.2,2),(278,'2022-12-12','2022-12-12 18:00:00.000000','humidade',17.18,2),(279,'2022-12-12','2022-12-12 19:00:00.000000','temperatura',17.02,2),(280,'2022-12-12','2022-12-12 19:00:00.000000','humidade',17.18,2),(281,'2022-12-12','2022-12-12 20:00:00.000000','temperatura',17.04,2),(282,'2022-12-12','2022-12-12 20:00:00.000000','humidade',17.04,2),(283,'2022-12-12','2022-12-12 21:00:00.000000','temperatura',14.2,2),(284,'2022-12-12','2022-12-12 21:00:00.000000','humidade',20.1,2),(285,'2022-12-12','2022-12-12 22:00:00.000000','temperatura',13.58,2),(286,'2022-12-12','2022-12-12 22:00:00.000000','humidade',20.68,2),(287,'2022-12-12','2022-12-12 23:00:00.000000','temperatura',14.14,2),(288,'2022-12-12','2022-12-12 23:00:00.000000','humidade',20.12,2),(289,'2022-12-13','2022-12-13 00:00:00.000000','temperatura',11.2,2),(290,'2022-12-13','2022-12-13 00:00:00.000000','humidade',23.2,2),(291,'2022-12-13','2022-12-13 01:00:00.000000','temperatura',12.399999999999999,2),(292,'2022-12-13','2022-12-13 01:00:00.000000','humidade',21.98,2),(293,'2022-12-13','2022-12-13 02:00:00.000000','temperatura',12.54,2),(294,'2022-12-13','2022-12-13 02:00:00.000000','humidade',21.62,2),(295,'2022-12-13','2022-12-13 03:00:00.000000','temperatura',14.379999999999999,2),(296,'2022-12-13','2022-12-13 03:00:00.000000','humidade',19.84,2),(297,'2022-12-13','2022-12-13 04:00:00.000000','temperatura',13.239999999999998,2),(298,'2022-12-13','2022-12-13 04:00:00.000000','humidade',21,2),(299,'2022-12-13','2022-12-13 05:00:00.000000','temperatura',13.399999999999999,2),(300,'2022-12-13','2022-12-13 05:00:00.000000','humidade',20.900000000000002,2),(301,'2022-12-13','2022-12-13 06:00:00.000000','temperatura',16.06,2),(302,'2022-12-13','2022-12-13 06:00:00.000000','humidade',18.240000000000002,2),(303,'2022-12-13','2022-12-13 07:00:00.000000','temperatura',15.84,2),(304,'2022-12-13','2022-12-13 07:00:00.000000','humidade',18.42,2),(305,'2022-12-13','2022-12-13 08:00:00.000000','temperatura',15.899999999999999,2),(306,'2022-12-13','2022-12-13 08:00:00.000000','humidade',18.32,2),(307,'2022-12-13','2022-12-13 09:00:00.000000','temperatura',18.46,2),(308,'2022-12-13','2022-12-13 09:00:00.000000','humidade',15.84,2),(309,'2022-12-13','2022-12-13 10:00:00.000000','temperatura',18.3,2),(310,'2022-12-13','2022-12-13 10:00:00.000000','humidade',16.08,2),(311,'2022-12-13','2022-12-13 11:00:00.000000','temperatura',18.8,2),(312,'2022-12-13','2022-12-13 11:00:00.000000','humidade',15.239999999999998,2),(313,'2022-12-13','2022-12-13 12:00:00.000000','temperatura',20.58,2),(314,'2022-12-13','2022-12-13 12:00:00.000000','humidade',13.700000000000001,2),(315,'2022-12-13','2022-12-13 13:00:00.000000','temperatura',19.54,2),(316,'2022-12-13','2022-12-13 13:00:00.000000','humidade',14.64,2),(317,'2022-12-13','2022-12-13 14:00:00.000000','temperatura',20.8,2),(318,'2022-12-13','2022-12-13 14:00:00.000000','humidade',13.519999999999998,2),(319,'2022-12-13','2022-12-13 15:00:00.000000','temperatura',19.08,2),(320,'2022-12-13','2022-12-13 15:00:00.000000','humidade',15.04,2),(321,'2022-12-13','2022-12-13 16:00:00.000000','temperatura',18.240000000000002,2),(322,'2022-12-13','2022-12-13 16:00:00.000000','humidade',15.999999999999998,2),(323,'2022-12-13','2022-12-13 17:00:00.000000','temperatura',19.02,2),(324,'2022-12-13','2022-12-13 17:00:00.000000','humidade',15.14,2),(325,'2022-12-13','2022-12-13 18:00:00.000000','temperatura',17,2),(326,'2022-12-13','2022-12-13 18:00:00.000000','humidade',17.12,2),(327,'2022-12-13','2022-12-13 19:00:00.000000','temperatura',17.2,2),(328,'2022-12-13','2022-12-13 19:00:00.000000','humidade',17.2,2),(329,'2022-12-13','2022-12-13 20:00:00.000000','temperatura',17.2,2),(330,'2022-12-13','2022-12-13 20:00:00.000000','humidade',17.14,2),(331,'2022-12-13','2022-12-13 21:00:00.000000','temperatura',14.2,2),(332,'2022-12-13','2022-12-13 21:00:00.000000','humidade',20.14,2),(333,'2022-12-13','2022-12-13 22:00:00.000000','temperatura',13.42,2),(334,'2022-12-13','2022-12-13 22:00:00.000000','humidade',20.6,2),(335,'2022-12-13','2022-12-13 23:00:00.000000','temperatura',14.02,2),(336,'2022-12-13','2022-12-13 23:00:00.000000','humidade',20.02,2);
 /*!40000 ALTER TABLE `sensor_measurements_cozinha` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `sensor_measurements_cozinha_seq`
---
-
-DROP TABLE IF EXISTS `sensor_measurements_cozinha_seq`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `sensor_measurements_cozinha_seq` (
-  `next_val` bigint DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `sensor_measurements_cozinha_seq`
---
-
-LOCK TABLES `sensor_measurements_cozinha_seq` WRITE;
-/*!40000 ALTER TABLE `sensor_measurements_cozinha_seq` DISABLE KEYS */;
-INSERT INTO `sensor_measurements_cozinha_seq` VALUES (1);
-/*!40000 ALTER TABLE `sensor_measurements_cozinha_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -645,15 +358,16 @@ DROP TABLE IF EXISTS `sensor_measurements_externo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sensor_measurements_externo` (
-  `id` int NOT NULL,
-  `timestamp` datetime(6) DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `dia` date DEFAULT NULL,
+  `stamp` datetime(6) DEFAULT NULL,
   `tipo` varchar(255) DEFAULT NULL,
   `valor` double DEFAULT NULL,
   `id_div` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK8s3oq1joss5kvyd6ow0mfyqbl` (`id_div`),
   CONSTRAINT `FK8s3oq1joss5kvyd6ow0mfyqbl` FOREIGN KEY (`id_div`) REFERENCES `divisao` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=337 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -662,29 +376,8 @@ CREATE TABLE `sensor_measurements_externo` (
 
 LOCK TABLES `sensor_measurements_externo` WRITE;
 /*!40000 ALTER TABLE `sensor_measurements_externo` DISABLE KEYS */;
+INSERT INTO `sensor_measurements_externo` VALUES (1,'2022-12-07','2022-12-07 00:00:00.000000','temperatura',10.42,3),(2,'2022-12-07','2022-12-07 00:00:00.000000','humidade',21.88,3),(3,'2022-12-07','2022-12-07 01:00:00.000000','temperatura',12.56,3),(4,'2022-12-07','2022-12-07 01:00:00.000000','humidade',19.66,3),(5,'2022-12-07','2022-12-07 02:00:00.000000','temperatura',10.06,3),(6,'2022-12-07','2022-12-07 02:00:00.000000','humidade',22.06,3),(7,'2022-12-07','2022-12-07 03:00:00.000000','temperatura',12.78,3),(8,'2022-12-07','2022-12-07 03:00:00.000000','humidade',19.52,3),(9,'2022-12-07','2022-12-07 04:00:00.000000','temperatura',13.239999999999998,3),(10,'2022-12-07','2022-12-07 04:00:00.000000','humidade',18.94,3),(11,'2022-12-07','2022-12-07 05:00:00.000000','temperatura',13.42,3),(12,'2022-12-07','2022-12-07 05:00:00.000000','humidade',18.62,3),(13,'2022-12-07','2022-12-07 06:00:00.000000','temperatura',14.34,3),(14,'2022-12-07','2022-12-07 06:00:00.000000','humidade',18,3),(15,'2022-12-07','2022-12-07 07:00:00.000000','temperatura',14.36,3),(16,'2022-12-07','2022-12-07 07:00:00.000000','humidade',17.84,3),(17,'2022-12-07','2022-12-07 08:00:00.000000','temperatura',14.68,3),(18,'2022-12-07','2022-12-07 08:00:00.000000','humidade',17.52,3),(19,'2022-12-07','2022-12-07 09:00:00.000000','temperatura',17.200000000000003,3),(20,'2022-12-07','2022-12-07 09:00:00.000000','humidade',15.079999999999998,3),(21,'2022-12-07','2022-12-07 10:00:00.000000','temperatura',17.34,3),(22,'2022-12-07','2022-12-07 10:00:00.000000','humidade',14.8,3),(23,'2022-12-07','2022-12-07 11:00:00.000000','temperatura',17.52,3),(24,'2022-12-07','2022-12-07 11:00:00.000000','humidade',14.600000000000001,3),(25,'2022-12-07','2022-12-07 12:00:00.000000','temperatura',19.34,3),(26,'2022-12-07','2022-12-07 12:00:00.000000','humidade',12.84,3),(27,'2022-12-07','2022-12-07 13:00:00.000000','temperatura',18.84,3),(28,'2022-12-07','2022-12-07 13:00:00.000000','humidade',13.299999999999999,3),(29,'2022-12-07','2022-12-07 14:00:00.000000','temperatura',19,3),(30,'2022-12-07','2022-12-07 14:00:00.000000','humidade',13.299999999999999,3),(31,'2022-12-07','2022-12-07 15:00:00.000000','temperatura',17.14,3),(32,'2022-12-07','2022-12-07 15:00:00.000000','humidade',15.079999999999998,3),(33,'2022-12-07','2022-12-07 16:00:00.000000','temperatura',17.919999999999998,3),(34,'2022-12-07','2022-12-07 16:00:00.000000','humidade',14.3,3),(35,'2022-12-07','2022-12-07 17:00:00.000000','temperatura',17.62,3),(36,'2022-12-07','2022-12-07 17:00:00.000000','humidade',14.58,3),(37,'2022-12-07','2022-12-07 18:00:00.000000','temperatura',16.06,3),(38,'2022-12-07','2022-12-07 18:00:00.000000','humidade',16.06,3),(39,'2022-12-07','2022-12-07 19:00:00.000000','temperatura',16.02,3),(40,'2022-12-07','2022-12-07 19:00:00.000000','humidade',16.08,3),(41,'2022-12-07','2022-12-07 20:00:00.000000','temperatura',16.16,3),(42,'2022-12-07','2022-12-07 20:00:00.000000','humidade',16.02,3),(43,'2022-12-07','2022-12-07 21:00:00.000000','temperatura',13.2,3),(44,'2022-12-07','2022-12-07 21:00:00.000000','humidade',19.06,3),(45,'2022-12-07','2022-12-07 22:00:00.000000','temperatura',14.2,3),(46,'2022-12-07','2022-12-07 22:00:00.000000','humidade',18.04,3),(47,'2022-12-07','2022-12-07 23:00:00.000000','temperatura',13.44,3),(48,'2022-12-07','2022-12-07 23:00:00.000000','humidade',18.78,3),(49,'2022-12-08','2022-12-08 00:00:00.000000','temperatura',10.42,3),(50,'2022-12-08','2022-12-08 00:00:00.000000','humidade',21.74,3),(51,'2022-12-08','2022-12-08 01:00:00.000000','temperatura',12.5,3),(52,'2022-12-08','2022-12-08 01:00:00.000000','humidade',19.76,3),(53,'2022-12-08','2022-12-08 02:00:00.000000','temperatura',10.02,3),(54,'2022-12-08','2022-12-08 02:00:00.000000','humidade',22.16,3),(55,'2022-12-08','2022-12-08 03:00:00.000000','temperatura',12.7,3),(56,'2022-12-08','2022-12-08 03:00:00.000000','humidade',19.5,3),(57,'2022-12-08','2022-12-08 04:00:00.000000','temperatura',13.2,3),(58,'2022-12-08','2022-12-08 04:00:00.000000','humidade',18.82,3),(59,'2022-12-08','2022-12-08 05:00:00.000000','temperatura',13.44,3),(60,'2022-12-08','2022-12-08 05:00:00.000000','humidade',18.700000000000003,3),(61,'2022-12-08','2022-12-08 06:00:00.000000','temperatura',14.34,3),(62,'2022-12-08','2022-12-08 06:00:00.000000','humidade',17.900000000000002,3),(63,'2022-12-08','2022-12-08 07:00:00.000000','temperatura',14.319999999999999,3),(64,'2022-12-08','2022-12-08 07:00:00.000000','humidade',17.86,3),(65,'2022-12-08','2022-12-08 08:00:00.000000','temperatura',14.62,3),(66,'2022-12-08','2022-12-08 08:00:00.000000','humidade',17.459999999999997,3),(67,'2022-12-08','2022-12-08 09:00:00.000000','temperatura',17.200000000000003,3),(68,'2022-12-08','2022-12-08 09:00:00.000000','humidade',15.079999999999998,3),(69,'2022-12-08','2022-12-08 10:00:00.000000','temperatura',17.22,3),(70,'2022-12-08','2022-12-08 10:00:00.000000','humidade',14.88,3),(71,'2022-12-08','2022-12-08 11:00:00.000000','temperatura',17.419999999999998,3),(72,'2022-12-08','2022-12-08 11:00:00.000000','humidade',14.660000000000002,3),(73,'2022-12-08','2022-12-08 12:00:00.000000','temperatura',19.24,3),(74,'2022-12-08','2022-12-08 12:00:00.000000','humidade',12.92,3),(75,'2022-12-08','2022-12-08 13:00:00.000000','temperatura',18.86,3),(76,'2022-12-08','2022-12-08 13:00:00.000000','humidade',13.28,3),(77,'2022-12-08','2022-12-08 14:00:00.000000','temperatura',18.96,3),(78,'2022-12-08','2022-12-08 14:00:00.000000','humidade',13.28,3),(79,'2022-12-08','2022-12-08 15:00:00.000000','temperatura',17.220000000000002,3),(80,'2022-12-08','2022-12-08 15:00:00.000000','humidade',14.979999999999999,3),(81,'2022-12-08','2022-12-08 16:00:00.000000','temperatura',18.08,3),(82,'2022-12-08','2022-12-08 16:00:00.000000','humidade',14.200000000000001,3),(83,'2022-12-08','2022-12-08 17:00:00.000000','temperatura',17.5,3),(84,'2022-12-08','2022-12-08 17:00:00.000000','humidade',14.68,3),(85,'2022-12-08','2022-12-08 18:00:00.000000','temperatura',16.08,3),(86,'2022-12-08','2022-12-08 18:00:00.000000','humidade',16,3),(87,'2022-12-08','2022-12-08 19:00:00.000000','temperatura',16.14,3),(88,'2022-12-08','2022-12-08 19:00:00.000000','humidade',16.14,3),(89,'2022-12-08','2022-12-08 20:00:00.000000','temperatura',16.16,3),(90,'2022-12-08','2022-12-08 20:00:00.000000','humidade',16.12,3),(91,'2022-12-08','2022-12-08 21:00:00.000000','temperatura',13.02,3),(92,'2022-12-08','2022-12-08 21:00:00.000000','humidade',19,3),(93,'2022-12-08','2022-12-08 22:00:00.000000','temperatura',14,3),(94,'2022-12-08','2022-12-08 22:00:00.000000','humidade',18.04,3),(95,'2022-12-08','2022-12-08 23:00:00.000000','temperatura',13.52,3),(96,'2022-12-08','2022-12-08 23:00:00.000000','humidade',18.78,3),(97,'2022-12-09','2022-12-09 00:00:00.000000','temperatura',10.34,3),(98,'2022-12-09','2022-12-09 00:00:00.000000','humidade',21.9,3),(99,'2022-12-09','2022-12-09 01:00:00.000000','temperatura',12.540000000000001,3),(100,'2022-12-09','2022-12-09 01:00:00.000000','humidade',19.76,3),(101,'2022-12-09','2022-12-09 02:00:00.000000','temperatura',10.04,3),(102,'2022-12-09','2022-12-09 02:00:00.000000','humidade',22.16,3),(103,'2022-12-09','2022-12-09 03:00:00.000000','temperatura',12.6,3),(104,'2022-12-09','2022-12-09 03:00:00.000000','humidade',19.56,3),(105,'2022-12-09','2022-12-09 04:00:00.000000','temperatura',13.299999999999999,3),(106,'2022-12-09','2022-12-09 04:00:00.000000','humidade',19,3),(107,'2022-12-09','2022-12-09 05:00:00.000000','temperatura',13.46,3),(108,'2022-12-09','2022-12-09 05:00:00.000000','humidade',18.700000000000003,3),(109,'2022-12-09','2022-12-09 06:00:00.000000','temperatura',14.28,3),(110,'2022-12-09','2022-12-09 06:00:00.000000','humidade',17.8,3),(111,'2022-12-09','2022-12-09 07:00:00.000000','temperatura',14.399999999999999,3),(112,'2022-12-09','2022-12-09 07:00:00.000000','humidade',17.900000000000002,3),(113,'2022-12-09','2022-12-09 08:00:00.000000','temperatura',14.74,3),(114,'2022-12-09','2022-12-09 08:00:00.000000','humidade',17.419999999999998,3),(115,'2022-12-09','2022-12-09 09:00:00.000000','temperatura',17.12,3),(116,'2022-12-09','2022-12-09 09:00:00.000000','humidade',14.999999999999998,3),(117,'2022-12-09','2022-12-09 10:00:00.000000','temperatura',17.34,3),(118,'2022-12-09','2022-12-09 10:00:00.000000','humidade',14.84,3),(119,'2022-12-09','2022-12-09 11:00:00.000000','temperatura',17.439999999999998,3),(120,'2022-12-09','2022-12-09 11:00:00.000000','humidade',14.740000000000002,3),(121,'2022-12-09','2022-12-09 12:00:00.000000','temperatura',19.4,3),(122,'2022-12-09','2022-12-09 12:00:00.000000','humidade',12.9,3),(123,'2022-12-09','2022-12-09 13:00:00.000000','temperatura',18.94,3),(124,'2022-12-09','2022-12-09 13:00:00.000000','humidade',13.379999999999999,3),(125,'2022-12-09','2022-12-09 14:00:00.000000','temperatura',18.8,3),(126,'2022-12-09','2022-12-09 14:00:00.000000','humidade',13.379999999999999,3),(127,'2022-12-09','2022-12-09 15:00:00.000000','temperatura',17.240000000000002,3),(128,'2022-12-09','2022-12-09 15:00:00.000000','humidade',14.999999999999998,3),(129,'2022-12-09','2022-12-09 16:00:00.000000','temperatura',18.04,3),(130,'2022-12-09','2022-12-09 16:00:00.000000','humidade',14.280000000000001,3),(131,'2022-12-09','2022-12-09 17:00:00.000000','temperatura',17.7,3),(132,'2022-12-09','2022-12-09 17:00:00.000000','humidade',14.52,3),(133,'2022-12-09','2022-12-09 18:00:00.000000','temperatura',16.04,3),(134,'2022-12-09','2022-12-09 18:00:00.000000','humidade',16.02,3),(135,'2022-12-09','2022-12-09 19:00:00.000000','temperatura',16.16,3),(136,'2022-12-09','2022-12-09 19:00:00.000000','humidade',16.12,3),(137,'2022-12-09','2022-12-09 20:00:00.000000','temperatura',16.08,3),(138,'2022-12-09','2022-12-09 20:00:00.000000','humidade',16.12,3),(139,'2022-12-09','2022-12-09 21:00:00.000000','temperatura',13.1,3),(140,'2022-12-09','2022-12-09 21:00:00.000000','humidade',19.06,3),(141,'2022-12-09','2022-12-09 22:00:00.000000','temperatura',14.06,3),(142,'2022-12-09','2022-12-09 22:00:00.000000','humidade',18.18,3),(143,'2022-12-09','2022-12-09 23:00:00.000000','temperatura',13.5,3),(144,'2022-12-09','2022-12-09 23:00:00.000000','humidade',18.66,3),(145,'2022-12-10','2022-12-10 00:00:00.000000','temperatura',10.46,3),(146,'2022-12-10','2022-12-10 00:00:00.000000','humidade',21.8,3),(147,'2022-12-10','2022-12-10 01:00:00.000000','temperatura',12.58,3),(148,'2022-12-10','2022-12-10 01:00:00.000000','humidade',19.68,3),(149,'2022-12-10','2022-12-10 02:00:00.000000','temperatura',10.04,3),(150,'2022-12-10','2022-12-10 02:00:00.000000','humidade',22.08,3),(151,'2022-12-10','2022-12-10 03:00:00.000000','temperatura',12.6,3),(152,'2022-12-10','2022-12-10 03:00:00.000000','humidade',19.419999999999998,3),(153,'2022-12-10','2022-12-10 04:00:00.000000','temperatura',13.239999999999998,3),(154,'2022-12-10','2022-12-10 04:00:00.000000','humidade',18.82,3),(155,'2022-12-10','2022-12-10 05:00:00.000000','temperatura',13.56,3),(156,'2022-12-10','2022-12-10 05:00:00.000000','humidade',18.8,3),(157,'2022-12-10','2022-12-10 06:00:00.000000','temperatura',14.36,3),(158,'2022-12-10','2022-12-10 06:00:00.000000','humidade',17.94,3),(159,'2022-12-10','2022-12-10 07:00:00.000000','temperatura',14.36,3),(160,'2022-12-10','2022-12-10 07:00:00.000000','humidade',17.98,3),(161,'2022-12-10','2022-12-10 08:00:00.000000','temperatura',14.66,3),(162,'2022-12-10','2022-12-10 08:00:00.000000','humidade',17.459999999999997,3),(163,'2022-12-10','2022-12-10 09:00:00.000000','temperatura',17.14,3),(164,'2022-12-10','2022-12-10 09:00:00.000000','humidade',15.079999999999998,3),(165,'2022-12-10','2022-12-10 10:00:00.000000','temperatura',17.32,3),(166,'2022-12-10','2022-12-10 10:00:00.000000','humidade',14.82,3),(167,'2022-12-10','2022-12-10 11:00:00.000000','temperatura',17.599999999999998,3),(168,'2022-12-10','2022-12-10 11:00:00.000000','humidade',14.620000000000001,3),(169,'2022-12-10','2022-12-10 12:00:00.000000','temperatura',19.38,3),(170,'2022-12-10','2022-12-10 12:00:00.000000','humidade',12.92,3),(171,'2022-12-10','2022-12-10 13:00:00.000000','temperatura',19,3),(172,'2022-12-10','2022-12-10 13:00:00.000000','humidade',13.2,3),(173,'2022-12-10','2022-12-10 14:00:00.000000','temperatura',18.88,3),(174,'2022-12-10','2022-12-10 14:00:00.000000','humidade',13.319999999999999,3),(175,'2022-12-10','2022-12-10 15:00:00.000000','temperatura',17.200000000000003,3),(176,'2022-12-10','2022-12-10 15:00:00.000000','humidade',14.919999999999998,3),(177,'2022-12-10','2022-12-10 16:00:00.000000','temperatura',17.9,3),(178,'2022-12-10','2022-12-10 16:00:00.000000','humidade',14.22,3),(179,'2022-12-10','2022-12-10 17:00:00.000000','temperatura',17.7,3),(180,'2022-12-10','2022-12-10 17:00:00.000000','humidade',14.62,3),(181,'2022-12-10','2022-12-10 18:00:00.000000','temperatura',16.18,3),(182,'2022-12-10','2022-12-10 18:00:00.000000','humidade',16.18,3),(183,'2022-12-10','2022-12-10 19:00:00.000000','temperatura',16.02,3),(184,'2022-12-10','2022-12-10 19:00:00.000000','humidade',16.02,3),(185,'2022-12-10','2022-12-10 20:00:00.000000','temperatura',16.2,3),(186,'2022-12-10','2022-12-10 20:00:00.000000','humidade',16.14,3),(187,'2022-12-10','2022-12-10 21:00:00.000000','temperatura',13.1,3),(188,'2022-12-10','2022-12-10 21:00:00.000000','humidade',19.16,3),(189,'2022-12-10','2022-12-10 22:00:00.000000','temperatura',14.02,3),(190,'2022-12-10','2022-12-10 22:00:00.000000','humidade',18.06,3),(191,'2022-12-10','2022-12-10 23:00:00.000000','temperatura',13.46,3),(192,'2022-12-10','2022-12-10 23:00:00.000000','humidade',18.720000000000002,3),(193,'2022-12-11','2022-12-11 00:00:00.000000','temperatura',10.360000000000001,3),(194,'2022-12-11','2022-12-11 00:00:00.000000','humidade',21.74,3),(195,'2022-12-11','2022-12-11 01:00:00.000000','temperatura',12.52,3),(196,'2022-12-11','2022-12-11 01:00:00.000000','humidade',19.66,3),(197,'2022-12-11','2022-12-11 02:00:00.000000','temperatura',10.12,3),(198,'2022-12-11','2022-12-11 02:00:00.000000','humidade',22.08,3),(199,'2022-12-11','2022-12-11 03:00:00.000000','temperatura',12.799999999999999,3),(200,'2022-12-11','2022-12-11 03:00:00.000000','humidade',19.459999999999997,3),(201,'2022-12-11','2022-12-11 04:00:00.000000','temperatura',13.219999999999999,3),(202,'2022-12-11','2022-12-11 04:00:00.000000','humidade',18.94,3),(203,'2022-12-11','2022-12-11 05:00:00.000000','temperatura',13.5,3),(204,'2022-12-11','2022-12-11 05:00:00.000000','humidade',18.6,3),(205,'2022-12-11','2022-12-11 06:00:00.000000','temperatura',14.28,3),(206,'2022-12-11','2022-12-11 06:00:00.000000','humidade',17.98,3),(207,'2022-12-11','2022-12-11 07:00:00.000000','temperatura',14.319999999999999,3),(208,'2022-12-11','2022-12-11 07:00:00.000000','humidade',17.98,3),(209,'2022-12-11','2022-12-11 08:00:00.000000','temperatura',14.62,3),(210,'2022-12-11','2022-12-11 08:00:00.000000','humidade',17.439999999999998,3),(211,'2022-12-11','2022-12-11 09:00:00.000000','temperatura',17.220000000000002,3),(212,'2022-12-11','2022-12-11 09:00:00.000000','humidade',14.939999999999998,3),(213,'2022-12-11','2022-12-11 10:00:00.000000','temperatura',17.24,3),(214,'2022-12-11','2022-12-11 10:00:00.000000','humidade',14.8,3),(215,'2022-12-11','2022-12-11 11:00:00.000000','temperatura',17.459999999999997,3),(216,'2022-12-11','2022-12-11 11:00:00.000000','humidade',14.660000000000002,3),(217,'2022-12-11','2022-12-11 12:00:00.000000','temperatura',19.32,3),(218,'2022-12-11','2022-12-11 12:00:00.000000','humidade',12.98,3),(219,'2022-12-11','2022-12-11 13:00:00.000000','temperatura',18.900000000000002,3),(220,'2022-12-11','2022-12-11 13:00:00.000000','humidade',13.26,3),(221,'2022-12-11','2022-12-11 14:00:00.000000','temperatura',18.86,3),(222,'2022-12-11','2022-12-11 14:00:00.000000','humidade',13.219999999999999,3),(223,'2022-12-11','2022-12-11 15:00:00.000000','temperatura',17.18,3),(224,'2022-12-11','2022-12-11 15:00:00.000000','humidade',14.999999999999998,3),(225,'2022-12-11','2022-12-11 16:00:00.000000','temperatura',17.919999999999998,3),(226,'2022-12-11','2022-12-11 16:00:00.000000','humidade',14.260000000000002,3),(227,'2022-12-11','2022-12-11 17:00:00.000000','temperatura',17.64,3),(228,'2022-12-11','2022-12-11 17:00:00.000000','humidade',14.56,3),(229,'2022-12-11','2022-12-11 18:00:00.000000','temperatura',16.02,3),(230,'2022-12-11','2022-12-11 18:00:00.000000','humidade',16.06,3),(231,'2022-12-11','2022-12-11 19:00:00.000000','temperatura',16.16,3),(232,'2022-12-11','2022-12-11 19:00:00.000000','humidade',16.06,3),(233,'2022-12-11','2022-12-11 20:00:00.000000','temperatura',16.2,3),(234,'2022-12-11','2022-12-11 20:00:00.000000','humidade',16.14,3),(235,'2022-12-11','2022-12-11 21:00:00.000000','temperatura',13.04,3),(236,'2022-12-11','2022-12-11 21:00:00.000000','humidade',19.16,3),(237,'2022-12-11','2022-12-11 22:00:00.000000','temperatura',14.1,3),(238,'2022-12-11','2022-12-11 22:00:00.000000','humidade',18.02,3),(239,'2022-12-11','2022-12-11 23:00:00.000000','temperatura',13.6,3),(240,'2022-12-11','2022-12-11 23:00:00.000000','humidade',18.76,3),(241,'2022-12-12','2022-12-12 00:00:00.000000','temperatura',10.42,3),(242,'2022-12-12','2022-12-12 00:00:00.000000','humidade',21.86,3),(243,'2022-12-12','2022-12-12 01:00:00.000000','temperatura',12.5,3),(244,'2022-12-12','2022-12-12 01:00:00.000000','humidade',19.76,3),(245,'2022-12-12','2022-12-12 02:00:00.000000','temperatura',10.1,3),(246,'2022-12-12','2022-12-12 02:00:00.000000','humidade',22.14,3),(247,'2022-12-12','2022-12-12 03:00:00.000000','temperatura',12.6,3),(248,'2022-12-12','2022-12-12 03:00:00.000000','humidade',19.52,3),(249,'2022-12-12','2022-12-12 04:00:00.000000','temperatura',13.36,3),(250,'2022-12-12','2022-12-12 04:00:00.000000','humidade',18.98,3),(251,'2022-12-12','2022-12-12 05:00:00.000000','temperatura',13.48,3),(252,'2022-12-12','2022-12-12 05:00:00.000000','humidade',18.76,3),(253,'2022-12-12','2022-12-12 06:00:00.000000','temperatura',14.28,3),(254,'2022-12-12','2022-12-12 06:00:00.000000','humidade',17.8,3),(255,'2022-12-12','2022-12-12 07:00:00.000000','temperatura',14.239999999999998,3),(256,'2022-12-12','2022-12-12 07:00:00.000000','humidade',17.8,3),(257,'2022-12-12','2022-12-12 08:00:00.000000','temperatura',14.76,3),(258,'2022-12-12','2022-12-12 08:00:00.000000','humidade',17.599999999999998,3),(259,'2022-12-12','2022-12-12 09:00:00.000000','temperatura',17.3,3),(260,'2022-12-12','2022-12-12 09:00:00.000000','humidade',15.019999999999998,3),(261,'2022-12-12','2022-12-12 10:00:00.000000','temperatura',17.24,3),(262,'2022-12-12','2022-12-12 10:00:00.000000','humidade',14.96,3),(263,'2022-12-12','2022-12-12 11:00:00.000000','temperatura',17.5,3),(264,'2022-12-12','2022-12-12 11:00:00.000000','humidade',14.700000000000001,3),(265,'2022-12-12','2022-12-12 12:00:00.000000','temperatura',19.2,3),(266,'2022-12-12','2022-12-12 12:00:00.000000','humidade',12.92,3),(267,'2022-12-12','2022-12-12 13:00:00.000000','temperatura',18.88,3),(268,'2022-12-12','2022-12-12 13:00:00.000000','humidade',13.379999999999999,3),(269,'2022-12-12','2022-12-12 14:00:00.000000','temperatura',18.94,3),(270,'2022-12-12','2022-12-12 14:00:00.000000','humidade',13.26,3),(271,'2022-12-12','2022-12-12 15:00:00.000000','temperatura',17.28,3),(272,'2022-12-12','2022-12-12 15:00:00.000000','humidade',14.919999999999998,3),(273,'2022-12-12','2022-12-12 16:00:00.000000','temperatura',18.02,3),(274,'2022-12-12','2022-12-12 16:00:00.000000','humidade',14.240000000000002,3),(275,'2022-12-12','2022-12-12 17:00:00.000000','temperatura',17.54,3),(276,'2022-12-12','2022-12-12 17:00:00.000000','humidade',14.54,3),(277,'2022-12-12','2022-12-12 18:00:00.000000','temperatura',16.08,3),(278,'2022-12-12','2022-12-12 18:00:00.000000','humidade',16.18,3),(279,'2022-12-12','2022-12-12 19:00:00.000000','temperatura',16.1,3),(280,'2022-12-12','2022-12-12 19:00:00.000000','humidade',16.04,3),(281,'2022-12-12','2022-12-12 20:00:00.000000','temperatura',16,3),(282,'2022-12-12','2022-12-12 20:00:00.000000','humidade',16.14,3),(283,'2022-12-12','2022-12-12 21:00:00.000000','temperatura',13.12,3),(284,'2022-12-12','2022-12-12 21:00:00.000000','humidade',19,3),(285,'2022-12-12','2022-12-12 22:00:00.000000','temperatura',14.14,3),(286,'2022-12-12','2022-12-12 22:00:00.000000','humidade',18,3),(287,'2022-12-12','2022-12-12 23:00:00.000000','temperatura',13.42,3),(288,'2022-12-12','2022-12-12 23:00:00.000000','humidade',18.62,3),(289,'2022-12-13','2022-12-13 00:00:00.000000','temperatura',10.34,3),(290,'2022-12-13','2022-12-13 00:00:00.000000','humidade',21.82,3),(291,'2022-12-13','2022-12-13 01:00:00.000000','temperatura',12.46,3),(292,'2022-12-13','2022-12-13 01:00:00.000000','humidade',19.6,3),(293,'2022-12-13','2022-12-13 02:00:00.000000','temperatura',10.16,3),(294,'2022-12-13','2022-12-13 02:00:00.000000','humidade',22,3),(295,'2022-12-13','2022-12-13 03:00:00.000000','temperatura',12.62,3),(296,'2022-12-13','2022-12-13 03:00:00.000000','humidade',19.4,3),(297,'2022-12-13','2022-12-13 04:00:00.000000','temperatura',13.26,3),(298,'2022-12-13','2022-12-13 04:00:00.000000','humidade',18.86,3),(299,'2022-12-13','2022-12-13 05:00:00.000000','temperatura',13.42,3),(300,'2022-12-13','2022-12-13 05:00:00.000000','humidade',18.720000000000002,3),(301,'2022-12-13','2022-12-13 06:00:00.000000','temperatura',14.34,3),(302,'2022-12-13','2022-12-13 06:00:00.000000','humidade',17.86,3),(303,'2022-12-13','2022-12-13 07:00:00.000000','temperatura',14.34,3),(304,'2022-12-13','2022-12-13 07:00:00.000000','humidade',18,3),(305,'2022-12-13','2022-12-13 08:00:00.000000','temperatura',14.66,3),(306,'2022-12-13','2022-12-13 08:00:00.000000','humidade',17.56,3),(307,'2022-12-13','2022-12-13 09:00:00.000000','temperatura',17.18,3),(308,'2022-12-13','2022-12-13 09:00:00.000000','humidade',15.019999999999998,3),(309,'2022-12-13','2022-12-13 10:00:00.000000','temperatura',17.259999999999998,3),(310,'2022-12-13','2022-12-13 10:00:00.000000','humidade',14.9,3),(311,'2022-12-13','2022-12-13 11:00:00.000000','temperatura',17.4,3),(312,'2022-12-13','2022-12-13 11:00:00.000000','humidade',14.600000000000001,3),(313,'2022-12-13','2022-12-13 12:00:00.000000','temperatura',19.24,3),(314,'2022-12-13','2022-12-13 12:00:00.000000','humidade',12.82,3),(315,'2022-12-13','2022-12-13 13:00:00.000000','temperatura',18.96,3),(316,'2022-12-13','2022-12-13 13:00:00.000000','humidade',13.219999999999999,3),(317,'2022-12-13','2022-12-13 14:00:00.000000','temperatura',19,3),(318,'2022-12-13','2022-12-13 14:00:00.000000','humidade',13.319999999999999,3),(319,'2022-12-13','2022-12-13 15:00:00.000000','temperatura',17.220000000000002,3),(320,'2022-12-13','2022-12-13 15:00:00.000000','humidade',14.959999999999999,3),(321,'2022-12-13','2022-12-13 16:00:00.000000','temperatura',18.099999999999998,3),(322,'2022-12-13','2022-12-13 16:00:00.000000','humidade',14.260000000000002,3),(323,'2022-12-13','2022-12-13 17:00:00.000000','temperatura',17.52,3),(324,'2022-12-13','2022-12-13 17:00:00.000000','humidade',14.56,3),(325,'2022-12-13','2022-12-13 18:00:00.000000','temperatura',16.02,3),(326,'2022-12-13','2022-12-13 18:00:00.000000','humidade',16.16,3),(327,'2022-12-13','2022-12-13 19:00:00.000000','temperatura',16.06,3),(328,'2022-12-13','2022-12-13 19:00:00.000000','humidade',16.14,3),(329,'2022-12-13','2022-12-13 20:00:00.000000','temperatura',16.2,3),(330,'2022-12-13','2022-12-13 20:00:00.000000','humidade',16.14,3),(331,'2022-12-13','2022-12-13 21:00:00.000000','temperatura',13.2,3),(332,'2022-12-13','2022-12-13 21:00:00.000000','humidade',19.16,3),(333,'2022-12-13','2022-12-13 22:00:00.000000','temperatura',14.2,3),(334,'2022-12-13','2022-12-13 22:00:00.000000','humidade',18.16,3),(335,'2022-12-13','2022-12-13 23:00:00.000000','temperatura',13.52,3),(336,'2022-12-13','2022-12-13 23:00:00.000000','humidade',18.76,3);
 /*!40000 ALTER TABLE `sensor_measurements_externo` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `sensor_measurements_externo_seq`
---
-
-DROP TABLE IF EXISTS `sensor_measurements_externo_seq`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `sensor_measurements_externo_seq` (
-  `next_val` bigint DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `sensor_measurements_externo_seq`
---
-
-LOCK TABLES `sensor_measurements_externo_seq` WRITE;
-/*!40000 ALTER TABLE `sensor_measurements_externo_seq` DISABLE KEYS */;
-INSERT INTO `sensor_measurements_externo_seq` VALUES (1);
-/*!40000 ALTER TABLE `sensor_measurements_externo_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -695,15 +388,16 @@ DROP TABLE IF EXISTS `sensor_measurements_quarto`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sensor_measurements_quarto` (
-  `id` int NOT NULL,
-  `timestamp` datetime(6) DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `dia` date DEFAULT NULL,
+  `stamp` datetime(6) DEFAULT NULL,
   `tipo` varchar(255) DEFAULT NULL,
   `valor` double DEFAULT NULL,
   `id_div` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKlb7aq9ekrf2ert6mcj1uh1ctq` (`id_div`),
   CONSTRAINT `FKlb7aq9ekrf2ert6mcj1uh1ctq` FOREIGN KEY (`id_div`) REFERENCES `divisao` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=337 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -712,29 +406,8 @@ CREATE TABLE `sensor_measurements_quarto` (
 
 LOCK TABLES `sensor_measurements_quarto` WRITE;
 /*!40000 ALTER TABLE `sensor_measurements_quarto` DISABLE KEYS */;
+INSERT INTO `sensor_measurements_quarto` VALUES (1,'2022-12-07','2022-12-07 00:00:00.000000','temperatura',12.440000000000001,4),(2,'2022-12-07','2022-12-07 00:00:00.000000','humidade',23.86,4),(3,'2022-12-07','2022-12-07 01:00:00.000000','temperatura',12.440000000000001,4),(4,'2022-12-07','2022-12-07 01:00:00.000000','humidade',23.759999999999998,4),(5,'2022-12-07','2022-12-07 02:00:00.000000','temperatura',15,4),(6,'2022-12-07','2022-12-07 02:00:00.000000','humidade',21.16,4),(7,'2022-12-07','2022-12-07 03:00:00.000000','temperatura',15.12,4),(8,'2022-12-07','2022-12-07 03:00:00.000000','humidade',21.14,4),(9,'2022-12-07','2022-12-07 04:00:00.000000','temperatura',14.02,4),(10,'2022-12-07','2022-12-07 04:00:00.000000','humidade',22.12,4),(11,'2022-12-07','2022-12-07 05:00:00.000000','temperatura',15.940000000000001,4),(12,'2022-12-07','2022-12-07 05:00:00.000000','humidade',20.24,4),(13,'2022-12-07','2022-12-07 06:00:00.000000','temperatura',16.42,4),(14,'2022-12-07','2022-12-07 06:00:00.000000','humidade',19.82,4),(15,'2022-12-07','2022-12-07 07:00:00.000000','temperatura',16.42,4),(16,'2022-12-07','2022-12-07 07:00:00.000000','humidade',19.7,4),(17,'2022-12-07','2022-12-07 08:00:00.000000','temperatura',16.479999999999997,4),(18,'2022-12-07','2022-12-07 08:00:00.000000','humidade',19.6,4),(19,'2022-12-07','2022-12-07 09:00:00.000000','temperatura',19.18,4),(20,'2022-12-07','2022-12-07 09:00:00.000000','humidade',17.06,4),(21,'2022-12-07','2022-12-07 10:00:00.000000','temperatura',19.8,4),(22,'2022-12-07','2022-12-07 10:00:00.000000','humidade',16.48,4),(23,'2022-12-07','2022-12-07 11:00:00.000000','temperatura',19.12,4),(24,'2022-12-07','2022-12-07 11:00:00.000000','humidade',17,4),(25,'2022-12-07','2022-12-07 12:00:00.000000','temperatura',20.18,4),(26,'2022-12-07','2022-12-07 12:00:00.000000','humidade',16.08,4),(27,'2022-12-07','2022-12-07 13:00:00.000000','temperatura',21.5,4),(28,'2022-12-07','2022-12-07 13:00:00.000000','humidade',14.64,4),(29,'2022-12-07','2022-12-07 14:00:00.000000','temperatura',20.4,4),(30,'2022-12-07','2022-12-07 14:00:00.000000','humidade',15.84,4),(31,'2022-12-07','2022-12-07 15:00:00.000000','temperatura',20.1,4),(32,'2022-12-07','2022-12-07 15:00:00.000000','humidade',16.08,4),(33,'2022-12-07','2022-12-07 16:00:00.000000','temperatura',19,4),(34,'2022-12-07','2022-12-07 16:00:00.000000','humidade',17.06,4),(35,'2022-12-07','2022-12-07 17:00:00.000000','temperatura',19.34,4),(36,'2022-12-07','2022-12-07 17:00:00.000000','humidade',16.779999999999998,4),(37,'2022-12-07','2022-12-07 18:00:00.000000','temperatura',18.18,4),(38,'2022-12-07','2022-12-07 18:00:00.000000','humidade',18.08,4),(39,'2022-12-07','2022-12-07 19:00:00.000000','temperatura',18.14,4),(40,'2022-12-07','2022-12-07 19:00:00.000000','humidade',18.12,4),(41,'2022-12-07','2022-12-07 20:00:00.000000','temperatura',18.04,4),(42,'2022-12-07','2022-12-07 20:00:00.000000','humidade',18.14,4),(43,'2022-12-07','2022-12-07 21:00:00.000000','temperatura',16.18,4),(44,'2022-12-07','2022-12-07 21:00:00.000000','humidade',20.14,4),(45,'2022-12-07','2022-12-07 22:00:00.000000','temperatura',14.940000000000001,4),(46,'2022-12-07','2022-12-07 22:00:00.000000','humidade',21.32,4),(47,'2022-12-07','2022-12-07 23:00:00.000000','temperatura',15.299999999999999,4),(48,'2022-12-07','2022-12-07 23:00:00.000000','humidade',20.98,4),(49,'2022-12-08','2022-12-08 00:00:00.000000','temperatura',12.4,4),(50,'2022-12-08','2022-12-08 00:00:00.000000','humidade',23.7,4),(51,'2022-12-08','2022-12-08 01:00:00.000000','temperatura',12.32,4),(52,'2022-12-08','2022-12-08 01:00:00.000000','humidade',23.7,4),(53,'2022-12-08','2022-12-08 02:00:00.000000','temperatura',15.02,4),(54,'2022-12-08','2022-12-08 02:00:00.000000','humidade',21.1,4),(55,'2022-12-08','2022-12-08 03:00:00.000000','temperatura',15.18,4),(56,'2022-12-08','2022-12-08 03:00:00.000000','humidade',21,4),(57,'2022-12-08','2022-12-08 04:00:00.000000','temperatura',14.02,4),(58,'2022-12-08','2022-12-08 04:00:00.000000','humidade',22.14,4),(59,'2022-12-08','2022-12-08 05:00:00.000000','temperatura',15.9,4),(60,'2022-12-08','2022-12-08 05:00:00.000000','humidade',20.36,4),(61,'2022-12-08','2022-12-08 06:00:00.000000','temperatura',16.5,4),(62,'2022-12-08','2022-12-08 06:00:00.000000','humidade',19.84,4),(63,'2022-12-08','2022-12-08 07:00:00.000000','temperatura',16.32,4),(64,'2022-12-08','2022-12-08 07:00:00.000000','humidade',19.86,4),(65,'2022-12-08','2022-12-08 08:00:00.000000','temperatura',16.5,4),(66,'2022-12-08','2022-12-08 08:00:00.000000','humidade',19.68,4),(67,'2022-12-08','2022-12-08 09:00:00.000000','temperatura',19.16,4),(68,'2022-12-08','2022-12-08 09:00:00.000000','humidade',17.08,4),(69,'2022-12-08','2022-12-08 10:00:00.000000','temperatura',19.88,4),(70,'2022-12-08','2022-12-08 10:00:00.000000','humidade',16.44,4),(71,'2022-12-08','2022-12-08 11:00:00.000000','temperatura',19.16,4),(72,'2022-12-08','2022-12-08 11:00:00.000000','humidade',17.2,4),(73,'2022-12-08','2022-12-08 12:00:00.000000','temperatura',20.18,4),(74,'2022-12-08','2022-12-08 12:00:00.000000','humidade',16.16,4),(75,'2022-12-08','2022-12-08 13:00:00.000000','temperatura',21.419999999999998,4),(76,'2022-12-08','2022-12-08 13:00:00.000000','humidade',14.600000000000001,4),(77,'2022-12-08','2022-12-08 14:00:00.000000','temperatura',20.259999999999998,4),(78,'2022-12-08','2022-12-08 14:00:00.000000','humidade',15.8,4),(79,'2022-12-08','2022-12-08 15:00:00.000000','temperatura',20.16,4),(80,'2022-12-08','2022-12-08 15:00:00.000000','humidade',16.14,4),(81,'2022-12-08','2022-12-08 16:00:00.000000','temperatura',19,4),(82,'2022-12-08','2022-12-08 16:00:00.000000','humidade',17.08,4),(83,'2022-12-08','2022-12-08 17:00:00.000000','temperatura',19.32,4),(84,'2022-12-08','2022-12-08 17:00:00.000000','humidade',16.82,4),(85,'2022-12-08','2022-12-08 18:00:00.000000','temperatura',18.04,4),(86,'2022-12-08','2022-12-08 18:00:00.000000','humidade',18.02,4),(87,'2022-12-08','2022-12-08 19:00:00.000000','temperatura',18.08,4),(88,'2022-12-08','2022-12-08 19:00:00.000000','humidade',18.16,4),(89,'2022-12-08','2022-12-08 20:00:00.000000','temperatura',18.14,4),(90,'2022-12-08','2022-12-08 20:00:00.000000','humidade',18.16,4),(91,'2022-12-08','2022-12-08 21:00:00.000000','temperatura',16.18,4),(92,'2022-12-08','2022-12-08 21:00:00.000000','humidade',20.14,4),(93,'2022-12-08','2022-12-08 22:00:00.000000','temperatura',15,4),(94,'2022-12-08','2022-12-08 22:00:00.000000','humidade',21.22,4),(95,'2022-12-08','2022-12-08 23:00:00.000000','temperatura',15.399999999999999,4),(96,'2022-12-08','2022-12-08 23:00:00.000000','humidade',20.96,4),(97,'2022-12-09','2022-12-09 00:00:00.000000','temperatura',12.48,4),(98,'2022-12-09','2022-12-09 00:00:00.000000','humidade',23.86,4),(99,'2022-12-09','2022-12-09 01:00:00.000000','temperatura',12.5,4),(100,'2022-12-09','2022-12-09 01:00:00.000000','humidade',23.759999999999998,4),(101,'2022-12-09','2022-12-09 02:00:00.000000','temperatura',15.12,4),(102,'2022-12-09','2022-12-09 02:00:00.000000','humidade',21.18,4),(103,'2022-12-09','2022-12-09 03:00:00.000000','temperatura',15.08,4),(104,'2022-12-09','2022-12-09 03:00:00.000000','humidade',21.04,4),(105,'2022-12-09','2022-12-09 04:00:00.000000','temperatura',14.18,4),(106,'2022-12-09','2022-12-09 04:00:00.000000','humidade',22.1,4),(107,'2022-12-09','2022-12-09 05:00:00.000000','temperatura',15.84,4),(108,'2022-12-09','2022-12-09 05:00:00.000000','humidade',20.38,4),(109,'2022-12-09','2022-12-09 06:00:00.000000','temperatura',16.34,4),(110,'2022-12-09','2022-12-09 06:00:00.000000','humidade',19.7,4),(111,'2022-12-09','2022-12-09 07:00:00.000000','temperatura',16.36,4),(112,'2022-12-09','2022-12-09 07:00:00.000000','humidade',19.72,4),(113,'2022-12-09','2022-12-09 08:00:00.000000','temperatura',16.54,4),(114,'2022-12-09','2022-12-09 08:00:00.000000','humidade',19.64,4),(115,'2022-12-09','2022-12-09 09:00:00.000000','temperatura',19.16,4),(116,'2022-12-09','2022-12-09 09:00:00.000000','humidade',16.919999999999998,4),(117,'2022-12-09','2022-12-09 10:00:00.000000','temperatura',19.74,4),(118,'2022-12-09','2022-12-09 10:00:00.000000','humidade',16.42,4),(119,'2022-12-09','2022-12-09 11:00:00.000000','temperatura',19.02,4),(120,'2022-12-09','2022-12-09 11:00:00.000000','humidade',17.08,4),(121,'2022-12-09','2022-12-09 12:00:00.000000','temperatura',20.12,4),(122,'2022-12-09','2022-12-09 12:00:00.000000','humidade',16.14,4),(123,'2022-12-09','2022-12-09 13:00:00.000000','temperatura',21.54,4),(124,'2022-12-09','2022-12-09 13:00:00.000000','humidade',14.72,4),(125,'2022-12-09','2022-12-09 14:00:00.000000','temperatura',20.24,4),(126,'2022-12-09','2022-12-09 14:00:00.000000','humidade',15.82,4),(127,'2022-12-09','2022-12-09 15:00:00.000000','temperatura',20.16,4),(128,'2022-12-09','2022-12-09 15:00:00.000000','humidade',16.14,4),(129,'2022-12-09','2022-12-09 16:00:00.000000','temperatura',19.02,4),(130,'2022-12-09','2022-12-09 16:00:00.000000','humidade',17,4),(131,'2022-12-09','2022-12-09 17:00:00.000000','temperatura',19.34,4),(132,'2022-12-09','2022-12-09 17:00:00.000000','humidade',16.74,4),(133,'2022-12-09','2022-12-09 18:00:00.000000','temperatura',18.12,4),(134,'2022-12-09','2022-12-09 18:00:00.000000','humidade',18.12,4),(135,'2022-12-09','2022-12-09 19:00:00.000000','temperatura',18,4),(136,'2022-12-09','2022-12-09 19:00:00.000000','humidade',18.14,4),(137,'2022-12-09','2022-12-09 20:00:00.000000','temperatura',18.14,4),(138,'2022-12-09','2022-12-09 20:00:00.000000','humidade',18.18,4),(139,'2022-12-09','2022-12-09 21:00:00.000000','temperatura',16.18,4),(140,'2022-12-09','2022-12-09 21:00:00.000000','humidade',20.08,4),(141,'2022-12-09','2022-12-09 22:00:00.000000','temperatura',14.84,4),(142,'2022-12-09','2022-12-09 22:00:00.000000','humidade',21.279999999999998,4),(143,'2022-12-09','2022-12-09 23:00:00.000000','temperatura',15.2,4),(144,'2022-12-09','2022-12-09 23:00:00.000000','humidade',20.86,4),(145,'2022-12-10','2022-12-10 00:00:00.000000','temperatura',12.38,4),(146,'2022-12-10','2022-12-10 00:00:00.000000','humidade',23.779999999999998,4),(147,'2022-12-10','2022-12-10 01:00:00.000000','temperatura',12.48,4),(148,'2022-12-10','2022-12-10 01:00:00.000000','humidade',23.9,4),(149,'2022-12-10','2022-12-10 02:00:00.000000','temperatura',15.12,4),(150,'2022-12-10','2022-12-10 02:00:00.000000','humidade',21.1,4),(151,'2022-12-10','2022-12-10 03:00:00.000000','temperatura',15.12,4),(152,'2022-12-10','2022-12-10 03:00:00.000000','humidade',21.08,4),(153,'2022-12-10','2022-12-10 04:00:00.000000','temperatura',14.02,4),(154,'2022-12-10','2022-12-10 04:00:00.000000','humidade',22.1,4),(155,'2022-12-10','2022-12-10 05:00:00.000000','temperatura',15.860000000000001,4),(156,'2022-12-10','2022-12-10 05:00:00.000000','humidade',20.32,4),(157,'2022-12-10','2022-12-10 06:00:00.000000','temperatura',16.36,4),(158,'2022-12-10','2022-12-10 06:00:00.000000','humidade',19.84,4),(159,'2022-12-10','2022-12-10 07:00:00.000000','temperatura',16.400000000000002,4),(160,'2022-12-10','2022-12-10 07:00:00.000000','humidade',19.82,4),(161,'2022-12-10','2022-12-10 08:00:00.000000','temperatura',16.4,4),(162,'2022-12-10','2022-12-10 08:00:00.000000','humidade',19.66,4),(163,'2022-12-10','2022-12-10 09:00:00.000000','temperatura',19.1,4),(164,'2022-12-10','2022-12-10 09:00:00.000000','humidade',17.06,4),(165,'2022-12-10','2022-12-10 10:00:00.000000','temperatura',19.8,4),(166,'2022-12-10','2022-12-10 10:00:00.000000','humidade',16.32,4),(167,'2022-12-10','2022-12-10 11:00:00.000000','temperatura',19.14,4),(168,'2022-12-10','2022-12-10 11:00:00.000000','humidade',17.18,4),(169,'2022-12-10','2022-12-10 12:00:00.000000','temperatura',20.18,4),(170,'2022-12-10','2022-12-10 12:00:00.000000','humidade',16.04,4),(171,'2022-12-10','2022-12-10 13:00:00.000000','temperatura',21.56,4),(172,'2022-12-10','2022-12-10 13:00:00.000000','humidade',14.64,4),(173,'2022-12-10','2022-12-10 14:00:00.000000','temperatura',20.3,4),(174,'2022-12-10','2022-12-10 14:00:00.000000','humidade',15.84,4),(175,'2022-12-10','2022-12-10 15:00:00.000000','temperatura',20.08,4),(176,'2022-12-10','2022-12-10 15:00:00.000000','humidade',16.14,4),(177,'2022-12-10','2022-12-10 16:00:00.000000','temperatura',19.14,4),(178,'2022-12-10','2022-12-10 16:00:00.000000','humidade',17.12,4),(179,'2022-12-10','2022-12-10 17:00:00.000000','temperatura',19.36,4),(180,'2022-12-10','2022-12-10 17:00:00.000000','humidade',16.82,4),(181,'2022-12-10','2022-12-10 18:00:00.000000','temperatura',18.2,4),(182,'2022-12-10','2022-12-10 18:00:00.000000','humidade',18.08,4),(183,'2022-12-10','2022-12-10 19:00:00.000000','temperatura',18.12,4),(184,'2022-12-10','2022-12-10 19:00:00.000000','humidade',18.14,4),(185,'2022-12-10','2022-12-10 20:00:00.000000','temperatura',18,4),(186,'2022-12-10','2022-12-10 20:00:00.000000','humidade',18.18,4),(187,'2022-12-10','2022-12-10 21:00:00.000000','temperatura',16,4),(188,'2022-12-10','2022-12-10 21:00:00.000000','humidade',20.16,4),(189,'2022-12-10','2022-12-10 22:00:00.000000','temperatura',14.98,4),(190,'2022-12-10','2022-12-10 22:00:00.000000','humidade',21.2,4),(191,'2022-12-10','2022-12-10 23:00:00.000000','temperatura',15.2,4),(192,'2022-12-10','2022-12-10 23:00:00.000000','humidade',20.8,4),(193,'2022-12-11','2022-12-11 00:00:00.000000','temperatura',12.5,4),(194,'2022-12-11','2022-12-11 00:00:00.000000','humidade',23.779999999999998,4),(195,'2022-12-11','2022-12-11 01:00:00.000000','temperatura',12.42,4),(196,'2022-12-11','2022-12-11 01:00:00.000000','humidade',23.9,4),(197,'2022-12-11','2022-12-11 02:00:00.000000','temperatura',15.1,4),(198,'2022-12-11','2022-12-11 02:00:00.000000','humidade',21.18,4),(199,'2022-12-11','2022-12-11 03:00:00.000000','temperatura',15.18,4),(200,'2022-12-11','2022-12-11 03:00:00.000000','humidade',21.14,4),(201,'2022-12-11','2022-12-11 04:00:00.000000','temperatura',14.06,4),(202,'2022-12-11','2022-12-11 04:00:00.000000','humidade',22.18,4),(203,'2022-12-11','2022-12-11 05:00:00.000000','temperatura',15.98,4),(204,'2022-12-11','2022-12-11 05:00:00.000000','humidade',20.24,4),(205,'2022-12-11','2022-12-11 06:00:00.000000','temperatura',16.5,4),(206,'2022-12-11','2022-12-11 06:00:00.000000','humidade',19.84,4),(207,'2022-12-11','2022-12-11 07:00:00.000000','temperatura',16.42,4),(208,'2022-12-11','2022-12-11 07:00:00.000000','humidade',19.74,4),(209,'2022-12-11','2022-12-11 08:00:00.000000','temperatura',16.58,4),(210,'2022-12-11','2022-12-11 08:00:00.000000','humidade',19.62,4),(211,'2022-12-11','2022-12-11 09:00:00.000000','temperatura',19.18,4),(212,'2022-12-11','2022-12-11 09:00:00.000000','humidade',16.9,4),(213,'2022-12-11','2022-12-11 10:00:00.000000','temperatura',19.8,4),(214,'2022-12-11','2022-12-11 10:00:00.000000','humidade',16.44,4),(215,'2022-12-11','2022-12-11 11:00:00.000000','temperatura',19.08,4),(216,'2022-12-11','2022-12-11 11:00:00.000000','humidade',17.16,4),(217,'2022-12-11','2022-12-11 12:00:00.000000','temperatura',20.18,4),(218,'2022-12-11','2022-12-11 12:00:00.000000','humidade',16.04,4),(219,'2022-12-11','2022-12-11 13:00:00.000000','temperatura',21.5,4),(220,'2022-12-11','2022-12-11 13:00:00.000000','humidade',14.8,4),(221,'2022-12-11','2022-12-11 14:00:00.000000','temperatura',20.36,4),(222,'2022-12-11','2022-12-11 14:00:00.000000','humidade',15.92,4),(223,'2022-12-11','2022-12-11 15:00:00.000000','temperatura',20,4),(224,'2022-12-11','2022-12-11 15:00:00.000000','humidade',16.16,4),(225,'2022-12-11','2022-12-11 16:00:00.000000','temperatura',19.12,4),(226,'2022-12-11','2022-12-11 16:00:00.000000','humidade',17.04,4),(227,'2022-12-11','2022-12-11 17:00:00.000000','temperatura',19.44,4),(228,'2022-12-11','2022-12-11 17:00:00.000000','humidade',16.88,4),(229,'2022-12-11','2022-12-11 18:00:00.000000','temperatura',18.1,4),(230,'2022-12-11','2022-12-11 18:00:00.000000','humidade',18.18,4),(231,'2022-12-11','2022-12-11 19:00:00.000000','temperatura',18.14,4),(232,'2022-12-11','2022-12-11 19:00:00.000000','humidade',18.06,4),(233,'2022-12-11','2022-12-11 20:00:00.000000','temperatura',18.06,4),(234,'2022-12-11','2022-12-11 20:00:00.000000','humidade',18.12,4),(235,'2022-12-11','2022-12-11 21:00:00.000000','temperatura',16.2,4),(236,'2022-12-11','2022-12-11 21:00:00.000000','humidade',20.12,4),(237,'2022-12-11','2022-12-11 22:00:00.000000','temperatura',14.98,4),(238,'2022-12-11','2022-12-11 22:00:00.000000','humidade',21.22,4),(239,'2022-12-11','2022-12-11 23:00:00.000000','temperatura',15.379999999999999,4),(240,'2022-12-11','2022-12-11 23:00:00.000000','humidade',20.98,4),(241,'2022-12-12','2022-12-12 00:00:00.000000','temperatura',12.3,4),(242,'2022-12-12','2022-12-12 00:00:00.000000','humidade',23.72,4),(243,'2022-12-12','2022-12-12 01:00:00.000000','temperatura',12.3,4),(244,'2022-12-12','2022-12-12 01:00:00.000000','humidade',23.82,4),(245,'2022-12-12','2022-12-12 02:00:00.000000','temperatura',15.14,4),(246,'2022-12-12','2022-12-12 02:00:00.000000','humidade',21,4),(247,'2022-12-12','2022-12-12 03:00:00.000000','temperatura',15.1,4),(248,'2022-12-12','2022-12-12 03:00:00.000000','humidade',21.18,4),(249,'2022-12-12','2022-12-12 04:00:00.000000','temperatura',14.2,4),(250,'2022-12-12','2022-12-12 04:00:00.000000','humidade',22.2,4),(251,'2022-12-12','2022-12-12 05:00:00.000000','temperatura',15.96,4),(252,'2022-12-12','2022-12-12 05:00:00.000000','humidade',20.36,4),(253,'2022-12-12','2022-12-12 06:00:00.000000','temperatura',16.3,4),(254,'2022-12-12','2022-12-12 06:00:00.000000','humidade',19.86,4),(255,'2022-12-12','2022-12-12 07:00:00.000000','temperatura',16.400000000000002,4),(256,'2022-12-12','2022-12-12 07:00:00.000000','humidade',19.82,4),(257,'2022-12-12','2022-12-12 08:00:00.000000','temperatura',16.419999999999998,4),(258,'2022-12-12','2022-12-12 08:00:00.000000','humidade',19.740000000000002,4),(259,'2022-12-12','2022-12-12 09:00:00.000000','temperatura',19.220000000000002,4),(260,'2022-12-12','2022-12-12 09:00:00.000000','humidade',17,4),(261,'2022-12-12','2022-12-12 10:00:00.000000','temperatura',19.74,4),(262,'2022-12-12','2022-12-12 10:00:00.000000','humidade',16.38,4),(263,'2022-12-12','2022-12-12 11:00:00.000000','temperatura',19.06,4),(264,'2022-12-12','2022-12-12 11:00:00.000000','humidade',17.14,4),(265,'2022-12-12','2022-12-12 12:00:00.000000','temperatura',20.18,4),(266,'2022-12-12','2022-12-12 12:00:00.000000','humidade',16.16,4),(267,'2022-12-12','2022-12-12 13:00:00.000000','temperatura',21.459999999999997,4),(268,'2022-12-12','2022-12-12 13:00:00.000000','humidade',14.72,4),(269,'2022-12-12','2022-12-12 14:00:00.000000','temperatura',20.24,4),(270,'2022-12-12','2022-12-12 14:00:00.000000','humidade',15.88,4),(271,'2022-12-12','2022-12-12 15:00:00.000000','temperatura',20,4),(272,'2022-12-12','2022-12-12 15:00:00.000000','humidade',16.02,4),(273,'2022-12-12','2022-12-12 16:00:00.000000','temperatura',19,4),(274,'2022-12-12','2022-12-12 16:00:00.000000','humidade',17.2,4),(275,'2022-12-12','2022-12-12 17:00:00.000000','temperatura',19.46,4),(276,'2022-12-12','2022-12-12 17:00:00.000000','humidade',16.86,4),(277,'2022-12-12','2022-12-12 18:00:00.000000','temperatura',18.18,4),(278,'2022-12-12','2022-12-12 18:00:00.000000','humidade',18.14,4),(279,'2022-12-12','2022-12-12 19:00:00.000000','temperatura',18.1,4),(280,'2022-12-12','2022-12-12 19:00:00.000000','humidade',18.08,4),(281,'2022-12-12','2022-12-12 20:00:00.000000','temperatura',18.14,4),(282,'2022-12-12','2022-12-12 20:00:00.000000','humidade',18.16,4),(283,'2022-12-12','2022-12-12 21:00:00.000000','temperatura',16.06,4),(284,'2022-12-12','2022-12-12 21:00:00.000000','humidade',20.06,4),(285,'2022-12-12','2022-12-12 22:00:00.000000','temperatura',14.940000000000001,4),(286,'2022-12-12','2022-12-12 22:00:00.000000','humidade',21.34,4),(287,'2022-12-12','2022-12-12 23:00:00.000000','temperatura',15.299999999999999,4),(288,'2022-12-12','2022-12-12 23:00:00.000000','humidade',20.8,4),(289,'2022-12-13','2022-12-13 00:00:00.000000','temperatura',12.34,4),(290,'2022-12-13','2022-12-13 00:00:00.000000','humidade',23.82,4),(291,'2022-12-13','2022-12-13 01:00:00.000000','temperatura',12.4,4),(292,'2022-12-13','2022-12-13 01:00:00.000000','humidade',23.88,4),(293,'2022-12-13','2022-12-13 02:00:00.000000','temperatura',15.16,4),(294,'2022-12-13','2022-12-13 02:00:00.000000','humidade',21.08,4),(295,'2022-12-13','2022-12-13 03:00:00.000000','temperatura',15.16,4),(296,'2022-12-13','2022-12-13 03:00:00.000000','humidade',21.2,4),(297,'2022-12-13','2022-12-13 04:00:00.000000','temperatura',14.12,4),(298,'2022-12-13','2022-12-13 04:00:00.000000','humidade',22.02,4),(299,'2022-12-13','2022-12-13 05:00:00.000000','temperatura',15.82,4),(300,'2022-12-13','2022-12-13 05:00:00.000000','humidade',20.4,4),(301,'2022-12-13','2022-12-13 06:00:00.000000','temperatura',16.34,4),(302,'2022-12-13','2022-12-13 06:00:00.000000','humidade',19.759999999999998,4),(303,'2022-12-13','2022-12-13 07:00:00.000000','temperatura',16.42,4),(304,'2022-12-13','2022-12-13 07:00:00.000000','humidade',19.86,4),(305,'2022-12-13','2022-12-13 08:00:00.000000','temperatura',16.4,4),(306,'2022-12-13','2022-12-13 08:00:00.000000','humidade',19.64,4),(307,'2022-12-13','2022-12-13 09:00:00.000000','temperatura',19.26,4),(308,'2022-12-13','2022-12-13 09:00:00.000000','humidade',17.02,4),(309,'2022-12-13','2022-12-13 10:00:00.000000','temperatura',19.82,4),(310,'2022-12-13','2022-12-13 10:00:00.000000','humidade',16.48,4),(311,'2022-12-13','2022-12-13 11:00:00.000000','temperatura',19.04,4),(312,'2022-12-13','2022-12-13 11:00:00.000000','humidade',17.16,4),(313,'2022-12-13','2022-12-13 12:00:00.000000','temperatura',20.2,4),(314,'2022-12-13','2022-12-13 12:00:00.000000','humidade',16.16,4),(315,'2022-12-13','2022-12-13 13:00:00.000000','temperatura',21.459999999999997,4),(316,'2022-12-13','2022-12-13 13:00:00.000000','humidade',14.600000000000001,4),(317,'2022-12-13','2022-12-13 14:00:00.000000','temperatura',20.259999999999998,4),(318,'2022-12-13','2022-12-13 14:00:00.000000','humidade',15.8,4),(319,'2022-12-13','2022-12-13 15:00:00.000000','temperatura',20.08,4),(320,'2022-12-13','2022-12-13 15:00:00.000000','humidade',16.12,4),(321,'2022-12-13','2022-12-13 16:00:00.000000','temperatura',19.18,4),(322,'2022-12-13','2022-12-13 16:00:00.000000','humidade',17.2,4),(323,'2022-12-13','2022-12-13 17:00:00.000000','temperatura',19.34,4),(324,'2022-12-13','2022-12-13 17:00:00.000000','humidade',16.779999999999998,4),(325,'2022-12-13','2022-12-13 18:00:00.000000','temperatura',18.08,4),(326,'2022-12-13','2022-12-13 18:00:00.000000','humidade',18.2,4),(327,'2022-12-13','2022-12-13 19:00:00.000000','temperatura',18.14,4),(328,'2022-12-13','2022-12-13 19:00:00.000000','humidade',18,4),(329,'2022-12-13','2022-12-13 20:00:00.000000','temperatura',18.1,4),(330,'2022-12-13','2022-12-13 20:00:00.000000','humidade',18.02,4),(331,'2022-12-13','2022-12-13 21:00:00.000000','temperatura',16.1,4),(332,'2022-12-13','2022-12-13 21:00:00.000000','humidade',20.2,4),(333,'2022-12-13','2022-12-13 22:00:00.000000','temperatura',14.96,4),(334,'2022-12-13','2022-12-13 22:00:00.000000','humidade',21.32,4),(335,'2022-12-13','2022-12-13 23:00:00.000000','temperatura',15.379999999999999,4),(336,'2022-12-13','2022-12-13 23:00:00.000000','humidade',20.8,4);
 /*!40000 ALTER TABLE `sensor_measurements_quarto` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `sensor_measurements_quarto_seq`
---
-
-DROP TABLE IF EXISTS `sensor_measurements_quarto_seq`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `sensor_measurements_quarto_seq` (
-  `next_val` bigint DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `sensor_measurements_quarto_seq`
---
-
-LOCK TABLES `sensor_measurements_quarto_seq` WRITE;
-/*!40000 ALTER TABLE `sensor_measurements_quarto_seq` DISABLE KEYS */;
-INSERT INTO `sensor_measurements_quarto_seq` VALUES (1);
-/*!40000 ALTER TABLE `sensor_measurements_quarto_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -745,15 +418,16 @@ DROP TABLE IF EXISTS `sensor_measurements_sala`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sensor_measurements_sala` (
-  `id` int NOT NULL,
-  `timestamp` datetime(6) DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `dia` date DEFAULT NULL,
+  `stamp` datetime(6) DEFAULT NULL,
   `tipo` varchar(255) DEFAULT NULL,
   `valor` double DEFAULT NULL,
   `id_div` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKbu8k19ihij8g9nql7dasi3i1w` (`id_div`),
   CONSTRAINT `FKbu8k19ihij8g9nql7dasi3i1w` FOREIGN KEY (`id_div`) REFERENCES `divisao` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20497 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -762,129 +436,8 @@ CREATE TABLE `sensor_measurements_sala` (
 
 LOCK TABLES `sensor_measurements_sala` WRITE;
 /*!40000 ALTER TABLE `sensor_measurements_sala` DISABLE KEYS */;
+INSERT INTO `sensor_measurements_sala` VALUES (20161,'2022-12-07','2022-12-07 00:00:00.000000','temperatura',10.68,1),(20162,'2022-12-07','2022-12-07 00:00:00.000000','humidade',19.64,1),(20163,'2022-12-07','2022-12-07 01:00:00.000000','temperatura',9.46,1),(20164,'2022-12-07','2022-12-07 01:00:00.000000','humidade',20.7,1),(20165,'2022-12-07','2022-12-07 02:00:00.000000','temperatura',11.16,1),(20166,'2022-12-07','2022-12-07 02:00:00.000000','humidade',19.02,1),(20167,'2022-12-07','2022-12-07 03:00:00.000000','temperatura',12.78,1),(20168,'2022-12-07','2022-12-07 03:00:00.000000','humidade',17.439999999999998,1),(20169,'2022-12-07','2022-12-07 04:00:00.000000','temperatura',11.62,1),(20170,'2022-12-07','2022-12-07 04:00:00.000000','humidade',18.56,1),(20171,'2022-12-07','2022-12-07 05:00:00.000000','temperatura',12.16,1),(20172,'2022-12-07','2022-12-07 05:00:00.000000','humidade',18.02,1),(20173,'2022-12-07','2022-12-07 06:00:00.000000','temperatura',13.4,1),(20174,'2022-12-07','2022-12-07 06:00:00.000000','humidade',16.68,1),(20175,'2022-12-07','2022-12-07 07:00:00.000000','temperatura',14.14,1),(20176,'2022-12-07','2022-12-07 07:00:00.000000','humidade',16.08,1),(20177,'2022-12-07','2022-12-07 08:00:00.000000','temperatura',14.2,1),(20178,'2022-12-07','2022-12-07 08:00:00.000000','humidade',16.04,1),(20179,'2022-12-07','2022-12-07 09:00:00.000000','temperatura',17.18,1),(20180,'2022-12-07','2022-12-07 09:00:00.000000','humidade',13.02,1),(20181,'2022-12-07','2022-12-07 10:00:00.000000','temperatura',16.76,1),(20182,'2022-12-07','2022-12-07 10:00:00.000000','humidade',13.459999999999999,1),(20183,'2022-12-07','2022-12-07 11:00:00.000000','temperatura',16.1,1),(20184,'2022-12-07','2022-12-07 11:00:00.000000','humidade',13.919999999999998,1),(20185,'2022-12-07','2022-12-07 12:00:00.000000','temperatura',17.700000000000003,1),(20186,'2022-12-07','2022-12-07 12:00:00.000000','humidade',12.439999999999998,1),(20187,'2022-12-07','2022-12-07 13:00:00.000000','temperatura',18,1),(20188,'2022-12-07','2022-12-07 13:00:00.000000','humidade',12.12,1),(20189,'2022-12-07','2022-12-07 14:00:00.000000','temperatura',17.22,1),(20190,'2022-12-07','2022-12-07 14:00:00.000000','humidade',12.82,1),(20191,'2022-12-07','2022-12-07 15:00:00.000000','temperatura',16.58,1),(20192,'2022-12-07','2022-12-07 15:00:00.000000','humidade',13.56,1),(20193,'2022-12-07','2022-12-07 16:00:00.000000','temperatura',17.04,1),(20194,'2022-12-07','2022-12-07 16:00:00.000000','humidade',13.14,1),(20195,'2022-12-07','2022-12-07 17:00:00.000000','temperatura',16.279999999999998,1),(20196,'2022-12-07','2022-12-07 17:00:00.000000','humidade',13.9,1),(20197,'2022-12-07','2022-12-07 18:00:00.000000','temperatura',15.2,1),(20198,'2022-12-07','2022-12-07 18:00:00.000000','humidade',15.14,1),(20199,'2022-12-07','2022-12-07 19:00:00.000000','temperatura',15.04,1),(20200,'2022-12-07','2022-12-07 19:00:00.000000','humidade',15.1,1),(20201,'2022-12-07','2022-12-07 20:00:00.000000','temperatura',15.02,1),(20202,'2022-12-07','2022-12-07 20:00:00.000000','humidade',15.16,1),(20203,'2022-12-07','2022-12-07 21:00:00.000000','temperatura',12.92,1),(20204,'2022-12-07','2022-12-07 21:00:00.000000','humidade',17.279999999999998,1),(20205,'2022-12-07','2022-12-07 22:00:00.000000','temperatura',12.7,1),(20206,'2022-12-07','2022-12-07 22:00:00.000000','humidade',17.58,1),(20207,'2022-12-07','2022-12-07 23:00:00.000000','temperatura',11.26,1),(20208,'2022-12-07','2022-12-07 23:00:00.000000','humidade',18.96,1),(20209,'2022-12-08','2022-12-08 00:00:00.000000','temperatura',10.7,1),(20210,'2022-12-08','2022-12-08 00:00:00.000000','humidade',19.66,1),(20211,'2022-12-08','2022-12-08 01:00:00.000000','temperatura',9.34,1),(20212,'2022-12-08','2022-12-08 01:00:00.000000','humidade',20.74,1),(20213,'2022-12-08','2022-12-08 02:00:00.000000','temperatura',11.2,1),(20214,'2022-12-08','2022-12-08 02:00:00.000000','humidade',18.959999999999997,1),(20215,'2022-12-08','2022-12-08 03:00:00.000000','temperatura',12.6,1),(20216,'2022-12-08','2022-12-08 03:00:00.000000','humidade',17.479999999999997,1),(20217,'2022-12-08','2022-12-08 04:00:00.000000','temperatura',11.76,1),(20218,'2022-12-08','2022-12-08 04:00:00.000000','humidade',18.58,1),(20219,'2022-12-08','2022-12-08 05:00:00.000000','temperatura',12.14,1),(20220,'2022-12-08','2022-12-08 05:00:00.000000','humidade',18.04,1),(20221,'2022-12-08','2022-12-08 06:00:00.000000','temperatura',13.540000000000001,1),(20222,'2022-12-08','2022-12-08 06:00:00.000000','humidade',16.78,1),(20223,'2022-12-08','2022-12-08 07:00:00.000000','temperatura',14.02,1),(20224,'2022-12-08','2022-12-08 07:00:00.000000','humidade',16.06,1),(20225,'2022-12-08','2022-12-08 08:00:00.000000','temperatura',14.14,1),(20226,'2022-12-08','2022-12-08 08:00:00.000000','humidade',16.12,1),(20227,'2022-12-08','2022-12-08 09:00:00.000000','temperatura',17.18,1),(20228,'2022-12-08','2022-12-08 09:00:00.000000','humidade',13.14,1),(20229,'2022-12-08','2022-12-08 10:00:00.000000','temperatura',16.720000000000002,1),(20230,'2022-12-08','2022-12-08 10:00:00.000000','humidade',13.419999999999998,1),(20231,'2022-12-08','2022-12-08 11:00:00.000000','temperatura',16.3,1),(20232,'2022-12-08','2022-12-08 11:00:00.000000','humidade',13.919999999999998,1),(20233,'2022-12-08','2022-12-08 12:00:00.000000','temperatura',17.62,1),(20234,'2022-12-08','2022-12-08 12:00:00.000000','humidade',12.479999999999999,1),(20235,'2022-12-08','2022-12-08 13:00:00.000000','temperatura',18.16,1),(20236,'2022-12-08','2022-12-08 13:00:00.000000','humidade',12.14,1),(20237,'2022-12-08','2022-12-08 14:00:00.000000','temperatura',17.32,1),(20238,'2022-12-08','2022-12-08 14:00:00.000000','humidade',13,1),(20239,'2022-12-08','2022-12-08 15:00:00.000000','temperatura',16.58,1),(20240,'2022-12-08','2022-12-08 15:00:00.000000','humidade',13.5,1),(20241,'2022-12-08','2022-12-08 16:00:00.000000','temperatura',16.959999999999997,1),(20242,'2022-12-08','2022-12-08 16:00:00.000000','humidade',13.260000000000002,1),(20243,'2022-12-08','2022-12-08 17:00:00.000000','temperatura',16.24,1),(20244,'2022-12-08','2022-12-08 17:00:00.000000','humidade',13.88,1),(20245,'2022-12-08','2022-12-08 18:00:00.000000','temperatura',15.18,1),(20246,'2022-12-08','2022-12-08 18:00:00.000000','humidade',15.02,1),(20247,'2022-12-08','2022-12-08 19:00:00.000000','temperatura',15.12,1),(20248,'2022-12-08','2022-12-08 19:00:00.000000','humidade',15,1),(20249,'2022-12-08','2022-12-08 20:00:00.000000','temperatura',15.02,1),(20250,'2022-12-08','2022-12-08 20:00:00.000000','humidade',15,1),(20251,'2022-12-08','2022-12-08 21:00:00.000000','temperatura',12.84,1),(20252,'2022-12-08','2022-12-08 21:00:00.000000','humidade',17.38,1),(20253,'2022-12-08','2022-12-08 22:00:00.000000','temperatura',12.66,1),(20254,'2022-12-08','2022-12-08 22:00:00.000000','humidade',17.54,1),(20255,'2022-12-08','2022-12-08 23:00:00.000000','temperatura',11.379999999999999,1),(20256,'2022-12-08','2022-12-08 23:00:00.000000','humidade',18.8,1),(20257,'2022-12-09','2022-12-09 00:00:00.000000','temperatura',10.64,1),(20258,'2022-12-09','2022-12-09 00:00:00.000000','humidade',19.54,1),(20259,'2022-12-09','2022-12-09 01:00:00.000000','temperatura',9.360000000000001,1),(20260,'2022-12-09','2022-12-09 01:00:00.000000','humidade',20.74,1),(20261,'2022-12-09','2022-12-09 02:00:00.000000','temperatura',11.24,1),(20262,'2022-12-09','2022-12-09 02:00:00.000000','humidade',18.9,1),(20263,'2022-12-09','2022-12-09 03:00:00.000000','temperatura',12.62,1),(20264,'2022-12-09','2022-12-09 03:00:00.000000','humidade',17.54,1),(20265,'2022-12-09','2022-12-09 04:00:00.000000','temperatura',11.68,1),(20266,'2022-12-09','2022-12-09 04:00:00.000000','humidade',18.54,1),(20267,'2022-12-09','2022-12-09 05:00:00.000000','temperatura',12.06,1),(20268,'2022-12-09','2022-12-09 05:00:00.000000','humidade',18.06,1),(20269,'2022-12-09','2022-12-09 06:00:00.000000','temperatura',13.44,1),(20270,'2022-12-09','2022-12-09 06:00:00.000000','humidade',16.76,1),(20271,'2022-12-09','2022-12-09 07:00:00.000000','temperatura',14.08,1),(20272,'2022-12-09','2022-12-09 07:00:00.000000','humidade',16.14,1),(20273,'2022-12-09','2022-12-09 08:00:00.000000','temperatura',14.2,1),(20274,'2022-12-09','2022-12-09 08:00:00.000000','humidade',16.18,1),(20275,'2022-12-09','2022-12-09 09:00:00.000000','temperatura',17.04,1),(20276,'2022-12-09','2022-12-09 09:00:00.000000','humidade',13.16,1),(20277,'2022-12-09','2022-12-09 10:00:00.000000','temperatura',16.62,1),(20278,'2022-12-09','2022-12-09 10:00:00.000000','humidade',13.479999999999999,1),(20279,'2022-12-09','2022-12-09 11:00:00.000000','temperatura',16.12,1),(20280,'2022-12-09','2022-12-09 11:00:00.000000','humidade',14.04,1),(20281,'2022-12-09','2022-12-09 12:00:00.000000','temperatura',17.720000000000002,1),(20282,'2022-12-09','2022-12-09 12:00:00.000000','humidade',12.519999999999998,1),(20283,'2022-12-09','2022-12-09 13:00:00.000000','temperatura',18.14,1),(20284,'2022-12-09','2022-12-09 13:00:00.000000','humidade',12.14,1),(20285,'2022-12-09','2022-12-09 14:00:00.000000','temperatura',17.3,1),(20286,'2022-12-09','2022-12-09 14:00:00.000000','humidade',12.92,1),(20287,'2022-12-09','2022-12-09 15:00:00.000000','temperatura',16.6,1),(20288,'2022-12-09','2022-12-09 15:00:00.000000','humidade',13.64,1),(20289,'2022-12-09','2022-12-09 16:00:00.000000','temperatura',16.939999999999998,1),(20290,'2022-12-09','2022-12-09 16:00:00.000000','humidade',13.100000000000001,1),(20291,'2022-12-09','2022-12-09 17:00:00.000000','temperatura',16.2,1),(20292,'2022-12-09','2022-12-09 17:00:00.000000','humidade',13.98,1),(20293,'2022-12-09','2022-12-09 18:00:00.000000','temperatura',15,1),(20294,'2022-12-09','2022-12-09 18:00:00.000000','humidade',15.14,1),(20295,'2022-12-09','2022-12-09 19:00:00.000000','temperatura',15.1,1),(20296,'2022-12-09','2022-12-09 19:00:00.000000','humidade',15.16,1),(20297,'2022-12-09','2022-12-09 20:00:00.000000','temperatura',15.16,1),(20298,'2022-12-09','2022-12-09 20:00:00.000000','humidade',15.06,1),(20299,'2022-12-09','2022-12-09 21:00:00.000000','temperatura',12.82,1),(20300,'2022-12-09','2022-12-09 21:00:00.000000','humidade',17.3,1),(20301,'2022-12-09','2022-12-09 22:00:00.000000','temperatura',12.68,1),(20302,'2022-12-09','2022-12-09 22:00:00.000000','humidade',17.419999999999998,1),(20303,'2022-12-09','2022-12-09 23:00:00.000000','temperatura',11.26,1),(20304,'2022-12-09','2022-12-09 23:00:00.000000','humidade',18.900000000000002,1),(20305,'2022-12-10','2022-12-10 00:00:00.000000','temperatura',10.62,1),(20306,'2022-12-10','2022-12-10 00:00:00.000000','humidade',19.54,1),(20307,'2022-12-10','2022-12-10 01:00:00.000000','temperatura',9.38,1),(20308,'2022-12-10','2022-12-10 01:00:00.000000','humidade',20.74,1),(20309,'2022-12-10','2022-12-10 02:00:00.000000','temperatura',11.28,1),(20310,'2022-12-10','2022-12-10 02:00:00.000000','humidade',18.939999999999998,1),(20311,'2022-12-10','2022-12-10 03:00:00.000000','temperatura',12.74,1),(20312,'2022-12-10','2022-12-10 03:00:00.000000','humidade',17.56,1),(20313,'2022-12-10','2022-12-10 04:00:00.000000','temperatura',11.639999999999999,1),(20314,'2022-12-10','2022-12-10 04:00:00.000000','humidade',18.459999999999997,1),(20315,'2022-12-10','2022-12-10 05:00:00.000000','temperatura',12.16,1),(20316,'2022-12-10','2022-12-10 05:00:00.000000','humidade',18.08,1),(20317,'2022-12-10','2022-12-10 06:00:00.000000','temperatura',13.52,1),(20318,'2022-12-10','2022-12-10 06:00:00.000000','humidade',16.6,1),(20319,'2022-12-10','2022-12-10 07:00:00.000000','temperatura',14,1),(20320,'2022-12-10','2022-12-10 07:00:00.000000','humidade',16.12,1),(20321,'2022-12-10','2022-12-10 08:00:00.000000','temperatura',14.02,1),(20322,'2022-12-10','2022-12-10 08:00:00.000000','humidade',16,1),(20323,'2022-12-10','2022-12-10 09:00:00.000000','temperatura',17.06,1),(20324,'2022-12-10','2022-12-10 09:00:00.000000','humidade',13.18,1),(20325,'2022-12-10','2022-12-10 10:00:00.000000','temperatura',16.700000000000003,1),(20326,'2022-12-10','2022-12-10 10:00:00.000000','humidade',13.419999999999998,1),(20327,'2022-12-10','2022-12-10 11:00:00.000000','temperatura',16.12,1),(20328,'2022-12-10','2022-12-10 11:00:00.000000','humidade',14.019999999999998,1),(20329,'2022-12-10','2022-12-10 12:00:00.000000','temperatura',17.700000000000003,1),(20330,'2022-12-10','2022-12-10 12:00:00.000000','humidade',12.439999999999998,1),(20331,'2022-12-10','2022-12-10 13:00:00.000000','temperatura',18.12,1),(20332,'2022-12-10','2022-12-10 13:00:00.000000','humidade',12,1),(20333,'2022-12-10','2022-12-10 14:00:00.000000','temperatura',17.34,1),(20334,'2022-12-10','2022-12-10 14:00:00.000000','humidade',12.96,1),(20335,'2022-12-10','2022-12-10 15:00:00.000000','temperatura',16.7,1),(20336,'2022-12-10','2022-12-10 15:00:00.000000','humidade',13.64,1),(20337,'2022-12-10','2022-12-10 16:00:00.000000','temperatura',17.099999999999998,1),(20338,'2022-12-10','2022-12-10 16:00:00.000000','humidade',13.260000000000002,1),(20339,'2022-12-10','2022-12-10 17:00:00.000000','temperatura',16.3,1),(20340,'2022-12-10','2022-12-10 17:00:00.000000','humidade',13.860000000000001,1),(20341,'2022-12-10','2022-12-10 18:00:00.000000','temperatura',15.12,1),(20342,'2022-12-10','2022-12-10 18:00:00.000000','humidade',15.06,1),(20343,'2022-12-10','2022-12-10 19:00:00.000000','temperatura',15.2,1),(20344,'2022-12-10','2022-12-10 19:00:00.000000','humidade',15.12,1),(20345,'2022-12-10','2022-12-10 20:00:00.000000','temperatura',15.06,1),(20346,'2022-12-10','2022-12-10 20:00:00.000000','humidade',15.14,1),(20347,'2022-12-10','2022-12-10 21:00:00.000000','temperatura',12.8,1),(20348,'2022-12-10','2022-12-10 21:00:00.000000','humidade',17.32,1),(20349,'2022-12-10','2022-12-10 22:00:00.000000','temperatura',12.639999999999999,1),(20350,'2022-12-10','2022-12-10 22:00:00.000000','humidade',17.479999999999997,1),(20351,'2022-12-10','2022-12-10 23:00:00.000000','temperatura',11.28,1),(20352,'2022-12-10','2022-12-10 23:00:00.000000','humidade',18.92,1),(20353,'2022-12-11','2022-12-11 00:00:00.000000','temperatura',10.6,1),(20354,'2022-12-11','2022-12-11 00:00:00.000000','humidade',19.68,1),(20355,'2022-12-11','2022-12-11 01:00:00.000000','temperatura',9.42,1),(20356,'2022-12-11','2022-12-11 01:00:00.000000','humidade',20.7,1),(20357,'2022-12-11','2022-12-11 02:00:00.000000','temperatura',11.18,1),(20358,'2022-12-11','2022-12-11 02:00:00.000000','humidade',18.939999999999998,1),(20359,'2022-12-11','2022-12-11 03:00:00.000000','temperatura',12.78,1),(20360,'2022-12-11','2022-12-11 03:00:00.000000','humidade',17.599999999999998,1),(20361,'2022-12-11','2022-12-11 04:00:00.000000','temperatura',11.76,1),(20362,'2022-12-11','2022-12-11 04:00:00.000000','humidade',18.599999999999998,1),(20363,'2022-12-11','2022-12-11 05:00:00.000000','temperatura',12.08,1),(20364,'2022-12-11','2022-12-11 05:00:00.000000','humidade',18.02,1),(20365,'2022-12-11','2022-12-11 06:00:00.000000','temperatura',13.58,1),(20366,'2022-12-11','2022-12-11 06:00:00.000000','humidade',16.76,1),(20367,'2022-12-11','2022-12-11 07:00:00.000000','temperatura',14.18,1),(20368,'2022-12-11','2022-12-11 07:00:00.000000','humidade',16.14,1),(20369,'2022-12-11','2022-12-11 08:00:00.000000','temperatura',14.14,1),(20370,'2022-12-11','2022-12-11 08:00:00.000000','humidade',16.08,1),(20371,'2022-12-11','2022-12-11 09:00:00.000000','temperatura',17.02,1),(20372,'2022-12-11','2022-12-11 09:00:00.000000','humidade',13.06,1),(20373,'2022-12-11','2022-12-11 10:00:00.000000','temperatura',16.62,1),(20374,'2022-12-11','2022-12-11 10:00:00.000000','humidade',13.499999999999998,1),(20375,'2022-12-11','2022-12-11 11:00:00.000000','temperatura',16.240000000000002,1),(20376,'2022-12-11','2022-12-11 11:00:00.000000','humidade',14.04,1),(20377,'2022-12-11','2022-12-11 12:00:00.000000','temperatura',17.8,1),(20378,'2022-12-11','2022-12-11 12:00:00.000000','humidade',12.579999999999998,1),(20379,'2022-12-11','2022-12-11 13:00:00.000000','temperatura',18.16,1),(20380,'2022-12-11','2022-12-11 13:00:00.000000','humidade',12.04,1),(20381,'2022-12-11','2022-12-11 14:00:00.000000','temperatura',17.2,1),(20382,'2022-12-11','2022-12-11 14:00:00.000000','humidade',12.9,1),(20383,'2022-12-11','2022-12-11 15:00:00.000000','temperatura',16.54,1),(20384,'2022-12-11','2022-12-11 15:00:00.000000','humidade',13.56,1),(20385,'2022-12-11','2022-12-11 16:00:00.000000','temperatura',17,1),(20386,'2022-12-11','2022-12-11 16:00:00.000000','humidade',13.260000000000002,1),(20387,'2022-12-11','2022-12-11 17:00:00.000000','temperatura',16.2,1),(20388,'2022-12-11','2022-12-11 17:00:00.000000','humidade',13.92,1),(20389,'2022-12-11','2022-12-11 18:00:00.000000','temperatura',15.2,1),(20390,'2022-12-11','2022-12-11 18:00:00.000000','humidade',15.2,1),(20391,'2022-12-11','2022-12-11 19:00:00.000000','temperatura',15.16,1),(20392,'2022-12-11','2022-12-11 19:00:00.000000','humidade',15.14,1),(20393,'2022-12-11','2022-12-11 20:00:00.000000','temperatura',15.06,1),(20394,'2022-12-11','2022-12-11 20:00:00.000000','humidade',15.08,1),(20395,'2022-12-11','2022-12-11 21:00:00.000000','temperatura',12.88,1),(20396,'2022-12-11','2022-12-11 21:00:00.000000','humidade',17.36,1),(20397,'2022-12-11','2022-12-11 22:00:00.000000','temperatura',12.74,1),(20398,'2022-12-11','2022-12-11 22:00:00.000000','humidade',17.5,1),(20399,'2022-12-11','2022-12-11 23:00:00.000000','temperatura',11.28,1),(20400,'2022-12-11','2022-12-11 23:00:00.000000','humidade',18.94,1),(20401,'2022-12-12','2022-12-12 00:00:00.000000','temperatura',10.5,1),(20402,'2022-12-12','2022-12-12 00:00:00.000000','humidade',19.52,1),(20403,'2022-12-12','2022-12-12 01:00:00.000000','temperatura',9.42,1),(20404,'2022-12-12','2022-12-12 01:00:00.000000','humidade',20.88,1),(20405,'2022-12-12','2022-12-12 02:00:00.000000','temperatura',11.1,1),(20406,'2022-12-12','2022-12-12 02:00:00.000000','humidade',18.939999999999998,1),(20407,'2022-12-12','2022-12-12 03:00:00.000000','temperatura',12.66,1),(20408,'2022-12-12','2022-12-12 03:00:00.000000','humidade',17.459999999999997,1),(20409,'2022-12-12','2022-12-12 04:00:00.000000','temperatura',11.68,1),(20410,'2022-12-12','2022-12-12 04:00:00.000000','humidade',18.4,1),(20411,'2022-12-12','2022-12-12 05:00:00.000000','temperatura',12.04,1),(20412,'2022-12-12','2022-12-12 05:00:00.000000','humidade',18.14,1),(20413,'2022-12-12','2022-12-12 06:00:00.000000','temperatura',13.52,1),(20414,'2022-12-12','2022-12-12 06:00:00.000000','humidade',16.64,1),(20415,'2022-12-12','2022-12-12 07:00:00.000000','temperatura',14.1,1),(20416,'2022-12-12','2022-12-12 07:00:00.000000','humidade',16.16,1),(20417,'2022-12-12','2022-12-12 08:00:00.000000','temperatura',14.08,1),(20418,'2022-12-12','2022-12-12 08:00:00.000000','humidade',16.08,1),(20419,'2022-12-12','2022-12-12 09:00:00.000000','temperatura',17.04,1),(20420,'2022-12-12','2022-12-12 09:00:00.000000','humidade',13.16,1),(20421,'2022-12-12','2022-12-12 10:00:00.000000','temperatura',16.76,1),(20422,'2022-12-12','2022-12-12 10:00:00.000000','humidade',13.579999999999998,1),(20423,'2022-12-12','2022-12-12 11:00:00.000000','temperatura',16.1,1),(20424,'2022-12-12','2022-12-12 11:00:00.000000','humidade',13.919999999999998,1),(20425,'2022-12-12','2022-12-12 12:00:00.000000','temperatura',17.62,1),(20426,'2022-12-12','2022-12-12 12:00:00.000000','humidade',12.459999999999999,1),(20427,'2022-12-12','2022-12-12 13:00:00.000000','temperatura',18.1,1),(20428,'2022-12-12','2022-12-12 13:00:00.000000','humidade',12.06,1),(20429,'2022-12-12','2022-12-12 14:00:00.000000','temperatura',17.24,1),(20430,'2022-12-12','2022-12-12 14:00:00.000000','humidade',12.84,1),(20431,'2022-12-12','2022-12-12 15:00:00.000000','temperatura',16.52,1),(20432,'2022-12-12','2022-12-12 15:00:00.000000','humidade',13.68,1),(20433,'2022-12-12','2022-12-12 16:00:00.000000','temperatura',17,1),(20434,'2022-12-12','2022-12-12 16:00:00.000000','humidade',13.14,1),(20435,'2022-12-12','2022-12-12 17:00:00.000000','temperatura',16.259999999999998,1),(20436,'2022-12-12','2022-12-12 17:00:00.000000','humidade',13.98,1),(20437,'2022-12-12','2022-12-12 18:00:00.000000','temperatura',15.2,1),(20438,'2022-12-12','2022-12-12 18:00:00.000000','humidade',15.02,1),(20439,'2022-12-12','2022-12-12 19:00:00.000000','temperatura',15,1),(20440,'2022-12-12','2022-12-12 19:00:00.000000','humidade',15.04,1),(20441,'2022-12-12','2022-12-12 20:00:00.000000','temperatura',15,1),(20442,'2022-12-12','2022-12-12 20:00:00.000000','humidade',15.18,1),(20443,'2022-12-12','2022-12-12 21:00:00.000000','temperatura',12.92,1),(20444,'2022-12-12','2022-12-12 21:00:00.000000','humidade',17.32,1),(20445,'2022-12-12','2022-12-12 22:00:00.000000','temperatura',12.78,1),(20446,'2022-12-12','2022-12-12 22:00:00.000000','humidade',17.52,1),(20447,'2022-12-12','2022-12-12 23:00:00.000000','temperatura',11.36,1),(20448,'2022-12-12','2022-12-12 23:00:00.000000','humidade',18.86,1),(20449,'2022-12-13','2022-12-13 00:00:00.000000','temperatura',10.52,1),(20450,'2022-12-13','2022-12-13 00:00:00.000000','humidade',19.62,1),(20451,'2022-12-13','2022-12-13 01:00:00.000000','temperatura',9.48,1),(20452,'2022-12-13','2022-12-13 01:00:00.000000','humidade',20.779999999999998,1),(20453,'2022-12-13','2022-12-13 02:00:00.000000','temperatura',11.28,1),(20454,'2022-12-13','2022-12-13 02:00:00.000000','humidade',19.02,1),(20455,'2022-12-13','2022-12-13 03:00:00.000000','temperatura',12.78,1),(20456,'2022-12-13','2022-12-13 03:00:00.000000','humidade',17.459999999999997,1),(20457,'2022-12-13','2022-12-13 04:00:00.000000','temperatura',11.639999999999999,1),(20458,'2022-12-13','2022-12-13 04:00:00.000000','humidade',18.599999999999998,1),(20459,'2022-12-13','2022-12-13 05:00:00.000000','temperatura',12.02,1),(20460,'2022-12-13','2022-12-13 05:00:00.000000','humidade',18.18,1),(20461,'2022-12-13','2022-12-13 06:00:00.000000','temperatura',13.44,1),(20462,'2022-12-13','2022-12-13 06:00:00.000000','humidade',16.720000000000002,1),(20463,'2022-12-13','2022-12-13 07:00:00.000000','temperatura',14.14,1),(20464,'2022-12-13','2022-12-13 07:00:00.000000','humidade',16.18,1),(20465,'2022-12-13','2022-12-13 08:00:00.000000','temperatura',14.2,1),(20466,'2022-12-13','2022-12-13 08:00:00.000000','humidade',16.02,1),(20467,'2022-12-13','2022-12-13 09:00:00.000000','temperatura',17.16,1),(20468,'2022-12-13','2022-12-13 09:00:00.000000','humidade',13.16,1),(20469,'2022-12-13','2022-12-13 10:00:00.000000','temperatura',16.700000000000003,1),(20470,'2022-12-13','2022-12-13 10:00:00.000000','humidade',13.459999999999999,1),(20471,'2022-12-13','2022-12-13 11:00:00.000000','temperatura',16.220000000000002,1),(20472,'2022-12-13','2022-12-13 11:00:00.000000','humidade',14.019999999999998,1),(20473,'2022-12-13','2022-12-13 12:00:00.000000','temperatura',17.62,1),(20474,'2022-12-13','2022-12-13 12:00:00.000000','humidade',12.559999999999999,1),(20475,'2022-12-13','2022-12-13 13:00:00.000000','temperatura',18.18,1),(20476,'2022-12-13','2022-12-13 13:00:00.000000','humidade',12.02,1),(20477,'2022-12-13','2022-12-13 14:00:00.000000','temperatura',17.34,1),(20478,'2022-12-13','2022-12-13 14:00:00.000000','humidade',12.82,1),(20479,'2022-12-13','2022-12-13 15:00:00.000000','temperatura',16.56,1),(20480,'2022-12-13','2022-12-13 15:00:00.000000','humidade',13.66,1),(20481,'2022-12-13','2022-12-13 16:00:00.000000','temperatura',16.959999999999997,1),(20482,'2022-12-13','2022-12-13 16:00:00.000000','humidade',13.240000000000002,1),(20483,'2022-12-13','2022-12-13 17:00:00.000000','temperatura',16.4,1),(20484,'2022-12-13','2022-12-13 17:00:00.000000','humidade',13.9,1),(20485,'2022-12-13','2022-12-13 18:00:00.000000','temperatura',15.04,1),(20486,'2022-12-13','2022-12-13 18:00:00.000000','humidade',15.06,1),(20487,'2022-12-13','2022-12-13 19:00:00.000000','temperatura',15.2,1),(20488,'2022-12-13','2022-12-13 19:00:00.000000','humidade',15.18,1),(20489,'2022-12-13','2022-12-13 20:00:00.000000','temperatura',15,1),(20490,'2022-12-13','2022-12-13 20:00:00.000000','humidade',15.12,1),(20491,'2022-12-13','2022-12-13 21:00:00.000000','temperatura',12.940000000000001,1),(20492,'2022-12-13','2022-12-13 21:00:00.000000','humidade',17.34,1),(20493,'2022-12-13','2022-12-13 22:00:00.000000','temperatura',12.76,1),(20494,'2022-12-13','2022-12-13 22:00:00.000000','humidade',17.5,1),(20495,'2022-12-13','2022-12-13 23:00:00.000000','temperatura',11.319999999999999,1),(20496,'2022-12-13','2022-12-13 23:00:00.000000','humidade',18.900000000000002,1);
 /*!40000 ALTER TABLE `sensor_measurements_sala` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `sensor_measurements_sala_seq`
---
-
-DROP TABLE IF EXISTS `sensor_measurements_sala_seq`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `sensor_measurements_sala_seq` (
-  `next_val` bigint DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `sensor_measurements_sala_seq`
---
-
-LOCK TABLES `sensor_measurements_sala_seq` WRITE;
-/*!40000 ALTER TABLE `sensor_measurements_sala_seq` DISABLE KEYS */;
-INSERT INTO `sensor_measurements_sala_seq` VALUES (1);
-/*!40000 ALTER TABLE `sensor_measurements_sala_seq` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `sensor_quarto`
---
-
-DROP TABLE IF EXISTS `sensor_quarto`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `sensor_quarto` (
-  `id` int NOT NULL,
-  `timestamp` datetime(6) DEFAULT NULL,
-  `tipo` varchar(255) DEFAULT NULL,
-  `valor` double DEFAULT NULL,
-  `id_div` int DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FKmgxqmpim5ttygpxlh1hxif53e` (`id_div`),
-  CONSTRAINT `FKmgxqmpim5ttygpxlh1hxif53e` FOREIGN KEY (`id_div`) REFERENCES `divisao` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `sensor_quarto`
---
-
-LOCK TABLES `sensor_quarto` WRITE;
-/*!40000 ALTER TABLE `sensor_quarto` DISABLE KEYS */;
-/*!40000 ALTER TABLE `sensor_quarto` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `sensor_quarto_seq`
---
-
-DROP TABLE IF EXISTS `sensor_quarto_seq`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `sensor_quarto_seq` (
-  `next_val` bigint DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `sensor_quarto_seq`
---
-
-LOCK TABLES `sensor_quarto_seq` WRITE;
-/*!40000 ALTER TABLE `sensor_quarto_seq` DISABLE KEYS */;
-INSERT INTO `sensor_quarto_seq` VALUES (1);
-/*!40000 ALTER TABLE `sensor_quarto_seq` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `sensor_sala`
---
-
-DROP TABLE IF EXISTS `sensor_sala`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `sensor_sala` (
-  `id` int NOT NULL,
-  `timestamp` datetime(6) DEFAULT NULL,
-  `tipo` varchar(255) DEFAULT NULL,
-  `valor` double DEFAULT NULL,
-  `id_div` int DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK42orx6146krwq47je3mnvn6kp` (`id_div`),
-  CONSTRAINT `FK42orx6146krwq47je3mnvn6kp` FOREIGN KEY (`id_div`) REFERENCES `divisao` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `sensor_sala`
---
-
-LOCK TABLES `sensor_sala` WRITE;
-/*!40000 ALTER TABLE `sensor_sala` DISABLE KEYS */;
-/*!40000 ALTER TABLE `sensor_sala` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `sensor_sala_seq`
---
-
-DROP TABLE IF EXISTS `sensor_sala_seq`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `sensor_sala_seq` (
-  `next_val` bigint DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `sensor_sala_seq`
---
-
-LOCK TABLES `sensor_sala_seq` WRITE;
-/*!40000 ALTER TABLE `sensor_sala_seq` DISABLE KEYS */;
-INSERT INTO `sensor_sala_seq` VALUES (1);
-/*!40000 ALTER TABLE `sensor_sala_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -895,13 +448,13 @@ DROP TABLE IF EXISTS `sensors`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sensors` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `tipo` varchar(255) NOT NULL,
   `id_div` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FK36ygvj9c1dlfq9t7r8lcw1ke4` (`id_div`),
   CONSTRAINT `FK36ygvj9c1dlfq9t7r8lcw1ke4` FOREIGN KEY (`id_div`) REFERENCES `divisao` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -910,29 +463,8 @@ CREATE TABLE `sensors` (
 
 LOCK TABLES `sensors` WRITE;
 /*!40000 ALTER TABLE `sensors` DISABLE KEYS */;
+INSERT INTO `sensors` VALUES (1,'temperatura',1),(2,'humidade',2),(3,'ar',3),(4,'temperatura',1),(5,'humidade',2),(6,'ar',3),(7,'temperatura',1),(8,'humidade',2),(9,'ar',3),(10,'temperatura',1),(11,'humidade',2),(12,'ar',3);
 /*!40000 ALTER TABLE `sensors` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `sensors_seq`
---
-
-DROP TABLE IF EXISTS `sensors_seq`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `sensors_seq` (
-  `next_val` bigint DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `sensors_seq`
---
-
-LOCK TABLES `sensors_seq` WRITE;
-/*!40000 ALTER TABLE `sensors_seq` DISABLE KEYS */;
-INSERT INTO `sensors_seq` VALUES (1);
-/*!40000 ALTER TABLE `sensors_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -956,6 +488,7 @@ CREATE TABLE `tomada` (
 
 LOCK TABLES `tomada` WRITE;
 /*!40000 ALTER TABLE `tomada` DISABLE KEYS */;
+INSERT INTO `tomada` VALUES ('Máquina aeróbica',1),('PlayStation 5',2),('Televisão LG OLED',6),('Aquário',7),('Frigorifico',8),('Microondas',9),('Máquina de Café',12),('Tostadeira',13),('Forno',14),('Ecrã',17),('Televisão',18),('Computador',21);
 /*!40000 ALTER TABLE `tomada` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -967,7 +500,7 @@ DROP TABLE IF EXISTS `utilizador`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `utilizador` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `email` varchar(255) NOT NULL,
   `is_admin` bit(1) NOT NULL,
   `nome` varchar(255) NOT NULL,
@@ -977,7 +510,7 @@ CREATE TABLE `utilizador` (
   UNIQUE KEY `UK_eougu510uft70icifeafv6cll` (`email`),
   KEY `FKs869r2e0pk8ym2ceos208xepd` (`id_casa`),
   CONSTRAINT `FKs869r2e0pk8ym2ceos208xepd` FOREIGN KEY (`id_casa`) REFERENCES `casa` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -986,29 +519,8 @@ CREATE TABLE `utilizador` (
 
 LOCK TABLES `utilizador` WRITE;
 /*!40000 ALTER TABLE `utilizador` DISABLE KEYS */;
+INSERT INTO `utilizador` VALUES (1,'Alberto Matias',_binary '','alberto.matias000@gmail.com','admin',1),(2,'Susana Mendes',_binary '\0','susana.mendes000@gmail.com','password',1);
 /*!40000 ALTER TABLE `utilizador` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `utilizador_seq`
---
-
-DROP TABLE IF EXISTS `utilizador_seq`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `utilizador_seq` (
-  `next_val` bigint DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `utilizador_seq`
---
-
-LOCK TABLES `utilizador_seq` WRITE;
-/*!40000 ALTER TABLE `utilizador_seq` DISABLE KEYS */;
-INSERT INTO `utilizador_seq` VALUES (1);
-/*!40000 ALTER TABLE `utilizador_seq` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -1020,4 +532,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-12-06 15:59:28
+-- Dump completed on 2022-12-07 22:12:10
