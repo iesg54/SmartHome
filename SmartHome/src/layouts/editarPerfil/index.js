@@ -18,6 +18,8 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { DropzoneDialog } from "material-ui-dropzone";
 import { useState } from "react";
+import { storage } from "firebaseConfig";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 const validationSchema = yup.object({
     nome: yup.string().required("Por favor adicione um nome!"),
@@ -45,7 +47,48 @@ function EditarPerfil() {
         },
         cleanForm: true,
     });
+
     const [open, setOpen] = useState(false);
+    const [image, setImage] = useState("");
+    const handleImageUpload = (files) => {
+        const file = files[0];
+        const storageRef = ref(storage, `images/${file.name}`);
+        const uploadTask = uploadBytesResumable(storageRef, file);
+        uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log("Upload is " + progress + "% done");
+                switch (snapshot.state) {
+                    case "paused":
+                        console.log("Upload is paused");
+                        break;
+                    case "running":
+                        console.log("Upload is running");
+                        break;
+                }
+            },
+            (error) => {
+                switch (error.code) {
+                    case "storage/unauthorized":
+                        console.log("User doesn't have permission to access the object");
+                        break;
+                    case "storage/canceled":
+                        console.log("User canceled the upload");
+                        break;
+                    case "storage/unknown":
+                        console.log("Unknown error occurred, inspect error.serverResponse");
+                        break;
+                }
+            },
+            () => {
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    console.log("File available at", downloadURL);
+                    setImage(downloadURL);
+                });
+            }
+        );
+    };
 
     return (
         <DashboardLayout>
@@ -53,11 +96,11 @@ function EditarPerfil() {
             <MDBox py={3}>
                 <Grid container justifyContent="center" spacing={2}>
                     <Grid item mb={2}>
-                        <MDAvatar src="https://bit.ly/34BY10g" alt="Avatar" size="xxl" />
+                        <MDAvatar src={image} alt="Avatar" size="xxl" />
                     </Grid>
                     <Grid item mb={2}>
                         <MDTypography variant="h4">Editar Perfil</MDTypography>
-                        <MDTypography variant="body2" color="textSecondary">
+                        <MDTypography variant="body2">
                             Altere as informações do seu perfil
                         </MDTypography>
                         <MDButton
@@ -76,7 +119,7 @@ function EditarPerfil() {
                             open={open}
                             onClose={() => setOpen(false)}
                             onSave={(files) => {
-                                console.log("Files:", files);
+                                handleImageUpload(files);
                                 setOpen(false);
                             }}
                             showPreviews
