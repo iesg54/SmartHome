@@ -506,6 +506,7 @@ CREATE TABLE `utilizador` (
   `nome` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `id_casa` int NOT NULL,
+  `profile_image` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_eougu510uft70icifeafv6cll` (`email`),
   KEY `FKs869r2e0pk8ym2ceos208xepd` (`id_casa`),
@@ -519,7 +520,7 @@ CREATE TABLE `utilizador` (
 
 LOCK TABLES `utilizador` WRITE;
 /*!40000 ALTER TABLE `utilizador` DISABLE KEYS */;
-INSERT INTO `utilizador` VALUES (1,'Alberto Matias',_binary '','alberto.matias000@gmail.com','admin',1),(2,'Susana Mendes',_binary '\0','susana.mendes000@gmail.com','password',1);
+INSERT INTO `utilizador` VALUES (1,'alberto.matias000@gmail.com',_binary '','Alberto Matias','admin',1,NULL),(2,'susana.mendes000@gmail.com',_binary '\0','Susana Mendes','password',1,NULL);
 /*!40000 ALTER TABLE `utilizador` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -532,4 +533,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-12-07 22:12:10
+-- Dump completed on 2022-12-08 23:00:33
