@@ -2,17 +2,15 @@ package pt.ua.deti.ies.smarthome.smarthome_api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.ResourceNotFoundException;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Utilizador;
 import pt.ua.deti.ies.smarthome.smarthome_api.services.UserService;
+import pt.ua.deti.ies.smarthome.smarthome_api.utils.SuccessfulRequest;
 
 @RestController
 @RequestMapping("smarthome/public")
-public class PublicAPIController {
+public class PublicController {
 
     // Services
     @Autowired
@@ -26,4 +24,9 @@ public class PublicAPIController {
         return userService.getUser(email, password);
     }
 
+    // Registers a new user in the DB
+    @PostMapping("/register")
+    public SuccessfulRequest registerUser(@RequestParam(name="name", required = true) String name, @RequestParam(name="email", required = true) String email, @RequestParam(name="password", required = true) String password){
+        return null;
+    }
 }

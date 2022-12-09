@@ -1,5 +1,6 @@
 package pt.ua.deti.ies.smarthome.smarthome_api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -52,4 +53,19 @@ public class Divisao {
     @OneToOne(mappedBy = "div")
     private ConsumoQuarto consumoQuarto;
 
+    // Getter methods that need to be ignored on JSON replies
+    @JsonIgnore
+    public List<Dispositivo> getDispositivos() {
+        return dispositivos;
+    }
+
+    @JsonIgnore
+    public List<Alerta> getAlertas() {
+        return alertas;
+    }
+
+    @JsonIgnore
+    public List<Sensors> getSensorsDiv() {
+        return sensorsDiv;
+    }
 }
