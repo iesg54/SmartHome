@@ -3,38 +3,52 @@ import * as React from "react";
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
-import TextField from "@mui/material/TextField";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
-import Button from "@mui/material/Button";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDButton from "components/MDButton";
 import MDTypography from "components/MDTypography";
+import MDInput from "components/MDInput";
 
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
-import SimpleBlogCard from "examples/Cards/BlogCards/SimpleBlogCard";
 
 // Data
 import usersData from "layouts/users/data/usersData";
 
+// components
+import UserCard from "layouts/users/components/UserCard";
+
 // Others
-import { Formik, Form } from "formik";
+import { useFormik } from "formik";
 import * as yup from "yup";
+
+const validationSchema = yup.object({
+    email: yup.string().email("Email is not valid!").required("Please add an email!"),
+    tipo: yup.string().required("Please select a type!"),
+});
 
 function Users() {
     const { users } = usersData;
     const [showForm, toggleForm] = React.useState(false);
 
-    const validate = yup.object().shape({
-        email: yup.string().email("Email is not valid!").required("Please add an email!"),
+    const formik = useFormik({
+        initialValues: {
+            email: "",
+            tipo: "",
+        },
+        validationSchema: validationSchema,
+        onSubmit: (values, { resetForm }) => {
+            alert(JSON.stringify(values, null, 2));
+            resetForm();
+        },
+        cleanForm: true,
     });
 
     const handleClick = (e) => {
@@ -47,145 +61,83 @@ function Users() {
     return (
         <DashboardLayout>
             <DashboardNavbar />
-            <MDBox py={3}>
-                <Grid container justifyContent="center" mb={6}>
-                    <MDTypography variant="h2">Utilizadores associados à Casa</MDTypography>
-                </Grid>
-                <Grid container spacing={5} justifyContent="center">
-                    {users.map((user) => (
-                        <Grid item xs={12} sm={6} md={3} key={user.id}>
-                            <MDBox mb={3}>
-                                <SimpleBlogCard
-                                    image="https://bit.ly/3Hlw1MQ"
-                                    title={user.name}
-                                    description={user.isAdmin ? "Admin" : "Utilizador Normal"}
-                                />
-                            </MDBox>
-                        </Grid>
-                    ))}
-                    <Grid item xs={12} sm={6} md={3}>
+            <Grid container justifyContent="center" mb={4}>
+                <MDTypography variant="h2">Utilizadores associados à Casa</MDTypography>
+            </Grid>
+            <Grid container spacing={5} justifyContent="center">
+                {users.map((user) => (
+                    <Grid item xs={12} sm={6} md={3} key={user.id}>
                         <MDBox mb={3}>
-                            <div onClick={handleClick}>
-                                <SimpleBlogCard
-                                    image="https://bit.ly/3Hlw1MQ"
-                                    title="Adicionar novo utilizador"
-                                    description="Associe um novo utilizador à Casa"
-                                />
-                            </div>
+                            <UserCard nome={user.name} isAdmin={user.isAdmin} />
                         </MDBox>
                     </Grid>
-                </Grid>
-            </MDBox>
-            <MDBox py={3}>
-                {showForm && (
-                    <Grid container justifyContent="center" mb={6}>
-                        <MDTypography variant="h3" mb={4}>
-                            Novo Utilizador
-                        </MDTypography>
-                        <Grid container justifyContent="center" mb={6}>
-                            <MDBox mb={3}>
-                                <Formik
-                                    validationSchema={validate}
-                                    onSubmit={(values, { resetForm }) => {
-                                        console.log(values);
-                                        resetForm;
-                                    }}
-                                    initialValues={{
-                                        email: "",
-                                        selectedOption: "Admin",
-                                    }}
+                ))}
+            </Grid>
+            <Grid container justifyContent="center" mb={3}>
+                <MDButton variant="contained" color="primary" size="small" onClick={handleClick}>
+                    {showForm ? "Cancelar" : "Adicionar Utilizador"}
+                </MDButton>
+            </Grid>
+            {showForm && (
+                <Grid container justifyContent="center">
+                    <MDTypography variant="h3" mb={2}>
+                        Novo Utilizador
+                    </MDTypography>
+                    <Grid container justifyContent="center">
+                        <form onSubmit={formik.handleSubmit}>
+                            <Grid item xs={12} sm={12} md={12} mb={2}>
+                                <MDTypography variant="h5">Email</MDTypography>
+                                <MDInput
+                                    id="email"
+                                    name="email"
+                                    label="Email"
+                                    type="email"
+                                    value={formik.values.email}
+                                    onChange={formik.handleChange}
+                                    error={formik.touched.email && Boolean(formik.errors.email)}
+                                    helperText={formik.touched.email && formik.errors.email}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={12} mb={2}>
+                                <FormControl
+                                    component="fieldset"
+                                    error={formik.touched.tipo && Boolean(formik.errors.tipo)}
                                 >
-                                    {({
-                                        handleSubmit,
-                                        handleChange,
-                                        values,
-                                        touched,
-                                        errors,
-                                        resetForm,
-                                        setFieldValue,
-                                    }) => (
-                                        <Form onSubmit={handleSubmit}>
-                                            <Grid container justifyContent="center" mb={6}>
-                                                <TextField
-                                                    id="email"
-                                                    name="email"
-                                                    label="Email"
-                                                    value={values.email}
-                                                    onChange={handleChange}
-                                                    error={touched.email && Boolean(errors.email)}
-                                                    helperText={touched.email && errors.email}
-                                                />
-                                            </Grid>
-                                            <Grid container justifyContent="center" mb={6}>
-                                                <FormControl>
-                                                    <FormLabel id="demo-radio-buttons-group-label">
-                                                        <MDTypography variant="p">
-                                                            Privilégios do Utilizador
-                                                        </MDTypography>
-                                                    </FormLabel>
-                                                    <RadioGroup
-                                                        row
-                                                        aria-labelledby="demo-radio-buttons-group-label"
-                                                        defaultValue="female"
-                                                        name={name}
-                                                        value={values.selectedOption}
-                                                        onChange={(event) => {
-                                                            setFieldValue(
-                                                                name,
-                                                                event.currentTarget.value
-                                                            );
-                                                        }}
-                                                    >
-                                                        <Grid
-                                                            container
-                                                            justifyContent="center"
-                                                            mb={6}
-                                                        >
-                                                            <FormControlLabel
-                                                                value="Admin"
-                                                                control={<Radio />}
-                                                                label="Admin"
-                                                            />
-                                                            <FormControlLabel
-                                                                value="Normal"
-                                                                control={<Radio />}
-                                                                label="Normal"
-                                                            />
-                                                        </Grid>
-                                                    </RadioGroup>
-                                                </FormControl>
-                                            </Grid>
-                                            <Grid container justifyContent="center" mb={6}>
-                                                <MDBox mr={2}>
-                                                    <MDButton
-                                                        variant="outlined"
-                                                        color="error"
-                                                        type="reset"
-                                                        onClick={handleClick}
-                                                    >
-                                                        Cancelar
-                                                    </MDButton>
-                                                </MDBox>
-                                                <MDBox>
-                                                    <Button
-                                                        color="success"
-                                                        variant="contained"
-                                                        type="submit"
-                                                    >
-                                                        {" "}
-                                                        Submit{" "}
-                                                    </Button>
-                                                </MDBox>
-                                            </Grid>
-                                        </Form>
-                                    )}
-                                </Formik>
-                            </MDBox>
-                        </Grid>
+                                    <MDTypography variant="h5">Tipo</MDTypography>
+                                    <RadioGroup
+                                        aria-label="tipo"
+                                        name="tipo"
+                                        value={formik.values.tipo}
+                                        onChange={formik.handleChange}
+                                    >
+                                        <FormControlLabel
+                                            value="admin"
+                                            control={<Radio />}
+                                            label="Administrador"
+                                        />
+                                        <FormControlLabel
+                                            value="user"
+                                            control={<Radio />}
+                                            label="Utilizador"
+                                        />
+                                    </RadioGroup>
+                                </FormControl>
+                            </Grid>
+                            <Grid container justifyContent="center" mb={3}>
+                                <MDButton
+                                    variant="contained"
+                                    color="success"
+                                    size="small"
+                                    type="submit"
+                                    fullWidth
+                                >
+                                    Convidar
+                                </MDButton>
+                            </Grid>
+                        </form>
                     </Grid>
-                )}
-            </MDBox>
-            <Divider />
+                </Grid>
+            )}
             <Footer />
         </DashboardLayout>
     );
