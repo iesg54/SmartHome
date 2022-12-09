@@ -6,24 +6,49 @@ import Grid from "@mui/material/Grid";
 
 // Material Dashboard 2 React Examples
 import DefaultLineChart from "examples/Charts/LineCharts/DefaultLineChart";
+import PieChart from "examples/Charts/PieChart";
 
-function HomeStats({ title, description, data, x }) {
+function HomeStats({
+    titleline,
+    titlepie,
+    descriptionline,
+    descriptionpie,
+    dataline,
+    datapie,
+    xline,
+    labelspie,
+}) {
     return (
         <Grid container spacing={3} mt={4}>
             <Grid item xs={12} sm={6} md={8}>
                 <DefaultLineChart
                     icon={{ color: "info", component: "wallet" }}
-                    title={title}
-                    description={description}
+                    title={titleline}
+                    description={descriptionline}
                     chart={{
-                        labels: x,
+                        labels: xline,
                         datasets: [
                             {
                                 label: "Gastos",
                                 color: "info",
-                                data,
+                                data: dataline,
                             },
                         ],
+                    }}
+                />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+                <PieChart
+                    icon={{ color: "info", component: "wallet" }}
+                    title={titlepie}
+                    description={descriptionpie}
+                    chart={{
+                        labels: labelspie,
+                        datasets: {
+                            label: "Gastos",
+                            backgroundColors: ["primary", "secondary", "warning", "dark"],
+                            data: datapie,
+                        },
                     }}
                 />
             </Grid>
@@ -32,17 +57,25 @@ function HomeStats({ title, description, data, x }) {
 }
 
 HomeStats.defaultProps = {
-    title: "",
-    description: "",
-    data: [],
-    x: [],
+    titleline: "",
+    titlepie: "",
+    descriptionline: "",
+    descriptionpie: "",
+    dataline: [],
+    datapie: [],
+    xline: [],
+    labelspie: [],
 };
 
 HomeStats.propTypes = {
-    title: PropTypes.string,
-    description: PropTypes.string,
-    data: PropTypes.arrayOf(PropTypes.number),
-    x: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
+    titleline: PropTypes.string,
+    titlepie: PropTypes.string,
+    descriptionline: PropTypes.string,
+    descriptionpie: PropTypes.string,
+    dataline: PropTypes.arrayOf(PropTypes.number),
+    datapie: PropTypes.arrayOf(PropTypes.number),
+    xline: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
+    labelspie: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default HomeStats;

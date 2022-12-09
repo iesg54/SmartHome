@@ -20,6 +20,7 @@ import SimpleBlogCard from "examples/Cards/BlogCards/SimpleBlogCard";
 // Data
 import divisionsData from "layouts/dashboard/data/divisionsData";
 import { monthlyEnergyCostData, yearlyEnergyCostData } from "./data/homeEnergyCostData";
+import { monthlyDivisionStats, yearlyDivisionStats } from "./data/divisionStatsData";
 
 // Components
 import HomeStats from "./components/HomeStats";
@@ -82,18 +83,26 @@ function Dashboard() {
                     <Grid container mb={4}>
                         {tabIndex === 0 && (
                             <HomeStats
-                                title={monthlyEnergyCostData.title}
-                                description={monthlyEnergyCostData.description}
-                                data={monthlyEnergyCostData.data}
-                                x={monthlyEnergyCostData.x}
+                                titleline={monthlyEnergyCostData.title}
+                                titlepie={monthlyDivisionStats.title}
+                                descriptionline={monthlyEnergyCostData.description}
+                                descriptionpie={monthlyDivisionStats.description}
+                                dataline={monthlyEnergyCostData.data}
+                                datapie={monthlyDivisionStats.data}
+                                xline={monthlyEnergyCostData.x}
+                                labelspie={monthlyDivisionStats.labels}
                             />
                         )}
                         {tabIndex === 1 && (
                             <HomeStats
-                                title={yearlyEnergyCostData.title}
-                                description={yearlyEnergyCostData.description}
-                                data={yearlyEnergyCostData.data}
-                                x={yearlyEnergyCostData.x}
+                                titleline={yearlyEnergyCostData.title}
+                                titlepie={yearlyDivisionStats.title}
+                                descriptionline={yearlyEnergyCostData.description}
+                                descriptionpie={yearlyDivisionStats.description}
+                                dataline={yearlyEnergyCostData.data}
+                                datapie={yearlyDivisionStats.data}
+                                xline={yearlyEnergyCostData.x}
+                                labelspie={yearlyDivisionStats.labels}
                             />
                         )}
                     </Grid>

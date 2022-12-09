@@ -1,45 +1,72 @@
 package pt.ua.deti.ies.smarthome.smarthome_api.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Divisao;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Sensors;
 import pt.ua.deti.ies.smarthome.smarthome_api.services.HouseService;
+import pt.ua.deti.ies.smarthome.smarthome_api.utils.SuccessfulRequest;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("house")
+@RequestMapping("smarthome/private/house")
 public class HouseController {
+    // DASHBOARD PAGE API METHODS
 
-    @Autowired 
-    private HouseService houseService;
-    
-    @GetMapping("/sensors")
-    public List<Sensors> getSensors(@RequestParam(name="id") Integer id_casa){
-        return houseService.getSensors(id_casa);
-        
+    HouseService houseService;
+
+    // Lists all the Sensors installed in a given House
+    @GetMapping("/{idCasa}")
+    public ResponseEntity<List<Sensors>> getSensors(@PathVariable(value="idCasa") int idCasa){
+        return ResponseEntity.ok(houseService.getSensors(idCasa));
     }
 
-    @GetMapping("/divisions")
-    public List<Divisao> getDivisions(@RequestParam(name = "id") Integer id_casa){
-        return houseService.getDivisions(id_casa); //mudar isto
+    // Returns all the divisions registered for a given House
+    @GetMapping("/{idCasa}/divisions")
+    public ResponseEntity<List<Divisao>> getDivisions(@PathVariable(value="idCasa") int idCasa){
+        return ResponseEntity.ok(houseService.getDivisions(idCasa));
     }
 
-    @PostMapping("/add-div")
-    public Divisao addDivision(@RequestParam(name="id_casa") Integer id_casa, @RequestParam(name="id_div") Integer id_div){
-        return houseService.addDivisao(id_casa, id_div);
+    // Associates a new division to a House
+    @PostMapping("/{idCasa}/divisions")
+    public SuccessfulRequest addDivision(@PathVariable(value="idCasa") int idCasa, @RequestParam(name="idDiv", required = true) Integer idDiv){
+        houseService.addDivisao(idCasa, idDiv);
+        SuccessfulRequest successfulRequest = new SuccessfulRequest("added new division");
+        return successfulRequest;
     }
 
-    @GetMapping("/consumo/{id-div}")
-    public Double consumoEnergetico(@PathVariable Integer id_div, @RequestParam(name = "id-casa") Integer id_casa){
-        return houseService.getConsumo(id_div, id_casa);
+    // ENERGY CONSUMPTION
+    // Returns the latest information stored in the DB regarding energy consumption. Must return the value for each division associated with the house.
+    @GetMapping("/{idCasa}/energy/current/{idDiv}")
+    public ResponseEntity<?> getCurrentEnergyDivision(@PathVariable(value="idCasa") int idCasa, @PathVariable(value="idDiv") int idDiv){
+        return ResponseEntity.ok(houseService.getConsumo(idDiv, idCasa));
+    }
+
+    // Returns the information stored in the DB regarding energy consumption in the current month. Must return the value for each division associated with the house.
+    @GetMapping("/{idCasa}/energy/month/{idDiv}")
+    public ResponseEntity<?> getMonthlyEnergyDivision(@PathVariable(value="idCasa") int idCasa, @PathVariable(value="idDiv") int idDiv){
+        return null;
+    }
+
+    // Returns the information stored in the DB regarding energy consumption in the last week. Must return the value for each division associated with the house.
+    @GetMapping("/{idCasa}/energy/weekly/{idDiv}")
+    public ResponseEntity<?> getWeeklyEnergyDivision(@PathVariable(value="idCasa") int idCasa, @PathVariable(value="idDiv") int idDiv){
+        return null;
+    }
+
+    // USERS PAGE API METHODS
+
+    // Returns the Users associated with the House
+    @GetMapping("/{idCasa}/users")
+    public ResponseEntity<?> getAllUsers(@PathVariable(value="idCasa") int idCasa){
+        return null;
+    }
+
+    // Adds a new user to the House Page, in case they are already registered in the DB
+    @PostMapping("/{idCasa}/users")
+    public SuccessfulRequest addUser(@PathVariable(value="idCasa") int idCasa){
+        return null;
     }
 
 }
