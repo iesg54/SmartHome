@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState, useEffect } from "react";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -28,7 +29,7 @@ import HomeStats from "./components/HomeStats";
 function Dashboard() {
     const { divisions } = divisionsData;
 
-    const [tabIndex, setTabIndex] = React.useState(0);
+    const [tabIndex, setTabIndex] = useState(0);
 
     const handleTabChange = (event, newTabIndex) => {
         setTabIndex(newTabIndex);

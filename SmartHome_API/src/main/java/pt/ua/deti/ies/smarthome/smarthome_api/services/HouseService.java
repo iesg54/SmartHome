@@ -10,8 +10,10 @@ import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.internal.util.privilegedactions.IsClassPresent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.ResourceNotFoundException;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Casa;
@@ -41,22 +43,22 @@ public class HouseService {
     @Autowired
     private DivisionRepository divisionRepository;
 
-    public List<Sensors> getSensors(Integer id_casa){
+    public ResponseEntity<List<Sensors>> getSensors(Integer id_casa){
         ArrayList<Sensors> sensores = new ArrayList<>();
 
         Optional<Casa> casaOptional = houseRepository.findById(id_casa);
         if (!(casaOptional.isPresent())){
-            return null;
+            return new ResponseEntity<List<Sensors>>(HttpStatus.OK);
         }
 
         Casa house = casaOptional.get();
 
         List<Divisao> divisoes = house.getDivisoesCasa();
         for (Divisao divisao : divisoes){
-            divisao.getSensorsDiv().forEach(sensores::add); //ig this works???
+            divisao.getSensorsDiv().forEach(sensores::add);
         }
 
-        return sensores;
+        return new ResponseEntity<List<Sensors>>(sensores, HttpStatus.OK);
     }
 
     public List<Divisao> getDivisions(Integer id_casa){
@@ -71,6 +73,8 @@ public class HouseService {
     }
 
     public Divisao addDivisao(Integer id_casa, Integer id_div){
+
+        //TODO - mudar isto para aceitar o tipo
         Optional<Casa> casaOptional = houseRepository.findById(id_casa);
         if (!(casaOptional.isPresent())){
             return null;

@@ -1,15 +1,12 @@
 package pt.ua.deti.ies.smarthome.smarthome_api.services;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.rabbitmq.client.RpcClient.Response;
-
 import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.ResourceNotFoundException;
+import pt.ua.deti.ies.smarthome.smarthome_api.model.Casa;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Utilizador;
 import pt.ua.deti.ies.smarthome.smarthome_api.repository.UserRepository;
 
@@ -33,11 +30,20 @@ public class UserService {
         }
     }
 
-    public ResponseEntity<List<Utilizador>> getUsers(){
-        return new ResponseEntity<>(userRepository.findAll(), HttpStatus.OK);
-    }
-
     public ResponseEntity<Utilizador> registerUser(String email, String nome, String password, String profile_image, Boolean isAdmin){
-        return null;
+        
+        // criar nova casa assim que o admin se regista
+        Utilizador novo = new Utilizador();
+        if (isAdmin){   // se for administrador, tem uma casa registada -> criar essa casa
+            Casa nova = new Casa();
+            novo.setCasa(nova);
+        }
+        novo.setEmail(email);
+        novo.setNome(nome);
+        novo.setPassword(password);
+        novo.setProfileImage(profile_image);
+        novo.setAdmin(isAdmin);
+        
+        return new ResponseEntity<>(novo, HttpStatus.OK);
     }
 }
