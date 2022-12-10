@@ -1,7 +1,6 @@
 package pt.ua.deti.ies.smarthome.smarthome_api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +10,7 @@ import pt.ua.deti.ies.smarthome.smarthome_api.model.Sensors;
 import pt.ua.deti.ies.smarthome.smarthome_api.services.HouseService;
 import pt.ua.deti.ies.smarthome.smarthome_api.utils.SuccessfulRequest;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -47,19 +47,19 @@ public class HouseController {
     // Returns the latest information stored in the DB regarding energy consumption. Must return the value for each division associated with the house.
     @GetMapping("/{idCasa}/energy/current")
     public ResponseEntity<Map<Integer, Double>> getCurrentEnergyDivision(@PathVariable(value="idCasa") int idCasa) throws ResourceNotFoundException {
-        return ResponseEntity.ok(houseService.getConsumo(idCasa));
+        return ResponseEntity.ok(houseService.getLatestConsumo(idCasa));
     }
 
     // Returns the information stored in the DB regarding energy consumption in the current month. Must return the value for each division associated with the house.
-    @GetMapping("/{idCasa}/energy/month/{idDiv}")
-    public ResponseEntity<?> getMonthlyEnergyDivision(@PathVariable(value="idCasa") int idCasa, @PathVariable(value="idDiv") int idDiv){
-        return null;
+    @GetMapping("/{idCasa}/energy/month")
+    public ResponseEntity<Map<Integer, Map<Date, Double>>> getMonthlyEnergyDivision(@PathVariable(value="idCasa") int idCasa) throws ResourceNotFoundException{
+        return ResponseEntity.ok(houseService.getMonthlyConsumo(idCasa));
     }
 
     // Returns the information stored in the DB regarding energy consumption in the last week. Must return the value for each division associated with the house.
-    @GetMapping("/{idCasa}/energy/weekly/{idDiv}")
-    public ResponseEntity<?> getWeeklyEnergyDivision(@PathVariable(value="idCasa") int idCasa, @PathVariable(value="idDiv") int idDiv){
-        return null;
+    @GetMapping("/{idCasa}/energy/week")
+    public ResponseEntity<Map<Integer, Map<Date, Double>>> getWeeklyEnergyDivision(@PathVariable(value="idCasa") int idCasa) throws ResourceNotFoundException{
+        return ResponseEntity.ok(houseService.getWeeklyConsumo(idCasa));
     }
 
     // USERS PAGE API METHODS

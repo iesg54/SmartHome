@@ -1,15 +1,12 @@
 package pt.ua.deti.ies.smarthome.smarthome_api.services;
 
-import java.lang.StackWalker.Option;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.*;
 
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.validator.internal.util.privilegedactions.IsClassPresent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +15,7 @@ import pt.ua.deti.ies.smarthome.smarthome_api.model.Casa;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Divisao;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Sensors;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.dispositivos.Dispositivo;
-import pt.ua.deti.ies.smarthome.smarthome_api.model.measurements.ConsumoCozinha;
-import pt.ua.deti.ies.smarthome.smarthome_api.model.measurements.ConsumoExterno;
-import pt.ua.deti.ies.smarthome.smarthome_api.model.measurements.ConsumoQuarto;
-import pt.ua.deti.ies.smarthome.smarthome_api.model.measurements.ConsumoSala;
+import pt.ua.deti.ies.smarthome.smarthome_api.model.measurements.*;
 import pt.ua.deti.ies.smarthome.smarthome_api.repository.*;
 
 @Service
@@ -83,7 +77,7 @@ public class HouseService {
         return null;
     }
 
-    public Map<Integer, Double> getConsumo(Integer id_casa) throws ResourceNotFoundException{
+    public Map<Integer, Double> getLatestConsumo(Integer id_casa) throws ResourceNotFoundException{
         Casa house = houseRepository.findById(id_casa).orElseThrow(() ->
                 new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + id_casa));
 
@@ -136,5 +130,109 @@ public class HouseService {
         }
 
         return consumoDivs;
+    }
+
+    public Map<Integer, Map<Date, Double>> getWeeklyConsumo(Integer id_casa) throws ResourceNotFoundException{
+        // TODO: Alterar para trabalhar com qualquer dia de query?
+        Casa house = houseRepository.findById(id_casa).orElseThrow(() ->
+                new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + id_casa));
+
+        Map<Integer, Map<Date, Double>> consumoPorDiv = new HashMap<>();
+        ArrayList<Double> values = new ArrayList<>();
+        Double consumoMedio = 0.0;
+
+        Date firstDay = Date.valueOf("2022-11-30");
+        Date lastDay;
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(firstDay);
+
+        for(Integer i = 0; i < 7; i++){
+            cal.add(Calendar.DATE, 1);
+            lastDay = new Date(cal.getTimeInMillis());
+
+            // Para cada divisão associada à Casa
+            for (Divisao div : divisionRepository.findAllByCasa(house)){
+                if(!consumoPorDiv.containsKey(div.getId())){
+                    consumoPorDiv.put(div.getId(), new HashMap<Date, Double>());
+                }
+
+                if (div.getTipo().toString().equals("QUARTO")){
+                    consumoQuartoRepository.findAllByDiaEquals(firstDay).forEach(cq -> values.add(cq.getValor()));
+                    consumoMedio = values.stream().mapToDouble(x -> x).average().orElse(0);
+                }else if(div.getTipo().toString().equals("COZINHA")){
+                    consumoCozinhaRepository.findAllByDiaEquals(firstDay).forEach(cq -> values.add(cq.getValor()));
+                    consumoMedio = values.stream().mapToDouble(x -> x).average().orElse(0);
+                }else if(div.getTipo().toString().equals("EXTERIOR")){
+                    consumoExternoRepository.findAllByDiaEquals(firstDay).forEach(cq -> values.add(cq.getValor()));
+                    consumoMedio = values.stream().mapToDouble(x -> x).average().orElse(0);
+                }else if(div.getTipo().toString().equals("SALA")){
+                    consumoSalaRepository.findAllByDiaEquals(firstDay).forEach(cq -> values.add(cq.getValor()));
+                    consumoMedio = values.stream().mapToDouble(x -> x).average().orElse(0);
+                };
+
+                values.clear();
+
+                Map<Date, Double> old = consumoPorDiv.get(div.getId());
+                old.put(firstDay, consumoMedio);
+                consumoPorDiv.put(div.getId(), old);
+
+            }
+
+            firstDay = lastDay;
+        }
+
+        return consumoPorDiv;
+    }
+
+    public Map<Integer, Map<Date, Double>> getMonthlyConsumo(Integer id_casa) throws ResourceNotFoundException{
+        // TODO: Alterar para trabalhar com qualquer dia de query?
+        Casa house = houseRepository.findById(id_casa).orElseThrow(() ->
+                new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + id_casa));
+
+        Map<Integer, Map<Date, Double>> consumoPorDiv = new HashMap<>();
+        ArrayList<Double> values = new ArrayList<>();
+        Double consumoMedio = 0.0;
+
+        Date firstDay = Date.valueOf("2022-11-06");
+        Date lastDay;
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(firstDay);
+
+        for(Integer i = 0; i < 30; i++){
+            cal.add(Calendar.DATE, 1);
+            lastDay = new Date(cal.getTimeInMillis());
+
+            // Para cada divisão associada à Casa
+            for (Divisao div : divisionRepository.findAllByCasa(house)){
+                if(!consumoPorDiv.containsKey(div.getId())){
+                    consumoPorDiv.put(div.getId(), new HashMap<Date, Double>());
+                }
+
+                if (div.getTipo().toString().equals("QUARTO")){
+                    consumoQuartoRepository.findAllByDiaEquals(firstDay).forEach(cq -> values.add(cq.getValor()));
+                    consumoMedio = values.stream().mapToDouble(x -> x).average().orElse(0);
+                }else if(div.getTipo().toString().equals("COZINHA")){
+                    consumoCozinhaRepository.findAllByDiaEquals(firstDay).forEach(cq -> values.add(cq.getValor()));
+                    consumoMedio = values.stream().mapToDouble(x -> x).average().orElse(0);
+                }else if(div.getTipo().toString().equals("EXTERIOR")){
+                    consumoExternoRepository.findAllByDiaEquals(firstDay).forEach(cq -> values.add(cq.getValor()));
+                    consumoMedio = values.stream().mapToDouble(x -> x).average().orElse(0);
+                }else if(div.getTipo().toString().equals("SALA")){
+                    consumoSalaRepository.findAllByDiaEquals(firstDay).forEach(cq -> values.add(cq.getValor()));
+                    consumoMedio = values.stream().mapToDouble(x -> x).average().orElse(0);
+                };
+
+                values.clear();
+
+                Map<Date, Double> old = consumoPorDiv.get(div.getId());
+                old.put(firstDay, consumoMedio);
+                consumoPorDiv.put(div.getId(), old);
+
+            }
+
+            firstDay = lastDay;
+        }
+
+        return consumoPorDiv;
     }
 }
