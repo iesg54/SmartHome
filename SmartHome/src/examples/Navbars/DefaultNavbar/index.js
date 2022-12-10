@@ -114,7 +114,7 @@ function DefaultNavbar({ transparent, light, action }) {
                         fontWeight="bold"
                         color={light ? "white" : "dark"}
                     >
-                        Material Dashboard 2
+                        SmartHome
                     </MDTypography>
                 </MDBox>
                 <MDBox color="inherit" display={{ xs: "none", lg: "flex" }} m={0} p={0}>
@@ -122,12 +122,6 @@ function DefaultNavbar({ transparent, light, action }) {
                         icon="donut_large"
                         name="dashboard"
                         route="/dashboard"
-                        light={light}
-                    />
-                    <DefaultNavbarLink
-                        icon="person"
-                        name="profile"
-                        route="/profile"
                         light={light}
                     />
                     <DefaultNavbarLink

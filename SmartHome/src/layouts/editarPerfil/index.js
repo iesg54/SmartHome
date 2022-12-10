@@ -1,5 +1,6 @@
 // @mui material components
 import Grid from "@mui/material/Grid";
+import Card from "@mui/material/Card";
 
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -93,104 +94,111 @@ function EditarPerfil() {
     return (
         <DashboardLayout>
             <DashboardNavbar />
-            <MDBox py={3}>
-                <Grid container justifyContent="center" spacing={2}>
-                    <Grid item mb={2}>
-                        <MDAvatar src={image} alt="Avatar" size="xxl" />
-                    </Grid>
-                    <Grid item mb={2}>
-                        <MDTypography variant="h4">Editar Perfil</MDTypography>
-                        <MDTypography variant="body2">
-                            Altere as informações do seu perfil
-                        </MDTypography>
-                        <MDButton
-                            color="success"
-                            variant="contained"
-                            size="small"
-                            onClick={() => setOpen(true)}
-                        >
-                            Alterar foto
-                        </MDButton>
-                        <DropzoneDialog
-                            acceptedFiles={["image/*"]}
-                            cancelButtonText="cancel"
-                            submitButtonText="submit"
-                            maxFileSize={5000000}
-                            open={open}
-                            onClose={() => setOpen(false)}
-                            onSave={(files) => {
-                                handleImageUpload(files);
-                                setOpen(false);
-                            }}
-                            showPreviews
-                            showFileNamesInPreview
-                            filesLimit={1}
-                        />
-                    </Grid>
-                    <Grid container mb={2} justifyContent="center">
-                        <form onSubmit={formik.handleSubmit}>
-                            <Grid item mb={2}>
-                                <MDTypography>Nome</MDTypography>
-                                <MDInput
-                                    id="nome"
-                                    name="nome"
-                                    type="text"
-                                    placeholder="nome"
-                                    value={formik.values.nome}
-                                    onChange={formik.handleChange}
-                                    error={formik.touched.nome && Boolean(formik.errors.nome)}
-                                    helperText={formik.touched.nome && formik.errors.nome}
-                                />
+            <Grid container justifyContent="center">
+                <MDBox py={3}>
+                    <Card>
+                        <Grid container justifyContent="center" alignItems="center" p={3}>
+                            <Grid item mb={2} mr={2}>
+                                <MDAvatar src={image} alt="Avatar" size="xxl" shadow="md" />
                             </Grid>
                             <Grid item mb={2}>
-                                <MDTypography>Email</MDTypography>
-                                <MDInput
-                                    id="email"
-                                    name="email"
-                                    type="email"
-                                    placeholder="email"
-                                    value={formik.values.email}
-                                    onChange={formik.handleChange}
-                                    error={formik.touched.email && Boolean(formik.errors.email)}
-                                    helperText={formik.touched.email && formik.errors.email}
+                                <MDTypography variant="h4">Editar Perfil</MDTypography>
+                                <MDTypography variant="body2">
+                                    Altere as informações do seu perfil
+                                </MDTypography>
+                                <MDButton
+                                    color="success"
+                                    variant="contained"
+                                    size="small"
+                                    onClick={() => setOpen(true)}
+                                >
+                                    Alterar foto
+                                </MDButton>
+                                <DropzoneDialog
+                                    acceptedFiles={["image/*"]}
+                                    cancelButtonText="cancel"
+                                    submitButtonText="submit"
+                                    maxFileSize={5000000}
+                                    open={open}
+                                    onClose={() => setOpen(false)}
+                                    onSave={(files) => {
+                                        handleImageUpload(files);
+                                        setOpen(false);
+                                    }}
+                                    showPreviews
+                                    showFileNamesInPreview
+                                    filesLimit={1}
                                 />
                             </Grid>
-                            <Grid item mb={2}>
-                                <MDTypography>Password</MDTypography>
-                                <MDInput
-                                    id="password"
-                                    name="password"
-                                    type="password"
-                                    placeholder="password"
-                                    value={formik.values.password}
-                                    onChange={formik.handleChange}
-                                    error={
-                                        formik.touched.password && Boolean(formik.errors.password)
-                                    }
-                                    helperText={formik.touched.password && formik.errors.password}
-                                />
-                            </Grid>
-                            <Grid container mb={2} spacing={2}>
-                                <Grid item>
-                                    <MDButton type="submit" color="success" variant="contained">
-                                        Salvar
-                                    </MDButton>
+                        </Grid>
+                        <Grid container mb={2} justifyContent="center">
+                            <form onSubmit={formik.handleSubmit}>
+                                <Grid item mb={2}>
+                                    <MDInput
+                                        id="nome"
+                                        name="nome"
+                                        type="text"
+                                        placeholder="nome"
+                                        value={formik.values.nome}
+                                        onChange={formik.handleChange}
+                                        error={formik.touched.nome && Boolean(formik.errors.nome)}
+                                        helperText={formik.touched.nome && formik.errors.nome}
+                                        fullWidth
+                                    />
                                 </Grid>
-                                <Grid item>
-                                    <MDButton
-                                        type="button"
-                                        color="error"
-                                        variant="contained"
-                                        onClick={() => formik.resetForm()}
-                                    >
-                                        Cancelar
-                                    </MDButton>
+                                <Grid item mb={2}>
+                                    <MDInput
+                                        id="email"
+                                        name="email"
+                                        type="email"
+                                        placeholder="email"
+                                        value={formik.values.email}
+                                        onChange={formik.handleChange}
+                                        error={formik.touched.email && Boolean(formik.errors.email)}
+                                        helperText={formik.touched.email && formik.errors.email}
+                                        fullWidth
+                                    />
                                 </Grid>
-                            </Grid>
-                        </form>
-                    </Grid>
-                </Grid>
-            </MDBox>
+                                <Grid item mb={2}>
+                                    <MDInput
+                                        id="password"
+                                        name="password"
+                                        type="password"
+                                        placeholder="password"
+                                        value={formik.values.password}
+                                        onChange={formik.handleChange}
+                                        error={
+                                            formik.touched.password &&
+                                            Boolean(formik.errors.password)
+                                        }
+                                        helperText={
+                                            formik.touched.password && formik.errors.password
+                                        }
+                                        fullWidth
+                                    />
+                                </Grid>
+                                <Grid container mb={2} spacing={2}>
+                                    <Grid item>
+                                        <MDButton type="submit" color="success" variant="contained">
+                                            Salvar
+                                        </MDButton>
+                                    </Grid>
+                                    <Grid item>
+                                        <MDButton
+                                            type="button"
+                                            color="error"
+                                            variant="contained"
+                                            onClick={() => formik.resetForm()}
+                                        >
+                                            Cancelar
+                                        </MDButton>
+                                    </Grid>
+                                </Grid>
+                            </form>
+                        </Grid>
+                    </Card>
+                </MDBox>
+            </Grid>
             <Footer />
         </DashboardLayout>
     );

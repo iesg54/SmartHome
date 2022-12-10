@@ -23,12 +23,12 @@ public class HouseService {
     @Autowired
     private HouseRepository houseRepository;
 
-    public List<Sensors> getSensors(Integer id_casa){
+    public ResponseEntity<List<Sensors>> getSensors(Integer id_casa){
         ArrayList<Sensors> sensores = new ArrayList<>();
 
         Optional<Casa> casaOptional = houseRepository.findById(id_casa);
         if (!(casaOptional.isPresent())){
-            return new ResponseEntity<>(null, HttpStatus.OK);
+            return new ResponseEntity<List<Sensors>>(HttpStatus.OK);
         }
 
         Casa house = casaOptional.get();
@@ -38,7 +38,7 @@ public class HouseService {
             divisao.getSensorsDiv().forEach(sensores::add);
         }
 
-        return sensores;
+        return new ResponseEntity<List<Sensors>>(sensores, HttpStatus.OK);
     }
 
     public List<Divisao> getDivisions(Integer id_casa){
@@ -52,7 +52,7 @@ public class HouseService {
         return house.getDivisoesCasa();
     }
 
-    public Divisao addDivisao(Integer id_casa, Integer id_div, String tipo){
+    public Divisao addDivisao(Integer id_casa, Integer id_div){
 
         //TODO - mudar isto para aceitar o tipo
         Optional<Casa> casaOptional = houseRepository.findById(id_casa);
@@ -70,7 +70,7 @@ public class HouseService {
         return null;
     }
 
-    public Double getConsumo(Integer id_div, Integer id_casa, String type) throws ResourceNotFoundException{
+    public Double getConsumo(Integer id_div, Integer id_casa) throws ResourceNotFoundException{
         Casa house = houseRepository.findById(id_casa).orElseThrow(() ->
                 new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + id_casa));
 
