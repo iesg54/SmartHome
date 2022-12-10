@@ -4,7 +4,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Utilizador;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("smarthome/private/user")

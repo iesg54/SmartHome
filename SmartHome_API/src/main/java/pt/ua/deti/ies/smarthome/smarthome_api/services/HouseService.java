@@ -1,14 +1,14 @@
 package pt.ua.deti.ies.smarthome.smarthome_api.services;
 
-import java.lang.StackWalker.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.hibernate.validator.internal.util.privilegedactions.IsClassPresent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.ResourceNotFoundException;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Casa;
@@ -28,14 +28,14 @@ public class HouseService {
 
         Optional<Casa> casaOptional = houseRepository.findById(id_casa);
         if (!(casaOptional.isPresent())){
-            return null;
+            return new ResponseEntity<>(null, HttpStatus.OK);
         }
 
         Casa house = casaOptional.get();
 
         List<Divisao> divisoes = house.getDivisoesCasa();
         for (Divisao divisao : divisoes){
-            divisao.getSensorsDiv().forEach(sensores::add); //ig this works???
+            divisao.getSensorsDiv().forEach(sensores::add);
         }
 
         return sensores;
@@ -52,7 +52,9 @@ public class HouseService {
         return house.getDivisoesCasa();
     }
 
-    public Divisao addDivisao(Integer id_casa, Integer id_div){
+    public Divisao addDivisao(Integer id_casa, Integer id_div, String tipo){
+
+        //TODO - mudar isto para aceitar o tipo
         Optional<Casa> casaOptional = houseRepository.findById(id_casa);
         if (!(casaOptional.isPresent())){
             return null;

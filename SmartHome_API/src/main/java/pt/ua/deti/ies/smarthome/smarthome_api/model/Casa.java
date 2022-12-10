@@ -37,4 +37,5 @@ public class Casa {
     public List<Divisao> getDivisoesCasa() {
         return divisoesCasa;
     }
+
 }

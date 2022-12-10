@@ -4,7 +4,7 @@ INSERT INTO casa(id, morada) VALUES(1, "Rua Aviacão Naval, Aveiro");
 
 -- inserir utilizadores:
 INSERT INTO utilizador(id, email, nome, password, is_admin, id_casa) VALUES (1, "Alberto Matias", "alberto.matias000@gmail.com", "admin", True, 1);
-INSERT INTO utilizador(id, email, nome, password, is_admin, id_casa) VALUES (1, "Susana Mendes", "susana.mendes000@gmail.com", "password", False, 1);
+INSERT INTO utilizador(id, email, nome, password, is_admin, id_casa) VALUES (2, "Susana Mendes", "susana.mendes000@gmail.com", "password", False, 1);
 
 -- inserir divisoes na casa:
 
