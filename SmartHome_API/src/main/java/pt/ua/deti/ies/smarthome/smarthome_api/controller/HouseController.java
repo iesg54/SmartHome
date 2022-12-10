@@ -33,7 +33,7 @@ public class HouseController {
 
     // Associates a new division to a House
     @PostMapping("/{idCasa}/divisions")
-    public SuccessfulRequest addDivision(@PathVariable(value="idCasa") int idCasa, @RequestParam(name="idDiv", required = true) Integer idDiv){
+    public SuccessfulRequest addDivision(@PathVariable(value="idCasa") int idCasa, @RequestParam(name="idDiv", required = true) Integer idDiv, @RequestParam(name="tipo", required = true) String tipo){
         houseService.addDivisao(idCasa, idDiv);
         SuccessfulRequest successfulRequest = new SuccessfulRequest("added new division");
         return successfulRequest;
