@@ -1,7 +1,9 @@
 package pt.ua.deti.ies.smarthome.smarthome_api.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.ResourceNotFoundException;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Divisao;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Sensors;
 import pt.ua.deti.ies.smarthome.smarthome_api.services.HouseService;
@@ -14,6 +16,7 @@ import java.util.List;
 public class HouseController {
     // DASHBOARD PAGE API METHODS
 
+    @Autowired
     HouseService houseService;
 
     // Lists all the Sensors installed in a given House
@@ -39,8 +42,8 @@ public class HouseController {
     // ENERGY CONSUMPTION
     // Returns the latest information stored in the DB regarding energy consumption. Must return the value for each division associated with the house.
     @GetMapping("/{idCasa}/energy/current/{idDiv}")
-    public ResponseEntity<?> getCurrentEnergyDivision(@PathVariable(value="idCasa") int idCasa, @PathVariable(value="idDiv") int idDiv){
-        return ResponseEntity.ok(houseService.getConsumo(idDiv, idCasa));
+    public ResponseEntity<?> getCurrentEnergyDivision(@PathVariable(value="idCasa") int idCasa, @PathVariable(value="idDiv") int idDiv, @PathVariable(value="type") String type) throws ResourceNotFoundException {
+        return ResponseEntity.ok(houseService.getConsumo(idDiv, idCasa, type));
     }
 
     // Returns the information stored in the DB regarding energy consumption in the current month. Must return the value for each division associated with the house.

@@ -18,6 +18,6 @@ public class PublicAPIController {
 
     @PostMapping("/user")
     public Utilizador newUser(@RequestBody Utilizador user){
-        return userService.newUser(user);
+        return null;
     }
 }
