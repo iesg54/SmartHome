@@ -53,4 +53,29 @@ public class DivisionController {
     public ResponseEntity<?> getDivisionEnergyConsumption(@PathVariable(value="idDiv") int idDiv, @RequestParam(name="type", required = true) String type){
         return null;
     }
+
+    //Update values in regadores
+    @PutMapping("/{idDiv}/regadores")
+    public ResponseEntity<?> updateRegador(@PathVariable(value="idDiv") int idDiv){
+        return null;
+    }
+
+    //Update values in regadores
+    @PutMapping("/{idDiv}/AC")
+    public ResponseEntity<?> updateAC(@PathVariable(value="idDiv") int idDiv){
+        return null;
+    }
+
+    //Update values in lampadas
+    @PutMapping("/{idDiv}/lampadas")
+    public ResponseEntity<?> updateLampadas(@PathVariable(value="idDiv") int idDiv){
+        return null;
+    }
+
+    //Update on/off device
+    @PutMapping("/{idDiv}/device")
+    public ResponseEntity<?> updateDevice(@PathVariable(value="idDiv") int idDiv){
+        return null;
+    }
 }
+
