@@ -26,6 +26,7 @@ public class Divisao {
     private String nome;
     @Enumerated(EnumType.STRING)
     private TipoDivisao tipo;
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="id_casa", nullable = false)
     private Casa casa;
@@ -40,7 +41,7 @@ public class Divisao {
     @OneToMany(mappedBy = "div", cascade = CascadeType.ALL)
     private List<Sensors> sensorsDiv = new ArrayList<>();
 
-    // Atributos de Relações One-To-One
+    // Atributos de Relações One-To-Many
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "div")
     private List<SensorMeasurementsQuarto> sensorQuarto;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "div")

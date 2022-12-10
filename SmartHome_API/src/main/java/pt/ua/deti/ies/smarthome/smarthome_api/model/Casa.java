@@ -21,6 +21,8 @@ public class Casa {
     private String morada;
     @OneToMany(mappedBy = "casa", cascade = CascadeType.ALL)
     private List<Utilizador> utilizadoresCasa = new ArrayList<>();
+    @OneToMany(mappedBy = "casa", cascade = CascadeType.ALL)
+    private List<Divisao> divisoes = new ArrayList<>();
 
 
     // Getter methods that need to be ignored on JSON replies
@@ -31,7 +33,7 @@ public class Casa {
 
     @JsonIgnore
     public List<Divisao> getDivisoesCasa() {
-        return null;
+        return divisoes;
     }
 
     @Override

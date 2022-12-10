@@ -43,17 +43,12 @@ public class HouseService {
     @Autowired
     private DivisionRepository divisionRepository;
 
-    public ResponseEntity<List<Sensors>> getSensors(Integer id_casa){
+    public ResponseEntity<List<Sensors>> getSensors(Integer id_casa) throws ResourceNotFoundException{
         ArrayList<Sensors> sensores = new ArrayList<>();
 
-        Optional<Casa> casaOptional = houseRepository.findById(id_casa);
-        if (!(casaOptional.isPresent())){
-            return new ResponseEntity<List<Sensors>>(HttpStatus.OK);
-        }
+        Casa casa = houseRepository.findById(id_casa).orElseThrow(() -> new ResourceNotFoundException("Could not found a house with that id"));
 
-        Casa house = casaOptional.get();
-
-        List<Divisao> divisoes = house.getDivisoesCasa();
+        List<Divisao> divisoes = casa.getDivisoesCasa();
         for (Divisao divisao : divisoes){
             divisao.getSensorsDiv().forEach(sensores::add);
         }
