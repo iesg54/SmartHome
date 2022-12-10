@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.ResourceNotFoundException;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Casa;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Divisao;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Sensors;
@@ -67,20 +68,20 @@ public class HouseService {
         return null;
     }
 
-    public Double getConsumo(Integer id_div, Integer id_casa){
-        Optional<Casa> casaOptional = houseRepository.findById(id_casa);
-        if (!(casaOptional.isPresent())){
-            return null;    // nao foi encontrada casa
-        }
+    public Double getConsumo(Integer id_div, Integer id_casa, String type) throws ResourceNotFoundException{
+        Casa house = houseRepository.findById(id_casa).orElseThrow(() ->
+                new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + id_casa));
+
         Divisao division = null;
-        Casa house = casaOptional.get();
+
         for (Divisao div : house.getDivisoesCasa()){
-            if (div.getId() == id_div){
+            if (div.getId().equals(id_div)){
                 division = div;
             }
         }
+
         if (division == null){
-            return null;
+            throw new ResourceNotFoundException("Não foi encontrada uma Divisão com o ID: " + id_div + "associada à Casa " + id_casa);
         }
 
         Double soma= 0.0;
@@ -89,8 +90,5 @@ public class HouseService {
         }
 
         return soma;
-
     }
-
-    
 }

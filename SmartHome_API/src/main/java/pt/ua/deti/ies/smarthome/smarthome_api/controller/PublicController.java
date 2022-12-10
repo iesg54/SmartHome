@@ -1,5 +1,7 @@
 package pt.ua.deti.ies.smarthome.smarthome_api.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,11 @@ public class PublicController {
     private UserService userService;
 
     // construtor
+
+    @GetMapping("/user")
+    public ResponseEntity<List<Utilizador>> getUtilizador(){
+        return userService.getUsers();
+    }
 
     // Returns the User corresponding to the e-mail and password used for a login, if they exist in the database
     @GetMapping("/login")

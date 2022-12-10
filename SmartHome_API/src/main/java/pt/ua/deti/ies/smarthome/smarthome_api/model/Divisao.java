@@ -24,6 +24,8 @@ public class Divisao {
     private Integer id;
     @Column(nullable = false)
     private String nome;
+    @Enumerated(EnumType.STRING)
+    private TipoDivisao tipo;
     @ManyToOne
     @JoinColumn(name ="id_casa", nullable = false)
     private Casa casa;

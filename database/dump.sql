@@ -251,6 +251,7 @@ CREATE TABLE `divisao` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nome` varchar(255) NOT NULL,
   `id_casa` int NOT NULL,
+  `tipo` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKj4awjxssbhlvnmx22qomxsquu` (`id_casa`),
   CONSTRAINT `FKj4awjxssbhlvnmx22qomxsquu` FOREIGN KEY (`id_casa`) REFERENCES `casa` (`id`)
@@ -263,7 +264,7 @@ CREATE TABLE `divisao` (
 
 LOCK TABLES `divisao` WRITE;
 /*!40000 ALTER TABLE `divisao` DISABLE KEYS */;
-INSERT INTO `divisao` VALUES (1,'sala',1),(2,'cozinha',1),(3,'exterior',1),(4,'quarto1',1),(5,'sala',1),(6,'cozinha',1),(7,'exterior',1),(8,'quarto1',1),(9,'sala',1),(10,'cozinha',1),(11,'exterior',1),(12,'quarto1',1);
+INSERT INTO `divisao` VALUES (1,'sala',1,'SALA'),(2,'cozinha',1,'COZINHA'),(3,'exterior',1,'EXTERIOR'),(4,'quarto1',1,'QUARTO');
 /*!40000 ALTER TABLE `divisao` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -533,4 +534,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-12-08 23:00:33
+-- Dump completed on 2022-12-10 18:28:49
