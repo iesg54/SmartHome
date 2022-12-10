@@ -12,6 +12,7 @@ import pt.ua.deti.ies.smarthome.smarthome_api.services.HouseService;
 import pt.ua.deti.ies.smarthome.smarthome_api.utils.SuccessfulRequest;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("smarthome/private/house")
@@ -24,7 +25,7 @@ public class HouseController {
 
     // Lists all the Sensors installed in a given House
     @GetMapping("/{idCasa}")
-    public ResponseEntity<List<Sensors>> getSensors(@PathVariable(value="idCasa") int idCasa){
+    public ResponseEntity<List<Sensors>> getSensors(@PathVariable(value="idCasa") int idCasa) throws ResourceNotFoundException{
         return houseService.getSensors(idCasa);
     }
 
@@ -36,8 +37,8 @@ public class HouseController {
 
     // Associates a new division to a House
     @PostMapping("/{idCasa}/divisions")
-    public SuccessfulRequest addDivision(@PathVariable(value="idCasa") int idCasa, @RequestParam(name="idDiv", required = true) Integer idDiv){
-        houseService.addDivisao(idCasa, idDiv);
+    public SuccessfulRequest addDivision(@PathVariable(value="idCasa") int idCasa, @RequestParam(name="idDiv", required = true) Integer idDiv, @RequestParam(name="type", required = true) String type){
+        houseService.addDivisao(idCasa, idDiv, type);
         SuccessfulRequest successfulRequest = new SuccessfulRequest("added new division");
         return successfulRequest;
     }
@@ -45,7 +46,7 @@ public class HouseController {
     // ENERGY CONSUMPTION
     // Returns the latest information stored in the DB regarding energy consumption. Must return the value for each division associated with the house.
     @GetMapping("/{idCasa}/energy/current")
-    public ResponseEntity<?> getCurrentEnergyDivision(@PathVariable(value="idCasa") int idCasa) throws ResourceNotFoundException {
+    public ResponseEntity<Map<Integer, Double>> getCurrentEnergyDivision(@PathVariable(value="idCasa") int idCasa) throws ResourceNotFoundException {
         return ResponseEntity.ok(houseService.getConsumo(idCasa));
     }
 

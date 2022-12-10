@@ -3,9 +3,7 @@ package pt.ua.deti.ies.smarthome.smarthome_api.services;
 import java.lang.StackWalker.Option;
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.internal.util.privilegedactions.IsClassPresent;
@@ -67,7 +65,7 @@ public class HouseService {
         return house.getDivisoesCasa();
     }
 
-    public Divisao addDivisao(Integer id_casa, Integer id_div){
+    public Divisao addDivisao(Integer id_casa, Integer id_div, String type){
 
         //TODO - mudar isto para aceitar o tipo
         Optional<Casa> casaOptional = houseRepository.findById(id_casa);
@@ -85,21 +83,16 @@ public class HouseService {
         return null;
     }
 
-    public Double getConsumo(Integer id_casa) throws ResourceNotFoundException{
+    public Map<Integer, Double> getConsumo(Integer id_casa) throws ResourceNotFoundException{
         Casa house = houseRepository.findById(id_casa).orElseThrow(() ->
                 new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + id_casa));
 
-        Double total_consumo = 0.0;
-        log.warn("Inside function");
-        log.warn(house.toString());
+        Map<Integer, Double> consumoDivs = new HashMap<>();
 
         // Para cada divisão associada à Casa
         for (Divisao div : divisionRepository.findAllByCasa(house)){
             // Ver dispositivos que estão ligados atualmente, e determinar o consumo da divisão a partir do valor de consumo destes
             Double consumo_div= 0.0;
-
-            log.warn(div.toString());
-            log.warn("Inside div loop");
 
             for (Dispositivo disp : div.getDispositivos()){
                 log.warn(disp.toString());
@@ -108,7 +101,6 @@ public class HouseService {
                 }
             }
 
-            /*
             // Adicionar a nova medição à tabela de Consumos do respetivo tipo de Divisão
             java.sql.Date date = new Date(System.currentTimeMillis());
             java.sql.Timestamp stamp = new Timestamp(System.currentTimeMillis());
@@ -138,11 +130,11 @@ public class HouseService {
                 cq.setStamp(stamp);
                 consumoSalaRepository.save(cq);
             };
-            */
 
-            total_consumo += consumo_div;
+
+            consumoDivs.put(div.getId(), consumo_div);
         }
 
-        return total_consumo;
+        return consumoDivs;
     }
 }

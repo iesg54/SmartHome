@@ -6,6 +6,7 @@ import pt.ua.deti.ies.smarthome.smarthome_api.utils.SuccessfulRequest;
 
 @RestController
 @RequestMapping("smarthome/private/division")
+@CrossOrigin
 public class DivisionController {
     // Division Page API Methods
     // SENSORS SECTION
