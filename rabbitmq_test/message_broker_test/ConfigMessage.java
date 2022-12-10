@@ -1,4 +1,4 @@
-package pt.message_broker_test;
+package pt.ua.deti.ies.smarthome.smarthome_api.message_broker_test;
 
 import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.amqp.core.Binding;

@@ -10,6 +10,7 @@ import pt.ua.deti.ies.smarthome.smarthome_api.repository.UserRepository;
 
 @Service
 public class UserService {
+
     @Autowired
     private UserRepository userRepository;
 
