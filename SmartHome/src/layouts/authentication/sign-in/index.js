@@ -1,3 +1,6 @@
+// react
+import { useState, useEffect } from "react";
+
 // react-router-dom components
 import { Link } from "react-router-dom";
 
@@ -19,26 +22,56 @@ import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 // other imports
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import axios from "axios";
 
 const validationSchema = Yup.object({
     email: Yup.string().email("Please add a valid email!").required("Please add an email!"),
-    password: Yup.string()
-        .min(6, "Password must be at least 6 characters!")
-        .required("Please add a password!"),
+    password: Yup.string().required("Please add a password!"),
 });
 
 function Basic() {
+    const [userData, setUserData] = useState({});
+    const [errorMessage, setErrorMessage] = useState("");
+    const getUserData = (values) => {
+        axios
+            .get(
+                `http://localhost:8080/smarthome/public/login?email=${values.email}&password=${values.password}`
+            )
+            .then((res) => {
+                setUserData(res.data);
+            })
+            .catch((error) => {
+                switch (error.response.status) {
+                    case 401:
+                        setErrorMessage("Password incorreta!");
+                        break;
+                    case 404:
+                        setErrorMessage("Email não encontrado!");
+                        break;
+                    default:
+                        setErrorMessage("Erro desconhecido!");
+                }
+            });
+    };
+
     const formik = useFormik({
         initialValues: {
             email: "",
             password: "",
         },
         validationSchema,
-        onSubmit: (values, { resetForm }) => {
-            alert(JSON.stringify(values, null, 2));
-            resetForm();
+        onSubmit: (values) => {
+            getUserData(values);
         },
     });
+
+    useEffect(() => {
+        if (userData.id) {
+            localStorage.setItem("userID", userData.id);
+            localStorage.setItem("CasaID", userData.casa.id);
+            window.location.href = "/dashboard";
+        }
+    }, [userData]);
 
     return (
         <BasicLayout image={bgImage}>
@@ -87,6 +120,13 @@ function Basic() {
                             fullWidth
                         />
                     </MDBox>
+                    {errorMessage && (
+                        <MDBox mb={3}>
+                            <MDTypography variant="body2" color="error" textAlign="center">
+                                {errorMessage}
+                            </MDTypography>
+                        </MDBox>
+                    )}
                     <MDBox mb={3}>
                         <MDButton
                             variant="contained"
@@ -100,7 +140,8 @@ function Basic() {
                     </MDBox>
                     <MDBox mb={3}>
                         <MDTypography variant="body2" color="secondary" textAlign="center">
-                            Don't have an account? <Link to="/authentication/sign-up">Sign up</Link>
+                            Don&apos;t have an account?&nbsp;
+                            <Link to="/authentication/sign-up">Sign up</Link>
                         </MDTypography>
                     </MDBox>
                 </MDBox>

@@ -10,6 +10,7 @@ import pt.ua.deti.ies.smarthome.smarthome_api.utils.SuccessfulRequest;
 
 @RestController
 @RequestMapping("smarthome/public")
+@CrossOrigin
 public class PublicController {
 
     // Services

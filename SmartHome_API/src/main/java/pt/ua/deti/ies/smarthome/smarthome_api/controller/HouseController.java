@@ -1,5 +1,6 @@
 package pt.ua.deti.ies.smarthome.smarthome_api.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Divisao;
@@ -11,10 +12,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("smarthome/private/house")
+@CrossOrigin
 public class HouseController {
     // DASHBOARD PAGE API METHODS
 
-    HouseService houseService;
+    @Autowired
+    private HouseService houseService;
 
     // Lists all the Sensors installed in a given House
     @GetMapping("/{idCasa}")
