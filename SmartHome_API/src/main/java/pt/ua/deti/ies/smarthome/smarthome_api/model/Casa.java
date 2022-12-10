@@ -2,10 +2,7 @@ package pt.ua.deti.ies.smarthome.smarthome_api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +21,7 @@ public class Casa {
     private String morada;
     @OneToMany(mappedBy = "casa", cascade = CascadeType.ALL)
     private List<Utilizador> utilizadoresCasa = new ArrayList<>();
-    @OneToMany(mappedBy = "casa", cascade = CascadeType.ALL)
-    private List<Divisao> divisoesCasa = new ArrayList<>();
+
 
     // Getter methods that need to be ignored on JSON replies
     @JsonIgnore
@@ -35,6 +31,14 @@ public class Casa {
 
     @JsonIgnore
     public List<Divisao> getDivisoesCasa() {
-        return divisoesCasa;
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return "Casa{" +
+                "id=" + id +
+                ", morada='" + morada + '\'' +
+                '}';
     }
 }

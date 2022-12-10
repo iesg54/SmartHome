@@ -41,9 +41,9 @@ public class HouseController {
 
     // ENERGY CONSUMPTION
     // Returns the latest information stored in the DB regarding energy consumption. Must return the value for each division associated with the house.
-    @GetMapping("/{idCasa}/energy/current/{idDiv}")
-    public ResponseEntity<?> getCurrentEnergyDivision(@PathVariable(value="idCasa") int idCasa, @PathVariable(value="idDiv") int idDiv, @PathVariable(value="type") String type) throws ResourceNotFoundException {
-        return ResponseEntity.ok(houseService.getConsumo(idDiv, idCasa, type));
+    @GetMapping("/{idCasa}/energy/current")
+    public ResponseEntity<?> getCurrentEnergyDivision(@PathVariable(value="idCasa") int idCasa) throws ResourceNotFoundException {
+        return ResponseEntity.ok(houseService.getConsumo(idCasa));
     }
 
     // Returns the information stored in the DB regarding energy consumption in the current month. Must return the value for each division associated with the house.

@@ -27,6 +27,6 @@ public class Utilizador {
     @Column(nullable = false)
     private boolean isAdmin;
     @ManyToOne
-    @JoinColumn(name ="id_casa", nullable = false)
+    @JoinColumn(name ="id_casa")
     private Casa casa;
 }

@@ -17,7 +17,7 @@ public class Sensors {
     private Integer id;
     @Column(nullable = false)
     private String tipo;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="id_div", nullable = false)
     private Divisao div;
 }

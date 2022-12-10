@@ -1,9 +1,6 @@
 package pt.ua.deti.ies.smarthome.smarthome_api.model.measurements;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +13,7 @@ import pt.ua.deti.ies.smarthome.smarthome_api.model.Divisao;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SensorMeasurementsSala extends SensorMeasurements {
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_div", referencedColumnName = "id")
     private Divisao div;
 }
