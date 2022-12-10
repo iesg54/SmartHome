@@ -2,11 +2,11 @@ import * as React from "react";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
-import Divider from "@mui/material/Divider";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
+import Card from "@mui/material/Card";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -43,7 +43,7 @@ function Users() {
             email: "",
             tipo: "",
         },
-        validationSchema: validationSchema,
+        validationSchema,
         onSubmit: (values, { resetForm }) => {
             alert(JSON.stringify(values, null, 2));
             resetForm();
@@ -55,8 +55,6 @@ function Users() {
         e.preventDefault();
         toggleForm((prevValue) => !prevValue);
     };
-
-    const name = "selectedOption";
 
     return (
         <DashboardLayout>
@@ -73,68 +71,81 @@ function Users() {
                     </Grid>
                 ))}
             </Grid>
-            <Grid container justifyContent="center" mb={3}>
-                <MDButton variant="contained" color="primary" size="small" onClick={handleClick}>
-                    {showForm ? "Cancelar" : "Adicionar Utilizador"}
+            <Grid container justifyContent="center" mb={4}>
+                <MDButton variant="contained" color="primary" onClick={handleClick}>
+                    Adicionar Utilizador
                 </MDButton>
             </Grid>
             {showForm && (
                 <Grid container justifyContent="center">
-                    <MDTypography variant="h3" mb={2}>
-                        Novo Utilizador
-                    </MDTypography>
-                    <Grid container justifyContent="center">
-                        <form onSubmit={formik.handleSubmit}>
-                            <Grid item xs={12} sm={12} md={12} mb={2}>
-                                <MDTypography variant="h5">Email</MDTypography>
-                                <MDInput
-                                    id="email"
-                                    name="email"
-                                    label="Email"
-                                    type="email"
-                                    value={formik.values.email}
-                                    onChange={formik.handleChange}
-                                    error={formik.touched.email && Boolean(formik.errors.email)}
-                                    helperText={formik.touched.email && formik.errors.email}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={12} md={12} mb={2}>
-                                <FormControl
-                                    component="fieldset"
-                                    error={formik.touched.tipo && Boolean(formik.errors.tipo)}
-                                >
-                                    <MDTypography variant="h5">Tipo</MDTypography>
-                                    <RadioGroup
-                                        aria-label="tipo"
-                                        name="tipo"
-                                        value={formik.values.tipo}
-                                        onChange={formik.handleChange}
-                                    >
-                                        <FormControlLabel
-                                            value="admin"
-                                            control={<Radio />}
-                                            label="Administrador"
-                                        />
-                                        <FormControlLabel
-                                            value="user"
-                                            control={<Radio />}
-                                            label="Utilizador"
-                                        />
-                                    </RadioGroup>
-                                </FormControl>
-                            </Grid>
+                    <Grid item xs={12} sm={6} md={4}>
+                        <Card>
                             <Grid container justifyContent="center" mb={3}>
-                                <MDButton
-                                    variant="contained"
-                                    color="success"
-                                    size="small"
-                                    type="submit"
-                                    fullWidth
-                                >
-                                    Convidar
-                                </MDButton>
-                            </Grid>
-                        </form>
+                            <MDBox p={3}>
+                                <MDTypography variant="h4" mb={3}>
+                                    Adicionar Utilizador
+                                </MDTypography>
+                                <form onSubmit={formik.handleSubmit}>
+                                    <MDBox mb={3}>
+                                        <MDInput
+                                            id="email"
+                                            name="email"
+                                            label="Email"
+                                            type="email"
+                                            value={formik.values.email}
+                                            onChange={formik.handleChange}
+                                            error={formik.touched.email && Boolean(formik.errors.email)}
+                                            helperText={formik.touched.email && formik.errors.email}
+                                            fullWidth
+                                        />
+                                    </MDBox>
+                                    <MDBox mb={3}>
+                                        <MDTypography variant="h6" mb={2}>
+                                            Tipo de Utilizador
+                                        </MDTypography>
+                                        <FormControl component="fieldset">
+                                            <RadioGroup
+                                                row
+                                                aria-label="tipo"
+                                                name="tipo"
+                                                value={formik.values.tipo}
+                                                onChange={formik.handleChange}
+                                            >
+                                                <FormControlLabel
+                                                    value="admin"
+                                                    control={<Radio />}
+                                                    label="Admin"
+                                                />
+                                                <FormControlLabel
+                                                    value="user"
+                                                    control={<Radio />}
+                                                    label="User"
+                                                />
+                                            </RadioGroup>
+                                        </FormControl>
+                                    </MDBox>
+                                    <MDBox mt={3} display="flex" justifyContent="space-between">
+                                        <MDButton
+                                            variant="contained"
+                                            color="primary"
+                                            size="small"
+                                            type="submit"
+                                        >
+                                            Adicionar
+                                        </MDButton>
+                                        <MDButton
+                                            variant="contained"
+                                            color="secondary"
+                                            size="small"
+                                            onClick={handleClick}
+                                        >
+                                            Cancelar
+                                        </MDButton>
+                                    </MDBox>
+                                </form>
+                            </MDBox>
+                        </Grid>
+                        </Card>
                     </Grid>
                 </Grid>
             )}

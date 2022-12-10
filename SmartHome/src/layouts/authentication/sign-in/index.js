@@ -1,33 +1,8 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-import { useState } from "react";
-
 // react-router-dom components
 import { Link } from "react-router-dom";
 
 // @mui material components
 import Card from "@mui/material/Card";
-import Switch from "@mui/material/Switch";
-import Grid from "@mui/material/Grid";
-import MuiLink from "@mui/material/Link";
-
-// @mui icons
-import FacebookIcon from "@mui/icons-material/Facebook";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import GoogleIcon from "@mui/icons-material/Google";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -41,10 +16,29 @@ import BasicLayout from "layouts/authentication/components/BasicLayout";
 // Images
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 
-function Basic() {
-    const [rememberMe, setRememberMe] = useState(false);
+// other imports
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
-    const handleSetRememberMe = () => setRememberMe(!rememberMe);
+const validationSchema = Yup.object({
+    email: Yup.string().email("Please add a valid email!").required("Please add an email!"),
+    password: Yup.string()
+        .min(6, "Password must be at least 6 characters!")
+        .required("Please add a password!"),
+});
+
+function Basic() {
+    const formik = useFormik({
+        initialValues: {
+            email: "",
+            password: "",
+        },
+        validationSchema,
+        onSubmit: (values, { resetForm }) => {
+            alert(JSON.stringify(values, null, 2));
+            resetForm();
+        },
+    });
 
     return (
         <BasicLayout image={bgImage}>
@@ -63,79 +57,51 @@ function Basic() {
                     <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
                         Sign in
                     </MDTypography>
-                    <Grid container spacing={3} justifyContent="center" sx={{ mt: 1, mb: 2 }}>
-                        <Grid item xs={2}>
-                            <MDTypography
-                                component={MuiLink}
-                                href="#"
-                                variant="body1"
-                                color="white"
-                            >
-                                <FacebookIcon color="inherit" />
-                            </MDTypography>
-                        </Grid>
-                        <Grid item xs={2}>
-                            <MDTypography
-                                component={MuiLink}
-                                href="#"
-                                variant="body1"
-                                color="white"
-                            >
-                                <GitHubIcon color="inherit" />
-                            </MDTypography>
-                        </Grid>
-                        <Grid item xs={2}>
-                            <MDTypography
-                                component={MuiLink}
-                                href="#"
-                                variant="body1"
-                                color="white"
-                            >
-                                <GoogleIcon color="inherit" />
-                            </MDTypography>
-                        </Grid>
-                    </Grid>
                 </MDBox>
                 <MDBox pt={4} pb={3} px={3}>
-                    <MDBox component="form" role="form">
-                        <MDBox mb={2}>
-                            <MDInput type="email" label="Email" fullWidth />
-                        </MDBox>
-                        <MDBox mb={2}>
-                            <MDInput type="password" label="Password" fullWidth />
-                        </MDBox>
-                        <MDBox display="flex" alignItems="center" ml={-1}>
-                            <Switch checked={rememberMe} onChange={handleSetRememberMe} />
-                            <MDTypography
-                                variant="button"
-                                fontWeight="regular"
-                                color="text"
-                                onClick={handleSetRememberMe}
-                                sx={{ cursor: "pointer", userSelect: "none", ml: -1 }}
-                            >
-                                &nbsp;&nbsp;Remember me
-                            </MDTypography>
-                        </MDBox>
-                        <MDBox mt={4} mb={1}>
-                            <MDButton variant="gradient" color="info" fullWidth>
-                                sign in
-                            </MDButton>
-                        </MDBox>
-                        <MDBox mt={3} mb={1} textAlign="center">
-                            <MDTypography variant="button" color="text">
-                                Don&apos;t have an account?{" "}
-                                <MDTypography
-                                    component={Link}
-                                    to="/authentication/sign-up"
-                                    variant="button"
-                                    color="info"
-                                    fontWeight="medium"
-                                    textGradient
-                                >
-                                    Sign up
-                                </MDTypography>
-                            </MDTypography>
-                        </MDBox>
+                    <MDBox mb={3}>
+                        <MDInput
+                            id="email"
+                            name="email"
+                            type="email"
+                            label="Email"
+                            placeholder="Email"
+                            value={formik.values.email}
+                            onChange={formik.handleChange}
+                            error={formik.touched.email && Boolean(formik.errors.email)}
+                            helperText={formik.touched.email && formik.errors.email}
+                            fullWidth
+                        />
+                    </MDBox>
+                    <MDBox mb={3}>
+                        <MDInput
+                            id="password"
+                            name="password"
+                            type="password"
+                            label="Password"
+                            placeholder="Password"
+                            value={formik.values.password}
+                            onChange={formik.handleChange}
+                            error={formik.touched.password && Boolean(formik.errors.password)}
+                            helperText={formik.touched.password && formik.errors.password}
+                            fullWidth
+                        />
+                    </MDBox>
+                    <MDBox mb={3}>
+                        <MDButton
+                            variant="contained"
+                            color="primary"
+                            fullWidth
+                            type="submit"
+                            onClick={formik.handleSubmit}
+                        >
+                            Sign in
+                        </MDButton>
+                    </MDBox>
+                    <MDBox mb={3}>
+                        <MDTypography variant="body2" color="secondary" textAlign="center">
+                            Don't have an account? <Link to="/authentication/sign-up">Sign up</Link>
+                        </MDTypography>
                     </MDBox>
                 </MDBox>
             </Card>
