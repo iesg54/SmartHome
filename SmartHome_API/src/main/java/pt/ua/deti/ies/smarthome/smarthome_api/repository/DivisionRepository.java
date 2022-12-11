@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface DivisionRepository extends JpaRepository<Divisao, Integer> {
     List<Divisao> findAllByCasa(Casa casa);
+
 }

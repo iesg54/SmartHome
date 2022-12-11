@@ -19,12 +19,14 @@ import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.ResourceNotFoundExcepti
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Casa;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Divisao;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Sensors;
+import pt.ua.deti.ies.smarthome.smarthome_api.model.Utilizador;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.dispositivos.Dispositivo;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.measurements.ConsumoCozinha;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.measurements.ConsumoExterno;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.measurements.ConsumoQuarto;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.measurements.ConsumoSala;
 import pt.ua.deti.ies.smarthome.smarthome_api.repository.*;
+import pt.ua.deti.ies.smarthome.smarthome_api.utils.SuccessfulRequest;
 
 @Service
 @Slf4j
@@ -42,6 +44,8 @@ public class HouseService {
     private ConsumoExternoRepository consumoExternoRepository;
     @Autowired
     private DivisionRepository divisionRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     public ResponseEntity<List<Sensors>> getSensors(Integer id_casa) throws ResourceNotFoundException{
         ArrayList<Sensors> sensores = new ArrayList<>();
@@ -56,26 +60,17 @@ public class HouseService {
         return new ResponseEntity<List<Sensors>>(sensores, HttpStatus.OK);
     }
 
-    public List<Divisao> getDivisions(Integer id_casa){
-        Optional<Casa> casaOptional = houseRepository.findById(id_casa);
-        if (!(casaOptional.isPresent())){
-            return null;
-        }
-
-        Casa house = casaOptional.get();
-
-        return house.getDivisoesCasa();
+    public List<Divisao> getDivisions(Integer id_casa) throws ResourceNotFoundException{
+        
+        Casa casa = houseRepository.findById(id_casa).orElseThrow(() -> new ResourceNotFoundException("Could not found a house with that id"));
+        return casa.getDivisoesCasa();
     }
 
-    public Divisao addDivisao(Integer id_casa, Integer id_div){
+    public Divisao addDivisao(Integer id_casa, Integer id_div) throws ResourceNotFoundException{
 
         //TODO - mudar isto para aceitar o tipo
-        Optional<Casa> casaOptional = houseRepository.findById(id_casa);
-        if (!(casaOptional.isPresent())){
-            return null;
-        }
+        Casa house = houseRepository.findById(id_casa).orElseThrow(() -> new ResourceNotFoundException("Could not found a house with that id"));
 
-        Casa house = casaOptional.get();
         for (Divisao div : house.getDivisoesCasa()){
             if (div.getId() == id_div){
                 return div;
@@ -145,4 +140,22 @@ public class HouseService {
 
         return total_consumo;
     }
+
+    public ResponseEntity<List<Utilizador>> getAllUsers(int idCasa) throws ResourceNotFoundException{
+        Casa casa = houseRepository.findById(idCasa).orElseThrow(() -> new ResourceNotFoundException("Could not found a house with that id"));
+        return new ResponseEntity<List<Utilizador>>(casa.getUtilizadoresCasa(), HttpStatus.OK);
+    }
+
+    public SuccessfulRequest addUser(int idCasa, int idUser) throws ResourceNotFoundException{
+        Casa casa = houseRepository.findById(idCasa).orElseThrow(() -> new ResourceNotFoundException("Could not found a house with that id"));
+        if (userRepository.findById(idUser).isPresent()){
+            List<Utilizador> users = casa.getUtilizadoresCasa();
+            users.add(userRepository.findById(idUser).orElseThrow(()-> new ResourceNotFoundException("Could not find that user...")));
+            casa.setUtilizadoresCasa(users);
+        }
+        houseRepository.save(casa);
+        return new SuccessfulRequest("Added user sucessfully");
+    }
+
+
 }

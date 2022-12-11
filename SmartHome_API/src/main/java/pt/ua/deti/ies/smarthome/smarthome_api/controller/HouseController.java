@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.ResourceNotFoundException;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Divisao;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Sensors;
+import pt.ua.deti.ies.smarthome.smarthome_api.model.Utilizador;
 import pt.ua.deti.ies.smarthome.smarthome_api.services.HouseService;
 import pt.ua.deti.ies.smarthome.smarthome_api.utils.SuccessfulRequest;
 
@@ -24,19 +25,19 @@ public class HouseController {
 
     // Lists all the Sensors installed in a given House
     @GetMapping("/{idCasa}")
-    public ResponseEntity<List<Sensors>> getSensors(@PathVariable(value="idCasa") int idCasa){
+    public ResponseEntity<List<Sensors>> getSensors(@PathVariable(value="idCasa") int idCasa) throws ResourceNotFoundException{
         return houseService.getSensors(idCasa);
     }
 
     // Returns all the divisions registered for a given House
     @GetMapping("/{idCasa}/divisions")
-    public ResponseEntity<List<Divisao>> getDivisions(@PathVariable(value="idCasa") int idCasa){
+    public ResponseEntity<List<Divisao>> getDivisions(@PathVariable(value="idCasa") int idCasa) throws ResourceNotFoundException{
         return ResponseEntity.ok(houseService.getDivisions(idCasa));
     }
 
     // Associates a new division to a House
     @PostMapping("/{idCasa}/divisions")
-    public SuccessfulRequest addDivision(@PathVariable(value="idCasa") int idCasa, @RequestParam(name="idDiv", required = true) Integer idDiv){
+    public SuccessfulRequest addDivision(@PathVariable(value="idCasa") int idCasa, @RequestParam(name="idDiv", required = true) Integer idDiv) throws ResourceNotFoundException{
         houseService.addDivisao(idCasa, idDiv);
         SuccessfulRequest successfulRequest = new SuccessfulRequest("added new division");
         return successfulRequest;
@@ -65,14 +66,14 @@ public class HouseController {
 
     // Returns the Users associated with the House
     @GetMapping("/{idCasa}/users")
-    public ResponseEntity<?> getAllUsers(@PathVariable(value="idCasa") int idCasa){
-        return null;
+    public ResponseEntity<List<Utilizador>> getAllUsers(@PathVariable(value="idCasa") int idCasa) throws ResourceNotFoundException{
+        return houseService.getAllUsers(idCasa);
     }
 
     // Adds a new user to the House Page, in case they are already registered in the DB
     @PostMapping("/{idCasa}/users")
-    public SuccessfulRequest addUser(@PathVariable(value="idCasa") int idCasa){
-        return null;
+    public SuccessfulRequest addUser(@PathVariable(value="idCasa") int idCasa, @RequestParam(value="idUser") int idUser) throws ResourceNotFoundException{
+        return houseService.addUser(idCasa, idUser);
     }
 
 }

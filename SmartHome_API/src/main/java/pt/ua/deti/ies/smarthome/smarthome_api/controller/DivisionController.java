@@ -1,13 +1,22 @@
 package pt.ua.deti.ies.smarthome.smarthome_api.controller;
 
+import java.sql.Time;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pt.ua.deti.ies.smarthome.smarthome_api.utils.SuccessfulRequest;
+import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.ResourceNotFoundException;
+import pt.ua.deti.ies.smarthome.smarthome_api.services.DivisionService;
 
 @RestController
 @RequestMapping("smarthome/private/division")
 public class DivisionController {
     // Division Page API Methods
+
+    @Autowired
+    private DivisionService divisionService;
     // SENSORS SECTION
 
     // Returns the latest measurement for each Sensor (Temperatura, Humidade, CO) in the given Division. Type refers to the type of division (Cozinha, Sala...) so we know which table to query.
@@ -43,39 +52,35 @@ public class DivisionController {
     }
 
     // Toggles the state of a device between on and off.
-    @PostMapping("/{idDiv}/device/{idDevice}")
-    public SuccessfulRequest toggleDeviceState(@PathVariable(value="idDiv") int idDiv, @PathVariable(value="idDevice") int idDevice){
-        return null;
+    @PostMapping("{idDiv}/device/{idDevice}")
+    public SuccessfulRequest toggleDeviceState(@PathVariable(value="idDiv") int idDiv, @PathVariable(value="idDevice") int idDevice) throws ResourceNotFoundException{
+        return divisionService.toggleDeviceStat(idDiv, idDevice);
     }
 
+
     // Method to get Energy Consumption in the division in the past 7 days. Type refers to the type of division(Cozinha, Sala,...) so we can use the correct DB table.
-    @GetMapping("/{idDiv}/energy")
-    public ResponseEntity<?> getDivisionEnergyConsumption(@PathVariable(value="idDiv") int idDiv, @RequestParam(name="type", required = true) String type){
-        return null;
+    @GetMapping("/{idDiv}/energy") // done - TODO testing
+    public ResponseEntity<List<Double>> getDivisionEnergyConsumption(@PathVariable(value="idDiv") int idDiv, @RequestParam(name="type", required = true) String type) throws ResourceNotFoundException{
+        return divisionService.getDivisionEnergyConsumptionS(idDiv, type);
     }
 
     //Update values in regadores
     @PutMapping("/{idDiv}/regadores")
-    public ResponseEntity<?> updateRegador(@PathVariable(value="idDiv") int idDiv){
-        return null;
+    public SuccessfulRequest updateRegador(@PathVariable(value="idDiv") int idDiv, @RequestParam(value="start_time") Time start_time, @RequestParam(value="end_time") Time end_time) throws ResourceNotFoundException{
+        return divisionService.updateRegador(idDiv, start_time, end_time);
     }
 
-    //Update values in regadores
+    //Update values in AC
     @PutMapping("/{idDiv}/AC")
-    public ResponseEntity<?> updateAC(@PathVariable(value="idDiv") int idDiv){
-        return null;
+    public SuccessfulRequest updateAC(@PathVariable(value="idDiv") int idDiv, @RequestParam(value="temp-atual") Double tempAtual, @RequestParam(value="temp-min") Double tempMin, @RequestParam(value="temp-max") Double tempMax) throws ResourceNotFoundException{
+        return divisionService.updateAC(idDiv, tempAtual, tempMin, tempMax);
     }
 
     //Update values in lampadas
     @PutMapping("/{idDiv}/lampadas")
-    public ResponseEntity<?> updateLampadas(@PathVariable(value="idDiv") int idDiv){
-        return null;
+    public SuccessfulRequest updateLampadas(@PathVariable(value="idDiv") int idDiv, @RequestParam(value="luminosidade") Double luminosidade, @RequestParam(value="start-time") Time startTime, @RequestParam(value="endTime") Time endTime) throws ResourceNotFoundException{
+        return divisionService.updateLamapada(idDiv, luminosidade, startTime, endTime);
     }
 
-    //Update on/off device
-    @PutMapping("/{idDiv}/device")
-    public ResponseEntity<?> updateDevice(@PathVariable(value="idDiv") int idDiv){
-        return null;
-    }
 }
 

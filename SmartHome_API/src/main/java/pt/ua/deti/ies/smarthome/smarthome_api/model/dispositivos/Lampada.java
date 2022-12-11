@@ -22,4 +22,16 @@ public class Lampada extends Dispositivo{
 
     @Column(name="end_time")
     private Time endTime;
+
+    public void setLuminosidade(Double luminosidade){
+        this.luminosidade = luminosidade;
+    }
+
+    public void setStartTime(Time startTime){
+        this.startTime = startTime;
+    }
+
+    public void setEndTime(Time endTime){
+        this.endTime = endTime;
+    }
 }
