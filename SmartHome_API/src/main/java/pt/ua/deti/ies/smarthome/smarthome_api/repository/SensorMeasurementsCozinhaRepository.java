@@ -4,10 +4,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Divisao;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.measurements.SensorMeasurementsCozinha;
-import pt.ua.deti.ies.smarthome.smarthome_api.model.measurements.SensorMeasurementsQuarto;
+
+import java.sql.Date;
+import java.util.List;
 
 @Repository
 public interface SensorMeasurementsCozinhaRepository extends JpaRepository<SensorMeasurementsCozinha, Integer> {
-    SensorMeasurementsCozinha findTopByTipoAndAndDivOrderByIdDesc(String tipo, Divisao div);
+    SensorMeasurementsCozinha findTopByTipoAndDivOrderByIdDesc(String tipo, Divisao div);
     Boolean existsByTipoAndDiv(String tipo, Divisao div);
+    List<SensorMeasurementsCozinha> findAllByTipoAndDivAndDiaEquals(String tipo, Divisao div, Date dia);
 }

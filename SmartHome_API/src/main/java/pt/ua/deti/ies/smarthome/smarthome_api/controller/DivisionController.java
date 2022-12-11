@@ -28,8 +28,8 @@ public class DivisionController {
 
     // Returns the average daily measurements for each Sensor (Temperatura, Humidade, CO) in the given Division, in the past week.
     @GetMapping("/{idDiv}/weeklyInfo")
-    public ResponseEntity<?> getWeeklySensorInfo(@PathVariable(value="idDiv") int idDiv){
-        return null;
+    public ResponseEntity<Map<Integer, Map<String, String>>> getWeeklySensorInfo(@PathVariable(value="idDiv") int idDiv) throws ResourceNotFoundException{
+        return ResponseEntity.ok(divisionService.weeklySensorInfo(idDiv));
     }
 
     // Returns the Alerts made for this division
