@@ -7,6 +7,7 @@ import pt.ua.deti.ies.smarthome.smarthome_api.model.Utilizador;
 
 @RestController
 @RequestMapping("smarthome/private/user")
+@CrossOrigin
 public class ProfileController {
     // EDIT PROFILE API METHODS
 

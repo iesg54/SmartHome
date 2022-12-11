@@ -8,30 +8,24 @@ import Grid from "@mui/material/Grid";
 import DefaultLineChart from "examples/Charts/LineCharts/DefaultLineChart";
 import PieChart from "examples/Charts/PieChart";
 
-function HomeStats({
-    titleline,
-    titlepie,
-    descriptionline,
-    descriptionpie,
-    dataline,
-    datapie,
-    xline,
-    labelspie,
-}) {
+function HomeStats({ LineChartObject, PieChartObject }) {
+    console.log("HomeStats");
+    console.log(LineChartObject);
+    console.log(PieChartObject);
     return (
         <Grid container spacing={3} mt={4}>
             <Grid item xs={12} sm={6} md={8}>
                 <DefaultLineChart
                     icon={{ color: "info", component: "wallet" }}
-                    title={titleline}
-                    description={descriptionline}
+                    title={LineChartObject.title}
+                    description={LineChartObject.description}
                     chart={{
-                        labels: xline,
+                        labels: LineChartObject.labels,
                         datasets: [
                             {
                                 label: "Gastos",
                                 color: "info",
-                                data: dataline,
+                                data: LineChartObject.data,
                             },
                         ],
                     }}
@@ -40,14 +34,22 @@ function HomeStats({
             <Grid item xs={12} sm={6} md={4}>
                 <PieChart
                     icon={{ color: "info", component: "wallet" }}
-                    title={titlepie}
-                    description={descriptionpie}
+                    title={PieChartObject.title}
+                    description={PieChartObject.description}
                     chart={{
-                        labels: labelspie,
+                        labels: PieChartObject.labels,
                         datasets: {
                             label: "Gastos",
-                            backgroundColors: ["primary", "secondary", "warning", "dark"],
-                            data: datapie,
+                            backgroundColors: [
+                                "primary",
+                                "secondary",
+                                "warning",
+                                "dark",
+                                "info",
+                                "success",
+                                "error",
+                            ],
+                            data: PieChartObject.data,
                         },
                     }}
                 />
@@ -57,25 +59,33 @@ function HomeStats({
 }
 
 HomeStats.defaultProps = {
-    titleline: "",
-    titlepie: "",
-    descriptionline: "",
-    descriptionpie: "",
-    dataline: [],
-    datapie: [],
-    xline: [],
-    labelspie: [],
+    LineChartObject: {
+        title: "Semana",
+        description: "Gasto energético semanal",
+        labels: ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"],
+        data: [0, 0, 0, 0, 0, 0, 0],
+    },
+    PieChartObject: {
+        title: "Semana",
+        description: "Gasto energético por divisão",
+        labels: ["Divisão 1", "Divisão 2", "Divisão 3", "Divisão 4"],
+        data: [0, 0, 0, 0],
+    },
 };
 
 HomeStats.propTypes = {
-    titleline: PropTypes.string,
-    titlepie: PropTypes.string,
-    descriptionline: PropTypes.string,
-    descriptionpie: PropTypes.string,
-    dataline: PropTypes.arrayOf(PropTypes.number),
-    datapie: PropTypes.arrayOf(PropTypes.number),
-    xline: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
-    labelspie: PropTypes.arrayOf(PropTypes.string),
+    LineChartObject: PropTypes.shape({
+        title: PropTypes.string,
+        description: PropTypes.string,
+        labels: PropTypes.arrayOf(PropTypes.string),
+        data: PropTypes.arrayOf(PropTypes.number),
+    }),
+    PieChartObject: PropTypes.shape({
+        title: PropTypes.string,
+        description: PropTypes.string,
+        labels: PropTypes.arrayOf(PropTypes.string),
+        data: PropTypes.arrayOf(PropTypes.number),
+    }),
 };
 
 export default HomeStats;

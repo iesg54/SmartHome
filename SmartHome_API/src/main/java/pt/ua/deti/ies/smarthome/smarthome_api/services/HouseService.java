@@ -1,17 +1,12 @@
 package pt.ua.deti.ies.smarthome.smarthome_api.services;
 
-import java.lang.StackWalker.Option;
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.validator.internal.util.privilegedactions.IsClassPresent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -21,10 +16,7 @@ import pt.ua.deti.ies.smarthome.smarthome_api.model.Divisao;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Sensors;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Utilizador;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.dispositivos.Dispositivo;
-import pt.ua.deti.ies.smarthome.smarthome_api.model.measurements.ConsumoCozinha;
-import pt.ua.deti.ies.smarthome.smarthome_api.model.measurements.ConsumoExterno;
-import pt.ua.deti.ies.smarthome.smarthome_api.model.measurements.ConsumoQuarto;
-import pt.ua.deti.ies.smarthome.smarthome_api.model.measurements.ConsumoSala;
+import pt.ua.deti.ies.smarthome.smarthome_api.model.measurements.*;
 import pt.ua.deti.ies.smarthome.smarthome_api.repository.*;
 import pt.ua.deti.ies.smarthome.smarthome_api.utils.SuccessfulRequest;
 
@@ -66,7 +58,7 @@ public class HouseService {
         return casa.getDivisoesCasa();
     }
 
-    public Divisao addDivisao(Integer id_casa, Integer id_div) throws ResourceNotFoundException{
+    public Divisao addDivisao(Integer id_casa, Integer id_div, String tipo) throws ResourceNotFoundException{
 
         //TODO - mudar isto para aceitar o tipo
         Casa house = houseRepository.findById(id_casa).orElseThrow(() -> new ResourceNotFoundException("Could not found a house with that id"));
@@ -80,30 +72,23 @@ public class HouseService {
         return null;
     }
 
-    public Double getConsumo(Integer id_casa) throws ResourceNotFoundException{
+    public Map<Integer, Double> getLatestConsumo(Integer id_casa) throws ResourceNotFoundException{
         Casa house = houseRepository.findById(id_casa).orElseThrow(() ->
                 new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + id_casa));
 
-        Double total_consumo = 0.0;
-        log.warn("Inside function");
-        log.warn(house.toString());
+        Map<Integer, Double> consumoDivs = new HashMap<>();
 
         // Para cada divisão associada à Casa
         for (Divisao div : divisionRepository.findAllByCasa(house)){
             // Ver dispositivos que estão ligados atualmente, e determinar o consumo da divisão a partir do valor de consumo destes
             Double consumo_div= 0.0;
 
-            log.warn(div.toString());
-            log.warn("Inside div loop");
-
             for (Dispositivo disp : div.getDispositivos()){
-                log.warn(disp.toString());
                 if(disp.isEstado()) {
                     consumo_div += disp.getConsumo_energy();
                 }
             }
 
-            /*
             // Adicionar a nova medição à tabela de Consumos do respetivo tipo de Divisão
             java.sql.Date date = new Date(System.currentTimeMillis());
             java.sql.Timestamp stamp = new Timestamp(System.currentTimeMillis());
@@ -133,12 +118,76 @@ public class HouseService {
                 cq.setStamp(stamp);
                 consumoSalaRepository.save(cq);
             };
-            */
 
-            total_consumo += consumo_div;
+
+            consumoDivs.put(div.getId(), consumo_div);
         }
 
-        return total_consumo;
+        return consumoDivs;
+    }
+
+    public Map<Integer, Map<Date, Double>> consumoLastWeek(Integer id_casa) throws ResourceNotFoundException{
+        // TODO: Alterar para trabalhar com qualquer dia de query?
+        Casa house = houseRepository.findById(id_casa).orElseThrow(() ->
+                new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + id_casa));
+
+        return getConsumoAllDivs(Date.valueOf("2022-11-30"), 7, house);
+        
+    }
+
+    public Map<Integer, Map<Date, Double>> consumoLastMonth(Integer id_casa) throws ResourceNotFoundException{
+        // TODO: Alterar para trabalhar com qualquer dia de query?
+        Casa house = houseRepository.findById(id_casa).orElseThrow(() ->
+                new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + id_casa));
+
+        return getConsumoAllDivs(Date.valueOf("2022-11-06"), 30, house);
+    }
+    
+    public Map<Integer, Map<Date, Double>> getConsumoAllDivs(Date startDay, Integer period, Casa house){
+        Map<Integer, Map<Date, Double>> consumoPorDiv = new HashMap<>();
+        ArrayList<Double> values = new ArrayList<>();
+        Double consumoMedio = 0.0;
+
+        Date lastDay;
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(startDay);
+
+        for(Integer i = 0; i < period; i++){
+            cal.add(Calendar.DATE, 1);
+            lastDay = new Date(cal.getTimeInMillis());
+
+            // Para cada divisão associada à Casa
+            for (Divisao div : divisionRepository.findAllByCasa(house)){
+                if(!consumoPorDiv.containsKey(div.getId())){
+                    consumoPorDiv.put(div.getId(), new HashMap<Date, Double>());
+                }
+
+                if (div.getTipo().toString().equals("QUARTO")){
+                    consumoQuartoRepository.findAllByDiaEquals(startDay).forEach(cq -> values.add(cq.getValor()));
+                    consumoMedio = values.stream().mapToDouble(x -> x).average().orElse(0);
+                }else if(div.getTipo().toString().equals("COZINHA")){
+                    consumoCozinhaRepository.findAllByDiaEquals(startDay).forEach(cq -> values.add(cq.getValor()));
+                    consumoMedio = values.stream().mapToDouble(x -> x).average().orElse(0);
+                }else if(div.getTipo().toString().equals("EXTERIOR")){
+                    consumoExternoRepository.findAllByDiaEquals(startDay).forEach(cq -> values.add(cq.getValor()));
+                    consumoMedio = values.stream().mapToDouble(x -> x).average().orElse(0);
+                }else if(div.getTipo().toString().equals("SALA")){
+                    consumoSalaRepository.findAllByDiaEquals(startDay).forEach(cq -> values.add(cq.getValor()));
+                    consumoMedio = values.stream().mapToDouble(x -> x).average().orElse(0);
+                };
+
+                values.clear();
+
+                Map<Date, Double> old = consumoPorDiv.get(div.getId());
+                old.put(startDay, consumoMedio);
+                consumoPorDiv.put(div.getId(), old);
+
+            }
+
+            startDay = lastDay;
+        }
+        
+        return consumoPorDiv;
     }
 
     public ResponseEntity<List<Utilizador>> getAllUsers(int idCasa) throws ResourceNotFoundException{

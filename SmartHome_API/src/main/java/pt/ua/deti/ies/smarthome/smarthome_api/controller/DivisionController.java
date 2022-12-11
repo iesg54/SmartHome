@@ -1,54 +1,64 @@
 package pt.ua.deti.ies.smarthome.smarthome_api.controller;
 
-import java.sql.Time;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import java.sql.Time;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.InvalidTypeException;
+import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.ResourceNotFoundException;
+import pt.ua.deti.ies.smarthome.smarthome_api.model.Alerta;
+import pt.ua.deti.ies.smarthome.smarthome_api.model.dispositivos.Dispositivo;
+import pt.ua.deti.ies.smarthome.smarthome_api.model.measurements.SensorMeasurements;
+import pt.ua.deti.ies.smarthome.smarthome_api.services.DivisionService;
 import pt.ua.deti.ies.smarthome.smarthome_api.utils.SuccessfulRequest;
 import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.ResourceNotFoundException;
 import pt.ua.deti.ies.smarthome.smarthome_api.services.DivisionService;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("smarthome/private/division")
+@CrossOrigin
 public class DivisionController {
-    // Division Page API Methods
-
     @Autowired
     private DivisionService divisionService;
+
+    // Division Page API Methods
     // SENSORS SECTION
 
-    // Returns the latest measurement for each Sensor (Temperatura, Humidade, CO) in the given Division. Type refers to the type of division (Cozinha, Sala...) so we know which table to query.
+    // Returns the latest measurement for each Sensor (Temperatura, Humidade, CO) in the given Division.
     @GetMapping("/{idDiv}/currentInfo")
-    public ResponseEntity<?> getCurrentSensorInfo(@PathVariable(value="idDiv") int idDiv, @RequestParam(name="type", required = true) String type){
-        return null;
+    public ResponseEntity<Map<String, SensorMeasurements>> getCurrentSensorInfo(@PathVariable(value="idDiv") int idDiv) throws ResourceNotFoundException {
+        return ResponseEntity.ok(divisionService.latestSensorInfo(idDiv));
     }
 
-    // Returns the average daily measurements for each Sensor (Temperatura, Humidade, CO) in the given Division, in the past week. Type refers to the type of division (Cozinha, Sala...) so we know which table to query.
+    // Returns the average daily measurements for each Sensor (Temperatura, Humidade, CO) in the given Division, in the past week.
     @GetMapping("/{idDiv}/weeklyInfo")
-    public ResponseEntity<?> getWeeklySensorInfo(@PathVariable(value="idDiv") int idDiv,  @RequestParam(name="type", required = true) String type){
-        return null;
+    public ResponseEntity<Map<Integer, Map<String, String>>> getWeeklySensorInfo(@PathVariable(value="idDiv") int idDiv) throws ResourceNotFoundException{
+        return ResponseEntity.ok(divisionService.weeklySensorInfo(idDiv));
     }
 
     // Returns the Alerts made for this division
     @GetMapping("/{idDiv}/alerts")
-    public ResponseEntity<?> getAlerts(@PathVariable(value="idDiv") int idDiv){
-        return null;
+    public ResponseEntity<List<Alerta>> getAlerts(@PathVariable(value="idDiv") int idDiv) throws ResourceNotFoundException {
+        return ResponseEntity.ok(divisionService.getAlerts(idDiv));
     }
 
     // DEVICES SECTION
 
     // Returns the devices present in a given Division
     @GetMapping("/{idDiv}/devices")
-    public ResponseEntity<?> getDivisionDevices(@PathVariable(value="idDiv") int idDiv){
-        return null;
+    public ResponseEntity<List<Dispositivo>> getDivisionDevices(@PathVariable(value="idDiv") int idDiv) throws ResourceNotFoundException{
+        return ResponseEntity.ok(divisionService.getDispositivos(idDiv));
     }
 
     // Associates a new device to the Division. Depending on the type of device, we need to add a entry do the subtype table! Values associated with each subtype must be default, as well as state which must be off by default (False)
     @PostMapping("/{idDiv}/devices")
-    public SuccessfulRequest addDevice(@PathVariable(value="idDiv") int idDiv, @RequestParam(name="type", required = true) String type, @RequestParam(name="nome", required = true) String nome, @RequestParam(name="consumo", required = true) Double consumo){
-        return null;
+    public SuccessfulRequest addDevice(@PathVariable(value="idDiv") int idDiv, @RequestParam(name="tipo", required = true) String type, @RequestParam(name="nome", required = true) String nome, @RequestParam(name="consumo", required = true) Double consumo)
+    throws ResourceNotFoundException, InvalidTypeException {
+        divisionService.addNewDevice(idDiv, type, nome, consumo);
+        return new SuccessfulRequest("Dispositivo adicionado com sucesso.");
     }
 
     // Toggles the state of a device between on and off.
