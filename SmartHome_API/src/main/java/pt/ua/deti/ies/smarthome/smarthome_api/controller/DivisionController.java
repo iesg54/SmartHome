@@ -3,11 +3,15 @@ package pt.ua.deti.ies.smarthome.smarthome_api.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.InvalidTypeException;
 import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.ResourceNotFoundException;
+import pt.ua.deti.ies.smarthome.smarthome_api.model.Alerta;
+import pt.ua.deti.ies.smarthome.smarthome_api.model.dispositivos.Dispositivo;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.measurements.SensorMeasurements;
 import pt.ua.deti.ies.smarthome.smarthome_api.services.DivisionService;
 import pt.ua.deti.ies.smarthome.smarthome_api.utils.SuccessfulRequest;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -34,22 +38,24 @@ public class DivisionController {
 
     // Returns the Alerts made for this division
     @GetMapping("/{idDiv}/alerts")
-    public ResponseEntity<?> getAlerts(@PathVariable(value="idDiv") int idDiv){
-        return null;
+    public ResponseEntity<List<Alerta>> getAlerts(@PathVariable(value="idDiv") int idDiv) throws ResourceNotFoundException {
+        return ResponseEntity.ok(divisionService.getAlerts(idDiv));
     }
 
     // DEVICES SECTION
 
     // Returns the devices present in a given Division
     @GetMapping("/{idDiv}/devices")
-    public ResponseEntity<?> getDivisionDevices(@PathVariable(value="idDiv") int idDiv){
-        return null;
+    public ResponseEntity<List<Dispositivo>> getDivisionDevices(@PathVariable(value="idDiv") int idDiv) throws ResourceNotFoundException{
+        return ResponseEntity.ok(divisionService.getDispositivos(idDiv));
     }
 
     // Associates a new device to the Division. Depending on the type of device, we need to add a entry do the subtype table! Values associated with each subtype must be default, as well as state which must be off by default (False)
     @PostMapping("/{idDiv}/devices")
-    public SuccessfulRequest addDevice(@PathVariable(value="idDiv") int idDiv, @RequestParam(name="type", required = true) String type, @RequestParam(name="nome", required = true) String nome, @RequestParam(name="consumo", required = true) Double consumo){
-        return null;
+    public SuccessfulRequest addDevice(@PathVariable(value="idDiv") int idDiv, @RequestParam(name="tipo", required = true) String type, @RequestParam(name="nome", required = true) String nome, @RequestParam(name="consumo", required = true) Double consumo)
+    throws ResourceNotFoundException, InvalidTypeException {
+        divisionService.addNewDevice(idDiv, type, nome, consumo);
+        return new SuccessfulRequest("Dispositivo adicionado com sucesso.");
     }
 
     // Toggles the state of a device between on and off.

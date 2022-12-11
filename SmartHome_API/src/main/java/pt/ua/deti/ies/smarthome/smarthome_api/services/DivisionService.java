@@ -1,18 +1,17 @@
 package pt.ua.deti.ies.smarthome.smarthome_api.services;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.InvalidTypeException;
 import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.ResourceNotFoundException;
+import pt.ua.deti.ies.smarthome.smarthome_api.model.Alerta;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Divisao;
+import pt.ua.deti.ies.smarthome.smarthome_api.model.dispositivos.*;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.measurements.SensorMeasurements;
 import pt.ua.deti.ies.smarthome.smarthome_api.repository.*;
 
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class DivisionService {
@@ -27,6 +26,18 @@ public class DivisionService {
     private SensorMeasurementsSalaRepository sensorSalaRepository;
     @Autowired
     private SensorMeasurementsExternoRepository sensorExternoRepository;
+    @Autowired
+    private AlertaRepository alertaRepository;
+    @Autowired
+    private DispositivoRepository dispositivoRepository;
+    @Autowired
+    private ACRepository acRepository;
+    @Autowired
+    private TomadaRepository tomadaRepository;
+    @Autowired
+    private LampadaRepository lampadaRepository;
+    @Autowired
+    private RegadorRepository regadorRepository;
 
     public Map<String, SensorMeasurements> latestSensorInfo(Integer idDiv) throws ResourceNotFoundException {
         Divisao div =  divisionRepository.findById(idDiv).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada uma divisão com o ID " + idDiv));
@@ -250,4 +261,53 @@ public class DivisionService {
         return processedValue;
     }
 
+    public List<Alerta> getAlerts(Integer idDiv) throws ResourceNotFoundException {
+        Divisao div =  divisionRepository.findById(idDiv).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada uma divisão com o ID " + idDiv));
+        List<Alerta> alertas = alertaRepository.findAllByDiv(div);
+
+        if(alertas.size() > 0){
+            return alertas;
+        }else{
+            throw new ResourceNotFoundException("Não foram encontrados alertas para a divisão com o ID " + idDiv);
+        }
+    }
+
+    public List<Dispositivo> getDispositivos(Integer idDiv) throws ResourceNotFoundException {
+        Divisao div =  divisionRepository.findById(idDiv).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada uma divisão com o ID " + idDiv));
+
+        return dispositivoRepository.findAllByDiv(div);
+    }
+
+    public void addNewDevice(Integer idDiv, String type, String name, Double consumption) throws ResourceNotFoundException, InvalidTypeException{
+        Divisao div =  divisionRepository.findById(idDiv).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada uma divisão com o ID " + idDiv));
+
+        if(type.equals("LAMPADA")){
+            Dispositivo d = lampadaRepository.save(new Lampada(100.0, null, null));
+            d.setDiv(div);
+            d.setConsumo_energy(consumption);
+            d.setEstado(false);
+            dispositivoRepository.save(d);
+        }else if(type.equals("AC")){
+            Dispositivo d = acRepository.save(new AC());
+            d.setDiv(div);
+            d.setConsumo_energy(consumption);
+            d.setEstado(false);
+            dispositivoRepository.save(d);
+        }else if(type.equals("REGADOR")){
+            Dispositivo d = regadorRepository.save(new Regador());
+            d.setDiv(div);
+            d.setConsumo_energy(consumption);
+            d.setEstado(false);
+            dispositivoRepository.save(d);
+        }else if(type.equals("TOMADA")){
+            Dispositivo d = tomadaRepository.save(new Tomada(name));
+            d.setDiv(div);
+            d.setConsumo_energy(consumption);
+            d.setEstado(false);
+            dispositivoRepository.save(d);
+        }else{
+            throw new InvalidTypeException("O tipo de Dispositivo passado não é suportado na BD! Tipo deve ser TOMADA, AC, REGADOR ou LAMPADA.");
+        }
+
+    }
 }

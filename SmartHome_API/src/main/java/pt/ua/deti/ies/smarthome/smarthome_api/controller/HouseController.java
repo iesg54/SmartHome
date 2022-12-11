@@ -53,13 +53,13 @@ public class HouseController {
     // Returns the information stored in the DB regarding energy consumption in the current month. Must return the value for each division associated with the house.
     @GetMapping("/{idCasa}/energy/month")
     public ResponseEntity<Map<Integer, Map<Date, Double>>> getMonthlyEnergyDivision(@PathVariable(value="idCasa") int idCasa) throws ResourceNotFoundException{
-        return ResponseEntity.ok(houseService.getMonthlyConsumo(idCasa));
+        return ResponseEntity.ok(houseService.consumoLastMonth(idCasa));
     }
 
     // Returns the information stored in the DB regarding energy consumption in the last week. Must return the value for each division associated with the house.
     @GetMapping("/{idCasa}/energy/week")
     public ResponseEntity<Map<Integer, Map<Date, Double>>> getWeeklyEnergyDivision(@PathVariable(value="idCasa") int idCasa) throws ResourceNotFoundException{
-        return ResponseEntity.ok(houseService.getWeeklyConsumo(idCasa));
+        return ResponseEntity.ok(houseService.consumoLastWeek(idCasa));
     }
 
     // USERS PAGE API METHODS

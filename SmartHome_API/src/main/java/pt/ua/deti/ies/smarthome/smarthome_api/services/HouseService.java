@@ -89,7 +89,6 @@ public class HouseService {
             Double consumo_div= 0.0;
 
             for (Dispositivo disp : div.getDispositivos()){
-                log.warn(disp.toString());
                 if(disp.isEstado()) {
                     consumo_div += disp.getConsumo_energy();
                 }
@@ -132,73 +131,33 @@ public class HouseService {
         return consumoDivs;
     }
 
-    public Map<Integer, Map<Date, Double>> getWeeklyConsumo(Integer id_casa) throws ResourceNotFoundException{
+    public Map<Integer, Map<Date, Double>> consumoLastWeek(Integer id_casa) throws ResourceNotFoundException{
         // TODO: Alterar para trabalhar com qualquer dia de query?
         Casa house = houseRepository.findById(id_casa).orElseThrow(() ->
                 new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + id_casa));
 
-        Map<Integer, Map<Date, Double>> consumoPorDiv = new HashMap<>();
-        ArrayList<Double> values = new ArrayList<>();
-        Double consumoMedio = 0.0;
-
-        Date firstDay = Date.valueOf("2022-11-30");
-        Date lastDay;
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(firstDay);
-
-        for(Integer i = 0; i < 7; i++){
-            cal.add(Calendar.DATE, 1);
-            lastDay = new Date(cal.getTimeInMillis());
-
-            // Para cada divisão associada à Casa
-            for (Divisao div : divisionRepository.findAllByCasa(house)){
-                if(!consumoPorDiv.containsKey(div.getId())){
-                    consumoPorDiv.put(div.getId(), new HashMap<Date, Double>());
-                }
-
-                if (div.getTipo().toString().equals("QUARTO")){
-                    consumoQuartoRepository.findAllByDiaEquals(firstDay).forEach(cq -> values.add(cq.getValor()));
-                    consumoMedio = values.stream().mapToDouble(x -> x).average().orElse(0);
-                }else if(div.getTipo().toString().equals("COZINHA")){
-                    consumoCozinhaRepository.findAllByDiaEquals(firstDay).forEach(cq -> values.add(cq.getValor()));
-                    consumoMedio = values.stream().mapToDouble(x -> x).average().orElse(0);
-                }else if(div.getTipo().toString().equals("EXTERIOR")){
-                    consumoExternoRepository.findAllByDiaEquals(firstDay).forEach(cq -> values.add(cq.getValor()));
-                    consumoMedio = values.stream().mapToDouble(x -> x).average().orElse(0);
-                }else if(div.getTipo().toString().equals("SALA")){
-                    consumoSalaRepository.findAllByDiaEquals(firstDay).forEach(cq -> values.add(cq.getValor()));
-                    consumoMedio = values.stream().mapToDouble(x -> x).average().orElse(0);
-                };
-
-                values.clear();
-
-                Map<Date, Double> old = consumoPorDiv.get(div.getId());
-                old.put(firstDay, consumoMedio);
-                consumoPorDiv.put(div.getId(), old);
-
-            }
-
-            firstDay = lastDay;
-        }
-
-        return consumoPorDiv;
+        return getConsumoAllDivs(Date.valueOf("2022-11-30"), 7, house);
+        
     }
 
-    public Map<Integer, Map<Date, Double>> getMonthlyConsumo(Integer id_casa) throws ResourceNotFoundException{
+    public Map<Integer, Map<Date, Double>> consumoLastMonth(Integer id_casa) throws ResourceNotFoundException{
         // TODO: Alterar para trabalhar com qualquer dia de query?
         Casa house = houseRepository.findById(id_casa).orElseThrow(() ->
                 new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + id_casa));
 
+        return getConsumoAllDivs(Date.valueOf("2022-11-06"), 30, house);
+    }
+    
+    public Map<Integer, Map<Date, Double>> getConsumoAllDivs(Date startDay, Integer period, Casa house){
         Map<Integer, Map<Date, Double>> consumoPorDiv = new HashMap<>();
         ArrayList<Double> values = new ArrayList<>();
         Double consumoMedio = 0.0;
 
-        Date firstDay = Date.valueOf("2022-11-06");
         Date lastDay;
         Calendar cal = Calendar.getInstance();
-        cal.setTime(firstDay);
+        cal.setTime(startDay);
 
-        for(Integer i = 0; i < 30; i++){
+        for(Integer i = 0; i < period; i++){
             cal.add(Calendar.DATE, 1);
             lastDay = new Date(cal.getTimeInMillis());
 
@@ -209,30 +168,30 @@ public class HouseService {
                 }
 
                 if (div.getTipo().toString().equals("QUARTO")){
-                    consumoQuartoRepository.findAllByDiaEquals(firstDay).forEach(cq -> values.add(cq.getValor()));
+                    consumoQuartoRepository.findAllByDiaEquals(startDay).forEach(cq -> values.add(cq.getValor()));
                     consumoMedio = values.stream().mapToDouble(x -> x).average().orElse(0);
                 }else if(div.getTipo().toString().equals("COZINHA")){
-                    consumoCozinhaRepository.findAllByDiaEquals(firstDay).forEach(cq -> values.add(cq.getValor()));
+                    consumoCozinhaRepository.findAllByDiaEquals(startDay).forEach(cq -> values.add(cq.getValor()));
                     consumoMedio = values.stream().mapToDouble(x -> x).average().orElse(0);
                 }else if(div.getTipo().toString().equals("EXTERIOR")){
-                    consumoExternoRepository.findAllByDiaEquals(firstDay).forEach(cq -> values.add(cq.getValor()));
+                    consumoExternoRepository.findAllByDiaEquals(startDay).forEach(cq -> values.add(cq.getValor()));
                     consumoMedio = values.stream().mapToDouble(x -> x).average().orElse(0);
                 }else if(div.getTipo().toString().equals("SALA")){
-                    consumoSalaRepository.findAllByDiaEquals(firstDay).forEach(cq -> values.add(cq.getValor()));
+                    consumoSalaRepository.findAllByDiaEquals(startDay).forEach(cq -> values.add(cq.getValor()));
                     consumoMedio = values.stream().mapToDouble(x -> x).average().orElse(0);
                 };
 
                 values.clear();
 
                 Map<Date, Double> old = consumoPorDiv.get(div.getId());
-                old.put(firstDay, consumoMedio);
+                old.put(startDay, consumoMedio);
                 consumoPorDiv.put(div.getId(), old);
 
             }
 
-            firstDay = lastDay;
+            startDay = lastDay;
         }
-
+        
         return consumoPorDiv;
     }
 }
