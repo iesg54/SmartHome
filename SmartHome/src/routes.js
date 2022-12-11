@@ -47,6 +47,12 @@ import EditarPerfil from "layouts/editarPerfil";
 // @mui icons
 import Icon from "@mui/material/Icon";
 
+// Axios
+import axios from "axios";
+
+// get userID and casaID from local storage
+const casaID = localStorage.getItem("CasaID");
+
 const routes = [
     {
         type: "collapse",
@@ -55,14 +61,6 @@ const routes = [
         icon: <Icon fontSize="small">dashboard</Icon>,
         route: "/dashboard",
         component: <Dashboard />,
-    },
-    {
-        type: "collapse",
-        name: "Divisões",
-        key: "division",
-        icon: <Icon fontSize="small">home</Icon>,
-        route: "/division/:name",
-        component: <Division />,
     },
     {
         type: "collapse",

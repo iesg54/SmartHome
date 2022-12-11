@@ -99,11 +99,11 @@ function EditarPerfil() {
                     <Card>
                         <Grid container justifyContent="center" alignItems="center" p={3}>
                             <Grid item mb={2} mr={2}>
-                                <MDAvatar 
-                                    src={image} 
-                                    alt="Avatar" 
-                                    size="xxl" 
-                                    shadow="md" 
+                                <MDAvatar
+                                    src={image}
+                                    alt="Avatar"
+                                    size="xxl"
+                                    shadow="md"
                                     bgColor="dark"
                                 />
                             </Grid>
