@@ -19,15 +19,18 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 
-// Data
-import usersData from "layouts/users/data/usersData";
-
 // components
 import UserCard from "layouts/users/components/UserCard";
 
 // Others
 import { useFormik } from "formik";
 import * as yup from "yup";
+
+// Data
+import usersData from "layouts/users/data/usersData";
+
+// Axios
+import axios from "axios";
 
 const validationSchema = yup.object({
     email: yup.string().email("Email is not valid!").required("Please add an email!"),
