@@ -1,25 +1,34 @@
 package pt.ua.deti.ies.smarthome.smarthome_api.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.ResourceNotFoundException;
+import pt.ua.deti.ies.smarthome.smarthome_api.model.measurements.SensorMeasurements;
+import pt.ua.deti.ies.smarthome.smarthome_api.services.DivisionService;
 import pt.ua.deti.ies.smarthome.smarthome_api.utils.SuccessfulRequest;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("smarthome/private/division")
 @CrossOrigin
 public class DivisionController {
+    @Autowired
+    private DivisionService divisionService;
+
     // Division Page API Methods
     // SENSORS SECTION
 
-    // Returns the latest measurement for each Sensor (Temperatura, Humidade, CO) in the given Division. Type refers to the type of division (Cozinha, Sala...) so we know which table to query.
+    // Returns the latest measurement for each Sensor (Temperatura, Humidade, CO) in the given Division.
     @GetMapping("/{idDiv}/currentInfo")
-    public ResponseEntity<?> getCurrentSensorInfo(@PathVariable(value="idDiv") int idDiv, @RequestParam(name="type", required = true) String type){
-        return null;
+    public ResponseEntity<Map<String, SensorMeasurements>> getCurrentSensorInfo(@PathVariable(value="idDiv") int idDiv) throws ResourceNotFoundException {
+        return ResponseEntity.ok(divisionService.latestSensorInfo(idDiv));
     }
 
-    // Returns the average daily measurements for each Sensor (Temperatura, Humidade, CO) in the given Division, in the past week. Type refers to the type of division (Cozinha, Sala...) so we know which table to query.
+    // Returns the average daily measurements for each Sensor (Temperatura, Humidade, CO) in the given Division, in the past week.
     @GetMapping("/{idDiv}/weeklyInfo")
-    public ResponseEntity<?> getWeeklySensorInfo(@PathVariable(value="idDiv") int idDiv,  @RequestParam(name="type", required = true) String type){
+    public ResponseEntity<?> getWeeklySensorInfo(@PathVariable(value="idDiv") int idDiv){
         return null;
     }
 
@@ -51,7 +60,7 @@ public class DivisionController {
 
     // Method to get Energy Consumption in the division in the past 7 days. Type refers to the type of division(Cozinha, Sala,...) so we can use the correct DB table.
     @GetMapping("/{idDiv}/energy")
-    public ResponseEntity<?> getDivisionEnergyConsumption(@PathVariable(value="idDiv") int idDiv, @RequestParam(name="type", required = true) String type){
+    public ResponseEntity<?> getDivisionEnergyConsumption(@PathVariable(value="idDiv") int idDiv){
         return null;
     }
 

@@ -1,5 +1,6 @@
 package pt.ua.deti.ies.smarthome.smarthome_api.model.measurements;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Divisao;
 
@@ -7,6 +8,7 @@ import pt.ua.deti.ies.smarthome.smarthome_api.model.Divisao;
 public class ConsumoCozinha extends Consumo{
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_div", referencedColumnName = "id")
+    @JsonIgnore
     private Divisao div;
 
     public ConsumoCozinha(Divisao div) {
