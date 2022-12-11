@@ -38,7 +38,7 @@ public class HouseController {
 
     // Associates a new division to a House
     @PostMapping("/{idCasa}/divisions")
-    public SuccessfulRequest addDivision(@PathVariable(value="idCasa") int idCasa, @RequestParam(name="idDiv", required = true) Integer idDiv, @RequestParam(name="type", required = true) String type){
+    public SuccessfulRequest addDivision(@PathVariable(value="idCasa") int idCasa, @RequestParam(name="idDiv", required = true) Integer idDiv, @RequestParam(name="type", required = true) String type) throws ResourceNotFoundException{
         houseService.addDivisao(idCasa, idDiv, type);
         SuccessfulRequest successfulRequest = new SuccessfulRequest("added new division");
         return successfulRequest;
