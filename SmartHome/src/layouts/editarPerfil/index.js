@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -18,9 +20,11 @@ import MDAvatar from "components/MDAvatar";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { DropzoneDialog } from "material-ui-dropzone";
-import { useState } from "react";
 import { storage } from "firebaseConfig";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+
+// Axios
+import axios from "axios";
 
 const validationSchema = yup.object({
     nome: yup.string().required("Por favor adicione um nome!"),
@@ -30,27 +34,62 @@ const validationSchema = yup.object({
         .required("Por favor adicione um email!"),
     password: yup
         .string()
-        .min(6, "A senha deve ter no mínimo 6 caracteres!")
         .required("Por favor adicione uma senha!"),
 });
 
 function EditarPerfil() {
+    // get userID from local storage
+    const userID = localStorage.getItem("userID");
+
+    // get user data from the API and set it to the state http://localhost:8080/smarthome/private/user/{userID}
+    const [userData, setUserData] = useState({});
+    useEffect(() => {
+        axios
+            .get(`http://localhost:8080/smarthome/private/user/${userID}`)
+            .then((response) => {
+                setUserData(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
+
     const formik = useFormik({
         initialValues: {
-            nome: "",
-            email: "",
-            password: "",
+            nome: userData.nome,
+            email: userData.email,
+            password: userData.password,
         },
         validationSchema: validationSchema,
         onSubmit: (values, { resetForm }) => {
-            alert(JSON.stringify(values, null, 2));
-            resetForm();
+            axios
+                .put(`http://localhost:8080/smarthome/private/user/${userID}`, {
+                    id: userID,
+                    email: values.email,
+                    nome: values.nome,
+                    password: values.password,
+                    profileImage: image,
+                    admin: userData.admin,
+                })
+                .then((response) => {
+                    console.log(response);
+                    resetForm();
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         },
         cleanForm: true,
+        enableReinitialize: true,
     });
 
     const [open, setOpen] = useState(false);
+
     const [image, setImage] = useState("");
+    useEffect(() => {
+        setImage(userData.profileImage);     
+    }, [userData.profileImage]);
+
     const handleImageUpload = (files) => {
         const file = files[0];
         const storageRef = ref(storage, `images/${file.name}`);
@@ -86,6 +125,23 @@ function EditarPerfil() {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                     console.log("File available at", downloadURL);
                     setImage(downloadURL);
+
+                    // save image url to the database http://localhost:8080/smarthome/private/user/profilePic/{userID}
+                    axios
+                        .put(`http://localhost:8080/smarthome/private/user/profilePic/${userID}`, null, {
+                            params: {
+                                profPic: downloadURL,
+                            },
+                        })
+                        .then((response) => {
+                            console.log(response);
+                        }
+                        )
+                        .catch((error) => {
+                            console.log(error);
+                        }
+                        );
+
                 });
             }
         );

@@ -87,12 +87,12 @@ function DivisionStats({ divisionID }) {
                 datasets: [
                     {
                         label: "Temperatura Mínima",
-                        color: "primary",
+                        color: "info",
                         data: [],
                     },
                     {
                         label: "Temperatura Máxima",
-                        color: "secondary",
+                        color: "primary",
                         data: [],
                     },
                 ],

@@ -47,7 +47,7 @@ function DivisionDevices({ divisionID, divisionName }) {
     const [energyData, setEnergyData] = useState({
         icon: { color: "warning", component: "bolt" },
         title: "Energia Consumida",
-        description: "Energia consumida por esta divisão na ultima semana",
+        description: "Energia consumida por esta divisão nos últimos 7 dias.",
         chart: {
             labels: [],
             datasets: [
@@ -67,7 +67,7 @@ function DivisionDevices({ divisionID, divisionName }) {
                     const newEnergyData = { ...prev };
 
                     Object.keys(response.data).map((key) => {
-                        newEnergyData.chart.labels.push(key);
+                        newEnergyData.chart.labels.push(key.split("T")[0]);
                         newEnergyData.chart.datasets[0].data.push(response.data[key]);
                     });
 

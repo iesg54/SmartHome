@@ -36,7 +36,8 @@ const validationSchema = yup.object({
 });
 
 function Users() {
-    const [showForm, toggleForm] = React.useState(false);
+    const [showForm, toggleForm] = useState(false);
+    const [responseMessage, setResponseMessage] = useState("");
 
     const formik = useFormik({
         initialValues: {
@@ -45,7 +46,23 @@ function Users() {
         },
         validationSchema,
         onSubmit: (values, { resetForm }) => {
-            alert(JSON.stringify(values, null, 2));
+            // Send data to the API http://localhost:8080/smarthome/private/house/{houseID}/users
+            axios
+                .post("http://localhost:8080/smarthome/private/house/1/users", null, {
+                    params: {
+                        email: values.email,
+                    },
+                })
+                .then((response) => {
+                    console.log(response);
+                    setResponseMessage(response.data.message);
+                }
+                )
+                .catch((error) => {
+                    console.log(error);
+                }
+                );
+
             resetForm();
         },
         cleanForm: true,
@@ -166,6 +183,13 @@ function Users() {
                                         </MDBox>
                                     </form>
                                 </MDBox>
+                                {responseMessage && (
+                                    <MDBox p={3}>
+                                        <MDTypography variant="h5" color="primary">
+                                            {responseMessage}
+                                        </MDTypography>
+                                    </MDBox>
+                                )}
                             </Grid>
                         </Card>
                     </Grid>

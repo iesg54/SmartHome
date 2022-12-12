@@ -61,9 +61,10 @@ function Dashboard() {
             });
     }, []);
 
-    // Get the energy cost of each division for the last month and save it in an array from the database http://localhost:8080/smarthome/private/house/1/energy/month
+    // Get the energy cost of each division for the last week and save it in an array from the database http://localhost:8080/smarthome/private/house/1/energy/month
     const [energyCostPerWeekDay, setEnergyCostPerWeekDay] = useState([]);
     const [energyCostPerDivision, setEnergyCostPerDivision] = useState([]);
+    const [lastWeek, setLastWeek] = useState([]);
     useEffect(() => {
         axios
             .get(`http://localhost:8080/smarthome/private/house/${casaID}/energy/week`)
@@ -74,10 +75,15 @@ function Dashboard() {
                 // round the energy cost to units of 10W save the mean value of the energy cost for each day in an array and save the mean value of the energy cost for each division in an array
                 let costPerDay = new Array(Object.keys(res.data[1]).length).fill(0);
                 let costPerDivision = [];
+                let lastW = [];
                 for (const key in res.data) {
                     let sum = 0;
                     let count = 0;
                     for (const key2 in res.data[key]) {
+                        let date = key2.split("T")[0]
+                        if (!lastW.includes(date)) {
+                            lastW.push(date);
+                        }
                         let day = Math.round(res.data[key][key2] / 10) * 10;
                         costPerDay[count] += day;
                         sum += day;
@@ -90,15 +96,17 @@ function Dashboard() {
                 }
                 setEnergyCostPerWeekDay(costPerDay);
                 setEnergyCostPerDivision(costPerDivision);
+                setLastWeek(lastW.sort());
             })
             .catch((error) => {
                 console.log(error);
             });
     }, []);
 
-    // Get the energy cost of each division for the last week and save it in an array from the database http://localhost:8080/smarthome/private/house/1/energy/week
+    // Get the energy cost of each division for the last month and save it in an array from the database http://localhost:8080/smarthome/private/house/1/energy/week
     const [energyCostPerDay, setEnergyCostPerDay] = useState([]);
     const [energyCostPerDivision2, setEnergyCostPerDivision2] = useState([]);
+    const [lastMonth, setLastMonth] = useState([]);
     useEffect(() => {
         axios
             .get(`http://localhost:8080/smarthome/private/house/${casaID}/energy/month`)
@@ -109,10 +117,15 @@ function Dashboard() {
 
                 let costPerDay = new Array(Object.keys(res.data[1]).length).fill(0);
                 let costPerDivision = [];
+                let lastM = [];
                 for (const key in res.data) {
                     let sum = 0;
                     let count = 0;
                     for (const key2 in res.data[key]) {
+                        let date = key2.split("T")[0]
+                        if (!lastM.includes(date)) {
+                            lastM.push(date);
+                        }
                         let day = Math.round(res.data[key][key2] / 10) * 10;
                         costPerDay[count] += day;
                         sum += day;
@@ -125,6 +138,7 @@ function Dashboard() {
                 }
                 setEnergyCostPerDay(costPerDay);
                 setEnergyCostPerDivision2(costPerDivision);
+                setLastMonth(lastM.sort());
             })
             .catch((error) => {
                 console.log(error);
@@ -190,16 +204,8 @@ function Dashboard() {
                             <HomeStats
                                 LineChartObject={{
                                     title: "Semana",
-                                    description: "Gasto energético semanal",
-                                    labels: [
-                                        "Segunda",
-                                        "Terça",
-                                        "Quarta",
-                                        "Quinta",
-                                        "Sexta",
-                                        "Sábado",
-                                        "Domingo",
-                                    ],
+                                    description: "Gasto energético dos últimos 7 dias",
+                                    labels: lastWeek,
                                     data: energyCostPerWeekDay,
                                 }}
                                 PieChartObject={{
@@ -214,40 +220,8 @@ function Dashboard() {
                             <HomeStats
                                 LineChartObject={{
                                     title: "Mês",
-                                    description: "Gasto energético mensal",
-                                    labels: [
-                                        "1",
-                                        "2",
-                                        "3",
-                                        "4",
-                                        "5",
-                                        "6",
-                                        "7",
-                                        "8",
-                                        "9",
-                                        "10",
-                                        "11",
-                                        "12",
-                                        "13",
-                                        "14",
-                                        "15",
-                                        "16",
-                                        "17",
-                                        "18",
-                                        "19",
-                                        "20",
-                                        "21",
-                                        "22",
-                                        "23",
-                                        "24",
-                                        "25",
-                                        "26",
-                                        "27",
-                                        "28",
-                                        "29",
-                                        "30",
-                                        "31",
-                                    ],
+                                    description: "Gasto energético dos últimos 30 dias",
+                                    labels: lastMonth,
                                     data: energyCostPerDay,
                                 }}
                                 PieChartObject={{
