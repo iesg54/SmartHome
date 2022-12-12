@@ -14,5 +14,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Tomada extends Dispositivo{
     @Column(nullable = false)
-    private String tipo;
+    private String nome;
 }

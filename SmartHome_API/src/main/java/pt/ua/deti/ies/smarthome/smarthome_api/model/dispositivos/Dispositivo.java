@@ -3,6 +3,7 @@ package pt.ua.deti.ies.smarthome.smarthome_api.model.dispositivos;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Divisao;
+import pt.ua.deti.ies.smarthome.smarthome_api.model.TipoDivisao;
 
 @Entity
 @Table(name = "Dispositivo")
@@ -11,30 +12,16 @@ public class Dispositivo {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
-
     @ManyToOne
     @JsonIgnore
     @JoinColumn(name ="id_divisao")
     private Divisao div;
-
     @Column
     private Double consumo_energy;
-
     @Column
     private boolean estado = false;
-
-    public Dispositivo(Integer id, Divisao div, Double consumo_energy, boolean estado) {
-        this.id = id;
-        this.div = div;
-        this.consumo_energy = consumo_energy;
-        this.estado = estado;
-    }
-
-    public Dispositivo(Divisao div, Double consumo_energy, boolean estado) {
-        this.div = div;
-        this.consumo_energy = consumo_energy;
-        this.estado = estado;
-    }
+    @Enumerated(EnumType.STRING)
+    private TipoDispositivo tipo;
 
     public Dispositivo() {
     }
@@ -71,5 +58,11 @@ public class Dispositivo {
         this.estado = estado;
     }
 
-    
+    public TipoDispositivo getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoDispositivo tipo) {
+        this.tipo = tipo;
+    }
 }
