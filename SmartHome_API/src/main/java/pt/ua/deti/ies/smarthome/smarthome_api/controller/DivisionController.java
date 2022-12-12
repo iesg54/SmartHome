@@ -1,6 +1,8 @@
 package pt.ua.deti.ies.smarthome.smarthome_api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.sql.Date;
 import java.sql.Time;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,8 +13,6 @@ import pt.ua.deti.ies.smarthome.smarthome_api.model.dispositivos.Dispositivo;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.measurements.SensorMeasurements;
 import pt.ua.deti.ies.smarthome.smarthome_api.services.DivisionService;
 import pt.ua.deti.ies.smarthome.smarthome_api.utils.SuccessfulRequest;
-import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.ResourceNotFoundException;
-import pt.ua.deti.ies.smarthome.smarthome_api.services.DivisionService;
 
 import java.util.List;
 import java.util.Map;
@@ -70,26 +70,41 @@ public class DivisionController {
 
     // Method to get Energy Consumption in the division in the past 7 days. Type refers to the type of division(Cozinha, Sala,...) so we can use the correct DB table.
     @GetMapping("/{idDiv}/energy") // done - TODO testing
-    public ResponseEntity<List<Double>> getDivisionEnergyConsumption(@PathVariable(value="idDiv") int idDiv, @RequestParam(name="type", required = true) String type) throws ResourceNotFoundException{
-        return divisionService.getDivisionEnergyConsumptionS(idDiv, type);
+    public ResponseEntity<Map<Date, Double>> getDivisionEnergyConsumption(@PathVariable(value="idDiv") int idDiv)
+            throws ResourceNotFoundException, InvalidTypeException{
+        return divisionService.getDivisionEnergyConsumption(idDiv);
     }
 
     //Update values in regadores
-    @PutMapping("/{idDiv}/regadores")
-    public SuccessfulRequest updateRegador(@PathVariable(value="idDiv") int idDiv, @RequestParam(value="start_time") Time start_time, @RequestParam(value="end_time") Time end_time) throws ResourceNotFoundException{
-        return divisionService.updateRegador(idDiv, start_time, end_time);
+    @PutMapping("/{idDiv}/regadores/{idDisp}")
+    public SuccessfulRequest updateRegador(@PathVariable(value="idDiv") int idDiv,
+                                           @PathVariable(value="idDisp") int idDisp,
+                                           @RequestParam(value="start_time") Time start_time,
+                                           @RequestParam(value="end_time") Time end_time)
+                                            throws ResourceNotFoundException{
+        return divisionService.updateRegador(idDiv, idDisp, start_time, end_time);
     }
 
     //Update values in AC
-    @PutMapping("/{idDiv}/AC")
-    public SuccessfulRequest updateAC(@PathVariable(value="idDiv") int idDiv, @RequestParam(value="temp-atual") Double tempAtual, @RequestParam(value="temp-min") Double tempMin, @RequestParam(value="temp-max") Double tempMax) throws ResourceNotFoundException{
-        return divisionService.updateAC(idDiv, tempAtual, tempMin, tempMax);
+    @PutMapping("/{idDiv}/AC/{idDisp}")
+    public SuccessfulRequest updateAC(@PathVariable(value="idDiv") int idDiv,
+                                      @PathVariable(value="idDisp") int idDisp,
+                                      @RequestParam(value="temp-atual", required = false) Double tempAtual,
+                                      @RequestParam(value="temp-min", required = false) Double tempMin,
+                                      @RequestParam(value="temp-max", required = false) Double tempMax)
+                                        throws ResourceNotFoundException{
+        return divisionService.updateAC(idDiv, idDisp, tempAtual, tempMin, tempMax);
     }
 
     //Update values in lampadas
-    @PutMapping("/{idDiv}/lampadas")
-    public SuccessfulRequest updateLampadas(@PathVariable(value="idDiv") int idDiv, @RequestParam(value="luminosidade") Double luminosidade, @RequestParam(value="start-time") Time startTime, @RequestParam(value="endTime") Time endTime) throws ResourceNotFoundException{
-        return divisionService.updateLamapada(idDiv, luminosidade, startTime, endTime);
+    @PutMapping("/{idDiv}/lampadas/{idDisp}")
+    public SuccessfulRequest updateLampadas(@PathVariable(value="idDiv") int idDiv,
+                                            @PathVariable(value="idDisp") int idDisp,
+                                            @RequestParam(value="luminosidade", required = false) Double luminosidade,
+                                            @RequestParam(value="start_time", required = false) Time startTime,
+                                            @RequestParam(value="end_time", required = false) Time endTime)
+                                            throws ResourceNotFoundException{
+        return divisionService.updateLampada(idDiv, idDisp, luminosidade, startTime, endTime);
     }
 
 }

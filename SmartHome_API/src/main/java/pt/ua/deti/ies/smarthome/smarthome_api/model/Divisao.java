@@ -36,10 +36,15 @@ public class Divisao {
     @JsonIgnore
     @OneToMany(mappedBy = "div", cascade = CascadeType.ALL)
     private List<Alerta> alertas = new ArrayList<>();
-
     @JsonIgnore
     @OneToMany(mappedBy = "div", cascade = CascadeType.ALL)
     private List<Sensors> sensorsDiv = new ArrayList<>();
+
+    public Divisao(String nome, TipoDivisao tipo, Casa casa) {
+        this.nome = nome;
+        this.tipo = tipo;
+        this.casa = casa;
+    }
 
     // Atributos de Relações One-To-Many
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "div")

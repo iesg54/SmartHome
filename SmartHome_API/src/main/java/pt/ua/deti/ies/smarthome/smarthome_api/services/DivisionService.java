@@ -332,24 +332,24 @@ public class DivisionService {
 
     public SuccessfulRequest toggleDeviceStat(int idDiv, int idDevice) throws ResourceNotFoundException{
         Divisao div = divisionRepository.findById(idDiv).orElseThrow(
-            () -> new ResourceNotFoundException("Não encontrada nenhuma divisao com esse id..."));
+            () -> new ResourceNotFoundException("Não encontrada nenhuma divisao com o ID " + idDiv));
 
 
         for (Dispositivo device : div.getDispositivos()){
             if (device.getId() == idDevice){
                 device.setEstado(!(device.isEstado()));
+                dispositivoRepository.save(device);
                 return new SuccessfulRequest("Changed state");
             }
         }
 
-        throw new ResourceNotFoundException("Coudn't find that device...");
-        
+        throw new ResourceNotFoundException("Não foi encontrado um dispositivo com o ID " + idDevice);
     }
 
-    public ResponseEntity<List<Double>> getDivisionEnergyConsumptionS(int idDiv, String type) throws ResourceNotFoundException{
-
+    public ResponseEntity<Map<Date, Double>> getDivisionEnergyConsumption(int idDiv) throws ResourceNotFoundException, InvalidTypeException{
+        Divisao div = divisionRepository.findById(idDiv).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada uma divisão com o ID " + idDiv));
         log.debug("got house info");
-        LinkedList<Double> lista = new LinkedList<>();
+        Map<Date, Double> lista = new HashMap<>();
 
         Date date1 = Date.valueOf("2022-11-30");    //mudar isto TODO
         Date date2 = null;
@@ -357,106 +357,126 @@ public class DivisionService {
         cal.setTime(date1);
         
 
-        if (type.toLowerCase().equals("cozinha")){
+        if (div.getTipo().toString().equals("COZINHA")){
             for (int i = 1; i<=7; i++){
                 cal.add(Calendar.DATE, 1);
                 date2 = new Date(cal.getTimeInMillis());
-                List<ConsumoCozinha> valores = consumoCozinhaRepository.findByDiaGreaterThanEqualAndDiaLessThan(date1, date2);
+                List<ConsumoCozinha> valores = consumoCozinhaRepository.findByDivAndDiaGreaterThanEqualAndDiaLessThan(div, date1, date2);
                 Double soma;
                 soma = valores.stream().mapToDouble(valor -> valor.getValor()).average().orElse(0);
-                lista.add(soma);
+                lista.put(date1, soma);
                 date1 = date2;
             }
-            
-        }
-        else if(type.toLowerCase().equals("quarto")){
+        }else if(div.getTipo().toString().equals("QUARTO")){
             for (int i = 1; i<=7; i++){
                 cal.add(Calendar.DATE, 1);
                 date2 = new Date(cal.getTimeInMillis());
-                List<ConsumoQuarto> valores = consumoQuartoRepository.findByDiaGreaterThanEqualAndDiaLessThan(date1, date2);
+                List<ConsumoQuarto> valores = consumoQuartoRepository.findByDivAndDiaGreaterThanEqualAndDiaLessThan(div, date1, date2);
                 Double soma = 0.0;
                 soma = valores.stream().mapToDouble(valor -> valor.getValor()).average().orElse(0);
-                lista.add(soma);
+                lista.put(date1, soma);
                 date1 = date2;
             }
-        }
-        else if(type.toLowerCase().equals("exterior")){ //????
+        }else if(div.getTipo().toString().equals("EXTERIOR")){ //????
             for (int i = 1; i<=7; i++){
                 cal.add(Calendar.DATE, 1);
                 date2 = new Date(cal.getTimeInMillis());
-                List<ConsumoExterno> valores = consumoExternoRepository.findByDiaGreaterThanEqualAndDiaLessThan(date1, date2);
+                List<ConsumoExterno> valores = consumoExternoRepository.findByDivAndDiaGreaterThanEqualAndDiaLessThan(div, date1, date2);
                 Double soma = 0.0;
                 soma = valores.stream().mapToDouble(valor -> valor.getValor()).average().orElse(0);
-                lista.add(soma);
+                lista.put(date1, soma);
                 date1 = date2;
             }
-        }
-        else if(type.toLowerCase().equals("sala")){
+        }else if(div.getTipo().toString().equals("SALA")){
             for (int i = 1; i<=7; i++){
                 cal.add(Calendar.DATE, 1);
                 date2 = new Date(cal.getTimeInMillis());
-                List<ConsumoSala> valores = consumoSalaRepository.findByDiaGreaterThanEqualAndDiaLessThan(date1, date2);
+                List<ConsumoSala> valores = consumoSalaRepository.findByDivAndDiaGreaterThanEqualAndDiaLessThan(div, date1, date2);
                 Double soma = 0.0;
                 soma = valores.stream().mapToDouble(valor -> valor.getValor()).average().orElse(0);
-                lista.add(soma);
+                lista.put(date1, soma);
                 date1 = date2;
             }
+        }else{
+            throw new InvalidTypeException("O tipo de Divisão passado não é suportado na BD! Tipo deve ser SALA, QUARTO, COZINHA ou EXTERIOR.");
         }
 
-        return new ResponseEntity<List<Double>> (lista, HttpStatus.OK);
-
-
+        return new ResponseEntity<Map<Date, Double>> (lista, HttpStatus.OK);
     }
 
-    public SuccessfulRequest updateRegador(int idDiv, Time start_time, Time end_time) throws ResourceNotFoundException{
+    public SuccessfulRequest updateRegador(int idDiv, int idDisp, Time start_time, Time end_time) throws ResourceNotFoundException{
         Divisao div = divisionRepository.findById(idDiv).orElseThrow(
-            () -> new ResourceNotFoundException("Não encontrada nenhuma divisao com esse id..."));
+            () -> new ResourceNotFoundException("Não foi encontrada nenhuma divisão com o ID " + idDiv));
+        boolean foundDisp = false;
 
-        List<Dispositivo> dispositivos = div.getDispositivos();
-        for (Dispositivo disp : dispositivos){
-            if (disp instanceof Regador){
+        for (Dispositivo disp : div.getDispositivos()){
+            if (idDisp == disp.getId()){
                 ((Regador) disp).setStart(start_time);
                 ((Regador) disp).setFinnish(end_time);
+                dispositivoRepository.save(disp);
+                foundDisp = true;
+                break;
             }
-            dispositivoRepository.save(disp);
+        }
+
+        if(!foundDisp){
+            throw new ResourceNotFoundException("Não foi encontrada nenhum dispositivo com o ID " + idDisp);
         }
 
         divisionRepository.save(div);
         return new SuccessfulRequest("updated successfully");
     }
 
-    public SuccessfulRequest updateAC(int idDiv, Double tautal, Double tmin, Double tmax) throws ResourceNotFoundException{
+    public SuccessfulRequest updateAC(int idDiv, int idDisp, Double tautal, Double tmin, Double tmax) throws ResourceNotFoundException{
         Divisao div = divisionRepository.findById(idDiv).orElseThrow(
-            () -> new ResourceNotFoundException("Não encontrada nenhuma divisao com esse id..."));
+            () -> new ResourceNotFoundException("Não encontrada nenhuma divisão com o ID " + idDiv));
+        boolean foundDisp = false;
 
-        List<Dispositivo> dispositivos = div.getDispositivos();
-        for (Dispositivo disp : dispositivos){
-            if (disp instanceof AC){
+        for (Dispositivo disp : div.getDispositivos()){
+            if (idDisp == disp.getId()){
                 ((AC) disp).setTempAtual(tautal);
                 ((AC) disp).setTempMax(tmax);
                 ((AC) disp).setTempMin(tmin);
+                foundDisp = true;
+                break;
             }
             dispositivoRepository.save(disp);
             
         }
+
+        if(!foundDisp){
+            throw new ResourceNotFoundException("Não foi encontrada nenhum dispositivo com o ID " + idDisp);
+        }
+
         divisionRepository.save(div);
         return new SuccessfulRequest("updated successfully");
     }
 
-    public SuccessfulRequest updateLamapada(int idDiv, Double luminosidade, Time startTime, Time endTime) throws ResourceNotFoundException{
+    public SuccessfulRequest updateLampada(int idDiv, int idDisp, Double luminosidade, Time startTime, Time endTime) throws ResourceNotFoundException{
         Divisao div = divisionRepository.findById(idDiv).orElseThrow(
-            () -> new ResourceNotFoundException("Não encontrada nenhuma divisao com esse id..."));
+            () -> new ResourceNotFoundException("Não encontrada nenhuma divisão com o ID " + idDiv));
+        boolean foundDisp = false;
 
-        List<Dispositivo> dispositivos = div.getDispositivos();
-        for (Dispositivo disp : dispositivos){
+        if(luminosidade > 100 || luminosidade < 0){
+            throw new ResourceNotFoundException("O valor de luminosidade utilizado não é permitido!");
+        }
+
+        for (Dispositivo disp : div.getDispositivos()){
             if (disp instanceof Lampada){
                 ((Lampada) disp).setLuminosidade(luminosidade);
                 ((Lampada) disp).setStartTime(startTime);
                 ((Lampada) disp).setEndTime(endTime);
+                foundDisp = true;
+                break;
             }
             dispositivoRepository.save(disp);
             
         }
+
+        if(!foundDisp){
+            throw new ResourceNotFoundException("Não foi encontrada nenhum dispositivo com o ID " + idDisp);
+        }
+
         divisionRepository.save(div);
         return new SuccessfulRequest("updated successfully");
     }

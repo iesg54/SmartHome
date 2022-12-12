@@ -30,7 +30,7 @@ public class PublicController {
     public SuccessfulRequest registerUser(@RequestParam(name="name", required = true) String name, 
                                         @RequestParam(name="email", required = true) String email, 
                                         @RequestParam(name="password", required = true) String password, 
-                                        @RequestParam(name="prof-pic", required = true) String profile_pic, 
+                                        @RequestParam(name="prof-pic", required = false) String profile_pic,
                                         @RequestParam(name="isAdmin", required = true) Boolean admin){
         userService.registerUser(name, email, password, profile_pic, admin);
         return new SuccessfulRequest("Registered with success");

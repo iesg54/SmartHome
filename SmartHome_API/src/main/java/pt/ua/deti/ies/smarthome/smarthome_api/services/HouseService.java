@@ -10,11 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.InvalidTypeException;
+import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.ResourceAlreadyExistsException;
 import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.ResourceNotFoundException;
-import pt.ua.deti.ies.smarthome.smarthome_api.model.Casa;
-import pt.ua.deti.ies.smarthome.smarthome_api.model.Divisao;
-import pt.ua.deti.ies.smarthome.smarthome_api.model.Sensors;
-import pt.ua.deti.ies.smarthome.smarthome_api.model.Utilizador;
+import pt.ua.deti.ies.smarthome.smarthome_api.model.*;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.dispositivos.Dispositivo;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.measurements.*;
 import pt.ua.deti.ies.smarthome.smarthome_api.repository.*;
@@ -42,7 +41,7 @@ public class HouseService {
     public ResponseEntity<List<Sensors>> getSensors(Integer id_casa) throws ResourceNotFoundException{
         ArrayList<Sensors> sensores = new ArrayList<>();
 
-        Casa casa = houseRepository.findById(id_casa).orElseThrow(() -> new ResourceNotFoundException("Could not found a house with that id"));
+        Casa casa = houseRepository.findById(id_casa).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + id_casa));
 
         List<Divisao> divisoes = casa.getDivisoesCasa();
         for (Divisao divisao : divisoes){
@@ -54,25 +53,36 @@ public class HouseService {
 
     public List<Divisao> getDivisions(Integer id_casa) throws ResourceNotFoundException{
         
-        Casa casa = houseRepository.findById(id_casa).orElseThrow(() -> new ResourceNotFoundException("Could not found a house with that id"));
+        Casa casa = houseRepository.findById(id_casa).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + id_casa));
         return casa.getDivisoesCasa();
     }
 
-    public Divisao addDivisao(Integer id_casa, Integer id_div, String tipo) throws ResourceNotFoundException{
+    public void addDivisao(Integer id_casa, Integer id_div, String tipo, String name) throws ResourceNotFoundException, ResourceAlreadyExistsException {
+        Casa house = houseRepository.findById(id_casa).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + id_casa));
+        Divisao newDiv;
 
-        //TODO - mudar isto para aceitar o tipo
-        Casa house = houseRepository.findById(id_casa).orElseThrow(() -> new ResourceNotFoundException("Could not found a house with that id"));
-
+        // Verificar se já existe uma Divisão com este ID
         for (Divisao div : house.getDivisoesCasa()){
             if (div.getId() == id_div){
-                return div;
+                throw new ResourceAlreadyExistsException("Já existe uma divisão com o ID " + id_div + " associada à Casa!");
             }
         }
 
-        return null;
+        // Adicionar a nova Divisão
+        if(tipo.equals(TipoDivisao.COZINHA.toString())){
+            newDiv = new Divisao(name, TipoDivisao.COZINHA, house);
+        }else if(tipo.equals(TipoDivisao.SALA.toString())){
+            newDiv = new Divisao(name, TipoDivisao.SALA, house);
+        }else if(tipo.equals(TipoDivisao.QUARTO.toString())){
+            newDiv = new Divisao(name, TipoDivisao.QUARTO, house);
+        }else{
+            newDiv = new Divisao(name, TipoDivisao.EXTERIOR, house);
+        }
+
+        divisionRepository.save(newDiv);
     }
 
-    public Map<Integer, Double> getLatestConsumo(Integer id_casa) throws ResourceNotFoundException{
+    public Map<Integer, Double> getLatestConsumo(Integer id_casa) throws ResourceNotFoundException, InvalidTypeException{
         Casa house = houseRepository.findById(id_casa).orElseThrow(() ->
                 new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + id_casa));
 
@@ -117,8 +127,9 @@ public class HouseService {
                 cq.setDia(date);
                 cq.setStamp(stamp);
                 consumoSalaRepository.save(cq);
-            };
-
+            }else{
+                throw new InvalidTypeException("O tipo de Divisão passado não é suportado na BD! Tipo deve ser SALA, QUARTO, COZINHA ou EXTERIOR.");
+            }
 
             consumoDivs.put(div.getId(), consumo_div);
         }
@@ -126,7 +137,7 @@ public class HouseService {
         return consumoDivs;
     }
 
-    public Map<Integer, Map<Date, Double>> consumoLastWeek(Integer id_casa) throws ResourceNotFoundException{
+    public Map<Integer, Map<Date, Double>> consumoLastWeek(Integer id_casa) throws ResourceNotFoundException, InvalidTypeException{
         // TODO: Alterar para trabalhar com qualquer dia de query?
         Casa house = houseRepository.findById(id_casa).orElseThrow(() ->
                 new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + id_casa));
@@ -135,7 +146,7 @@ public class HouseService {
         
     }
 
-    public Map<Integer, Map<Date, Double>> consumoLastMonth(Integer id_casa) throws ResourceNotFoundException{
+    public Map<Integer, Map<Date, Double>> consumoLastMonth(Integer id_casa) throws ResourceNotFoundException, InvalidTypeException{
         // TODO: Alterar para trabalhar com qualquer dia de query?
         Casa house = houseRepository.findById(id_casa).orElseThrow(() ->
                 new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + id_casa));
@@ -143,7 +154,7 @@ public class HouseService {
         return getConsumoAllDivs(Date.valueOf("2022-11-06"), 30, house);
     }
     
-    public Map<Integer, Map<Date, Double>> getConsumoAllDivs(Date startDay, Integer period, Casa house){
+    public Map<Integer, Map<Date, Double>> getConsumoAllDivs(Date startDay, Integer period, Casa house) throws InvalidTypeException{
         Map<Integer, Map<Date, Double>> consumoPorDiv = new HashMap<>();
         ArrayList<Double> values = new ArrayList<>();
         Double consumoMedio = 0.0;
@@ -174,7 +185,9 @@ public class HouseService {
                 }else if(div.getTipo().toString().equals("SALA")){
                     consumoSalaRepository.findAllByDiaEquals(startDay).forEach(cq -> values.add(cq.getValor()));
                     consumoMedio = values.stream().mapToDouble(x -> x).average().orElse(0);
-                };
+                }else{
+                    throw new InvalidTypeException("O tipo de Divisão passado não é suportado na BD! Tipo deve ser SALA, QUARTO, COZINHA ou EXTERIOR.");
+                }
 
                 values.clear();
 
@@ -191,16 +204,19 @@ public class HouseService {
     }
 
     public ResponseEntity<List<Utilizador>> getAllUsers(int idCasa) throws ResourceNotFoundException{
-        Casa casa = houseRepository.findById(idCasa).orElseThrow(() -> new ResourceNotFoundException("Could not found a house with that id"));
+        Casa casa = houseRepository.findById(idCasa).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + idCasa));
         return new ResponseEntity<List<Utilizador>>(casa.getUtilizadoresCasa(), HttpStatus.OK);
     }
 
     public SuccessfulRequest addUser(int idCasa, int idUser) throws ResourceNotFoundException{
-        Casa casa = houseRepository.findById(idCasa).orElseThrow(() -> new ResourceNotFoundException("Could not found a house with that id"));
+        Casa casa = houseRepository.findById(idCasa).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + idCasa));
         if (userRepository.findById(idUser).isPresent()){
             List<Utilizador> users = casa.getUtilizadoresCasa();
-            users.add(userRepository.findById(idUser).orElseThrow(()-> new ResourceNotFoundException("Could not find that user...")));
+            Utilizador user = userRepository.findById(idUser).orElseThrow(()-> new ResourceNotFoundException("Could not find that user..."));
+            users.add(user);
             casa.setUtilizadoresCasa(users);
+            user.setCasa(casa);
+            userRepository.save(user);
         }
         houseRepository.save(casa);
         return new SuccessfulRequest("Added user sucessfully");

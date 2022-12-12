@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.ResourceNotFoundException;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Casa;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Utilizador;
+import pt.ua.deti.ies.smarthome.smarthome_api.repository.HouseRepository;
 import pt.ua.deti.ies.smarthome.smarthome_api.repository.UserRepository;
 
 @Service
@@ -15,6 +16,8 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private HouseRepository houseRepository;
 
     public ResponseEntity<Utilizador> getUser(String email, String password) throws ResourceNotFoundException {
         if(userRepository.existsByEmail(email)){
@@ -30,20 +33,21 @@ public class UserService {
         }
     }
 
-    public ResponseEntity<Utilizador> registerUser(String email, String nome, String password, String profile_image, Boolean isAdmin){
+    public void registerUser(String email, String nome, String password, String profile_image, Boolean isAdmin){
         
         // criar nova casa assim que o admin se regista
         Utilizador novo = new Utilizador();
         if (isAdmin){   // se for administrador, tem uma casa registada -> criar essa casa
             Casa nova = new Casa();
             novo.setCasa(nova);
+            houseRepository.save(nova);
         }
         novo.setEmail(email);
         novo.setNome(nome);
         novo.setPassword(password);
         novo.setProfileImage(profile_image);
         novo.setAdmin(isAdmin);
-        
-        return new ResponseEntity<>(novo, HttpStatus.OK);
+
+        userRepository.save(novo);
     }
 }
