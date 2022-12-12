@@ -142,7 +142,7 @@ function Basic() {
                     <MDBox mb={3}>
                         <MDTypography variant="body2" color="secondary" textAlign="center">
                             Don&apos;t have an account?&nbsp;
-                            <Link to="/authentication/sign-up">Sign up</Link>
+                            <Link to="/register">Sign up</Link>
                         </MDTypography>
                     </MDBox>
                 </MDBox>

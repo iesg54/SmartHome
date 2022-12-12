@@ -119,59 +119,18 @@ function DefaultNavbar({ transparent, light, action }) {
                 </MDBox>
                 <MDBox color="inherit" display={{ xs: "none", lg: "flex" }} m={0} p={0}>
                     <DefaultNavbarLink
-                        icon="donut_large"
-                        name="dashboard"
-                        route="/dashboard"
-                        light={light}
-                    />
-                    <DefaultNavbarLink
-                        icon="person"
-                        name="profile"
-                        route="/profile"
-                        light={light}
-                    />
-                    <DefaultNavbarLink
                         icon="account_circle"
                         name="sign up"
-                        route="/authentication/sign-up"
+                        route="/register"
                         light={light}
                     />
                     <DefaultNavbarLink
                         icon="key"
                         name="sign in"
-                        route="/authentication/sign-in"
+                        route="/login"
                         light={light}
                     />
                 </MDBox>
-                {action &&
-                    (action.type === "internal" ? (
-                        <MDBox display={{ xs: "none", lg: "inline-block" }}>
-                            <MDButton
-                                component={Link}
-                                to={action.route}
-                                variant="gradient"
-                                color={action.color ? action.color : "info"}
-                                size="small"
-                            >
-                                {action.label}
-                            </MDButton>
-                        </MDBox>
-                    ) : (
-                        <MDBox display={{ xs: "none", lg: "inline-block" }}>
-                            <MDButton
-                                component="a"
-                                href={action.route}
-                                target="_blank"
-                                rel="noreferrer"
-                                variant="gradient"
-                                color={action.color ? action.color : "info"}
-                                size="small"
-                                sx={{ mt: -0.3 }}
-                            >
-                                {action.label}
-                            </MDButton>
-                        </MDBox>
-                    ))}
                 <MDBox
                     display={{ xs: "inline-block", lg: "none" }}
                     lineHeight={0}
