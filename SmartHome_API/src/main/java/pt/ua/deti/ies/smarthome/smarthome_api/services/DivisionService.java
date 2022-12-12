@@ -305,24 +305,28 @@ public class DivisionService {
             d.setDiv(div);
             d.setConsumo_energy(consumption);
             d.setEstado(false);
+            d.setTipo(TipoDispositivo.LAMPADA);
             dispositivoRepository.save(d);
         }else if(type.equals("AC")){
             Dispositivo d = acRepository.save(new AC());
             d.setDiv(div);
             d.setConsumo_energy(consumption);
             d.setEstado(false);
+            d.setTipo(TipoDispositivo.AC);
             dispositivoRepository.save(d);
         }else if(type.equals("REGADOR")){
             Dispositivo d = regadorRepository.save(new Regador());
             d.setDiv(div);
             d.setConsumo_energy(consumption);
             d.setEstado(false);
+            d.setTipo(TipoDispositivo.REGADOR);
             dispositivoRepository.save(d);
         }else if(type.equals("TOMADA")){
             Dispositivo d = tomadaRepository.save(new Tomada(name));
             d.setDiv(div);
             d.setConsumo_energy(consumption);
             d.setEstado(false);
+            d.setTipo(TipoDispositivo.TOMADA);
             dispositivoRepository.save(d);
         }else{
             throw new InvalidTypeException("O tipo de Dispositivo passado não é suportado na BD! Tipo deve ser TOMADA, AC, REGADOR ou LAMPADA.");
