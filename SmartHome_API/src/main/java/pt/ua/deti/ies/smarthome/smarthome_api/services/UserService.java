@@ -53,12 +53,12 @@ public class UserService {
     }
 
     public ResponseEntity<Utilizador> getUserInfo(int idUser) throws ResourceNotFoundException{
-        Utilizador user = userRepository.findById(idUser).orElseThrow(() -> new ResourceNotFoundException("Couldn't find user"));
+        Utilizador user = userRepository.findById(idUser).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado o utilizador com ID " + idUser));
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    public SuccessfulRequest updateUserInfo(int idUser, Utilizador user) throws ResourceNotFoundException{
-        Utilizador utilizadorExistente = userRepository.findById(idUser).orElseThrow(() -> new ResourceNotFoundException("Couldn't find user"));
+    public SuccessfulRequest updateUser(int idUser, Utilizador user) throws ResourceNotFoundException{
+        Utilizador utilizadorExistente = userRepository.findById(idUser).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado o utilizador com ID " + idUser));
         utilizadorExistente.setCasa(user.getCasa());
         utilizadorExistente.setAdmin(user.isAdmin());
         utilizadorExistente.setEmail(user.getEmail());
@@ -71,7 +71,7 @@ public class UserService {
     }
 
     public SuccessfulRequest updateProfPic(int idUser, String profPic) throws ResourceNotFoundException{
-        Utilizador utilizadorExistente = userRepository.findById(idUser).orElseThrow(() -> new ResourceNotFoundException("Couldn't find user"));
+        Utilizador utilizadorExistente = userRepository.findById(idUser).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado o utilizador com ID " + idUser));
         utilizadorExistente.setProfileImage(profPic);
         userRepository.save(utilizadorExistente);
         return new SuccessfulRequest("changed profile picture sucessfully");
