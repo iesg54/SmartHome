@@ -18,7 +18,7 @@ import Footer from "examples/Footer";
 import DivionStats from "layouts/division/components/Stats";
 import DivisionDisp from "layouts/division/components/Dispositivos";
 
-function Division(divisionID) {
+function Division({ divisionID, divisionName }) {
     const [tabIndex, setTabIndex] = React.useState(0);
 
     const handleTabChange = (event, newTabIndex) => {
@@ -38,8 +38,10 @@ function Division(divisionID) {
                     </Grid>
                 </Grid>
                 <Grid container mb={4}>
-                    {tabIndex === 0 && <DivionStats divisionID={divisionID.divisionID} />}
-                    {tabIndex === 1 && <DivisionDisp />}
+                    {tabIndex === 0 && <DivionStats divisionID={divisionID} />}
+                    {tabIndex === 1 && (
+                        <DivisionDisp divisionID={divisionID} divisionName={divisionName} />
+                    )}
                 </Grid>
             </MDBox>
             <Divider />

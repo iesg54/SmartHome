@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState, useEffect } from "react";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -26,9 +27,6 @@ import UserCard from "layouts/users/components/UserCard";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
-// Data
-import usersData from "layouts/users/data/usersData";
-
 // Axios
 import axios from "axios";
 
@@ -38,7 +36,6 @@ const validationSchema = yup.object({
 });
 
 function Users() {
-    const { users } = usersData;
     const [showForm, toggleForm] = React.useState(false);
 
     const formik = useFormik({
@@ -59,6 +56,19 @@ function Users() {
         toggleForm((prevValue) => !prevValue);
     };
 
+    // Get Users Data from the API and update the state http://localhost:8080/smarthome/private/house/{houseID}/users
+    const [users, setUsers] = useState([]);
+    useEffect(() => {
+        axios
+            .get("http://localhost:8080/smarthome/private/house/1/users")
+            .then((response) => {
+                setUsers(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
+
     return (
         <DashboardLayout>
             <DashboardNavbar />
@@ -69,7 +79,11 @@ function Users() {
                 {users.map((user) => (
                     <Grid item xs={12} sm={6} md={3} key={user.id}>
                         <MDBox mb={3}>
-                            <UserCard nome={user.name} isAdmin={user.isAdmin} />
+                            <UserCard
+                                nome={user.nome}
+                                isAdmin={user.admin}
+                                foto={user.profileImage}
+                            />
                         </MDBox>
                     </Grid>
                 ))}

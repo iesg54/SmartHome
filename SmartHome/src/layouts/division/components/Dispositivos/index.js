@@ -1,4 +1,6 @@
 import React from "react";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -15,15 +17,19 @@ import MDButton from "components/MDButton";
 import VerticalBarChart from "examples/Charts/BarCharts/VerticalBarChart";
 import ComplexStatisticsCard from "examples/Cards/StatisticsCards/ComplexStatisticsCard";
 
+// Axios
+import axios from "axios";
+
 // Dispositivos Data
-import energyChartData from "./data/energyChartData";
 import devices from "./data/devicesData";
 
 // Dispositivos Component
 import DeviceCard from "./components/DeviceCard";
 
-function DivisionDevices() {
-    const [devicesState, setDevicesState] = React.useState(devices);
+function DivisionDevices({ divisionID, divisionName }) {
+    const [devicesState, setDevicesState] = useState(devices);
+
+    console.log(divisionName);
 
     /* eslint-disable no-param-reassign */
     const handleDeviceState = (id) => {
@@ -37,6 +43,42 @@ function DivisionDevices() {
     };
     /* eslint-disable no-param-reassign */
 
+    // Get Energy Data from te API and update the state http://localhost:8080/smarthome/private/division/{divisionID}/energy
+    const [energyData, setEnergyData] = useState({
+        icon: { color: "warning", component: "bolt" },
+        title: "Energia Consumida",
+        description: "Energia consumida por esta divisão na ultima semana",
+        chart: {
+            labels: [],
+            datasets: [
+                {
+                    label: "Energia",
+                    color: "dark",
+                    data: [],
+                },
+            ],
+        },
+    });
+    useEffect(() => {
+        axios
+            .get(`http://localhost:8080/smarthome/private/division/${divisionID}/energy`)
+            .then((response) => {
+                setEnergyData((prev) => {
+                    const newEnergyData = { ...prev };
+
+                    Object.keys(response.data).map((key) => {
+                        newEnergyData.chart.labels.push(key);
+                        newEnergyData.chart.datasets[0].data.push(response.data[key]);
+                    });
+
+                    return newEnergyData;
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
+
     return (
         <>
             <Grid container justifyContent="center" mt={4}>
@@ -45,10 +87,13 @@ function DivisionDevices() {
             <Grid container mt={4} spacing={2}>
                 <Grid item xs={12} sm={12} md={8}>
                     <VerticalBarChart
-                        icon={energyChartData.icon}
-                        title={energyChartData.title}
-                        description={energyChartData.description}
-                        chart={energyChartData.chart}
+                        icon={energyData.icon}
+                        title={energyData.title}
+                        description={energyData.description}
+                        chart={{
+                            labels: energyData.chart.labels,
+                            datasets: energyData.chart.datasets,
+                        }}
                     />
                 </Grid>
                 <Grid item xs={12} sm={12} md={4}>
@@ -97,9 +142,11 @@ function DivisionDevices() {
                     <MDTypography variant="h2">Dispositivos Ligados</MDTypography>
                 </Grid>
                 <Grid item>
-                    <MDButton variant="gradient" color="dark" iconOnly size="large" circular>
-                        <Icon>add</Icon>
-                    </MDButton>
+                    <Link to={"/adicionarEquipamento/" + divisionName}>
+                        <MDButton variant="gradient" color="dark" iconOnly size="large" circular>
+                            <Icon>add</Icon>
+                        </MDButton>
+                    </Link>
                 </Grid>
             </Grid>
             <Grid container mt={4} spacing={3}>

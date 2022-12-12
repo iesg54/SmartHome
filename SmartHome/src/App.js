@@ -37,7 +37,7 @@ import theme from "assets/theme";
 import themeDark from "assets/theme-dark";
 
 // Material Dashboard 2 React routes
-import routes from "routes";
+import { routes, divisionsRoutes, addDeviceRoutes } from "routes";
 
 // Material Dashboard 2 React contexts
 import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "context";
@@ -152,6 +152,8 @@ export default function App() {
             {layout === "vr" && <Configurator />}
             <Routes>
                 {getRoutes(routes)}
+                {getRoutes(divisionsRoutes)}
+                {getRoutes(addDeviceRoutes)}
                 <Route path="*" element={<Navigate to="/dashboard" />} />
             </Routes>
         </ThemeProvider>

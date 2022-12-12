@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Radio from "@mui/material/Radio";
@@ -23,13 +25,16 @@ import Footer from "examples/Footer";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
+// Axios
+import axios from "axios";
+
 const validationSchema = yup.object({
     tipo: yup.string().required("Por favor selecione um tipo de equipamento!"),
     nome: yup.string().required("Por favor adicione um nome ao equipamento!"),
     consumo: yup.number().required("Por favor adicione um consumo energético ao equipamento!"),
 });
 
-function AdicionarEquipamento() {
+function AdicionarEquipamento({ divisionID }) {
     const formik = useFormik({
         initialValues: {
             tipo: "",
@@ -38,7 +43,25 @@ function AdicionarEquipamento() {
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            alert(JSON.stringify(values, null, 2));
+            // Post to the API http://localhost:8080/smarthome/private/division/{divisionID}/devices
+            axios
+                .post(
+                    `http://localhost:8080/smarthome/private/division/${divisionID}/devices`,
+                    null,
+                    {
+                        params: {
+                            tipo: values.tipo,
+                            nome: values.nome,
+                            consumo: Number(values.consumo),
+                        },
+                    }
+                )
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         },
         cleanForm: true,
     });
@@ -77,22 +100,22 @@ function AdicionarEquipamento() {
                                             onChange={formik.handleChange}
                                         >
                                             <FormControlLabel
-                                                value="lampada"
+                                                value="LAMPADA"
                                                 control={<Radio />}
                                                 label="Lâmpada"
                                             />
                                             <FormControlLabel
-                                                value="ac"
+                                                value="AC"
                                                 control={<Radio />}
                                                 label="Ar Condicionado"
                                             />
                                             <FormControlLabel
-                                                value="regador"
+                                                value="REGADOR"
                                                 control={<Radio />}
                                                 label="Regador"
                                             />
                                             <FormControlLabel
-                                                value="tomada"
+                                                value="TOMADA"
                                                 control={<Radio />}
                                                 label="Outro"
                                             />

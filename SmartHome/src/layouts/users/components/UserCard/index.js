@@ -15,7 +15,7 @@ function UserCard({ nome, foto, isAdmin }) {
         <Card>
             <MDBox display="flex" alignItems="center" p={3}>
                 <MDBox mr={3}>
-                    <MDAvatar src={foto} alt="User" size="lg" sx={{ border: "2px solid #fff" }} />
+                    <MDAvatar src={foto} alt="User" size="lg" shadow="md" bgColor="dark" />
                 </MDBox>
                 <MDBox>
                     <MDTypography variant="h5" fontWeight="bold">

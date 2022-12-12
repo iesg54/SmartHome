@@ -15,17 +15,15 @@ import MDTypography from "components/MDTypography";
 // Axios
 import axios from "axios";
 
-// Sensors Data
-import alertsTableData from "./data/alertsTableData";
+// Other
+import getAlertMessage from "./getAlertMessage";
 
-function DivisionStats(divisionID) {
+function DivisionStats({ divisionID }) {
     // Get sensors data from API http://localhost:8080/smarthome/private/division/{divisionID}/currentInfo
     const [sensorsCurrentData, setSensorsCurrentData] = useState([]);
     useEffect(() => {
         axios
-            .get(
-                `http://localhost:8080/smarthome/private/division/${divisionID.divisionID}/currentInfo`
-            )
+            .get(`http://localhost:8080/smarthome/private/division/${divisionID}/currentInfo`)
             .then((res) => {
                 // set data
                 const sensorsData = [];
@@ -58,17 +56,17 @@ function DivisionStats(divisionID) {
                         sensorsData.push({
                             name: res.data[key].tipo,
                             value: res.data[key].valor.toFixed(2),
-                            unit: unit,
-                            icon: icon,
-                            color: color,
+                            unit,
+                            icon,
+                            color,
                         });
                     } else {
                         sensorsData.push({
                             name: key,
                             value: null,
-                            unit: unit,
-                            icon: icon,
-                            color: color,
+                            unit,
+                            icon,
+                            color,
                         });
                     }
                 });
@@ -135,9 +133,7 @@ function DivisionStats(divisionID) {
     ]);
     useEffect(() => {
         axios
-            .get(
-                `http://localhost:8080/smarthome/private/division/${divisionID.divisionID}/weeklyInfo`
-            )
+            .get(`http://localhost:8080/smarthome/private/division/${divisionID}/weeklyInfo`)
             .then((res) => {
                 setSensorsWeeklyData((prev) => {
                     const sensorsData = [...prev];
@@ -155,6 +151,26 @@ function DivisionStats(divisionID) {
                     });
 
                     return sensorsData;
+                });
+            });
+    }, []);
+
+    // Get alerts data from API http://localhost:8080/smarthome/private/division/{divisionID}/alerts
+    const [alertsData, setAlertsData] = useState([]);
+    useEffect(() => {
+        axios
+            .get(`http://localhost:8080/smarthome/private/division/${divisionID}/alerts`)
+            .then((res) => {
+                res.data.map((alert) => {
+                    setAlertsData((prev) => [
+                        ...prev,
+                        {
+                            sensor: alert.sensor,
+                            mensagem: getAlertMessage(alert.sensor, alert.valor),
+                            valor: alert.valor,
+                            timestamp: alert.stamp,
+                        },
+                    ]);
                 });
             });
     }, []);
@@ -179,7 +195,6 @@ function DivisionStats(divisionID) {
             <Grid container justifyContent="center" mt={2} spacing={3}>
                 {sensorsWeeklyData.map((sensor) => (
                     <Grid item xs={12} sm={12} md={4} key={sensor.id}>
-                        {console.log(sensor)}
                         <DefaultLineChart
                             icon={sensor.icon}
                             title={sensor.name}
@@ -221,7 +236,7 @@ function DivisionStats(divisionID) {
                                 width: 100,
                             },
                         ],
-                        rows: alertsTableData,
+                        rows: alertsData,
                     }}
                 />
             </Grid>

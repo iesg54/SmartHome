@@ -72,14 +72,6 @@ const routes = [
     },
     {
         type: "collapse",
-        name: "AdicionarEquipamento",
-        key: "adicionarEquipamento",
-        icon: <Icon fontSize="small">devices</Icon>,
-        route: "/adicionarEquipamento",
-        component: <AdicionarEquipamento />,
-    },
-    {
-        type: "collapse",
         name: "EditarPerfil",
         key: "editarPerfil",
         icon: <Icon fontSize="small">person</Icon>,
@@ -105,18 +97,19 @@ const routes = [
 ];
 
 // get divisions from API and add to routes http://localhost:8080/smarthome/private/house/1/divisions
+const divisionsRoutes = [];
 axios
     .get(`http://localhost:8080/smarthome/private/house/${casaID}/divisions`)
     .then((response) => {
         const divisions = response.data;
         divisions.forEach((division) => {
-            routes.push({
+            divisionsRoutes.push({
                 type: "collapse",
                 name: division.nome,
                 key: division.id,
                 icon: <Icon fontSize="small">devices</Icon>,
                 route: `/division/${division.nome}`,
-                component: <Division divisionID={division.id} />,
+                component: <Division divisionID={division.id} divisionName={division.nome} />,
             });
         });
     })
@@ -124,4 +117,20 @@ axios
         console.log(error);
     });
 
-export default routes;
+// get divisions from API and add to routes http://localhost:8080/smarthome/private/house/1/divisions
+const addDeviceRoutes = [];
+axios.get(`http://localhost:8080/smarthome/private/house/${casaID}/divisions`).then((response) => {
+    const divisions = response.data;
+    divisions.forEach((division) => {
+        addDeviceRoutes.push({
+            type: "collapse",
+            name: division.nome,
+            key: division.id,
+            icon: <Icon fontSize="small">devices</Icon>,
+            route: `/adicionarEquipamento/${division.nome}`,
+            component: <AdicionarEquipamento divisionID={division.id} />,
+        });
+    });
+});
+
+export { routes, divisionsRoutes, addDeviceRoutes };
