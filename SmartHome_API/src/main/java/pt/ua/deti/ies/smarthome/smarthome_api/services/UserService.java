@@ -10,6 +10,7 @@ import pt.ua.deti.ies.smarthome.smarthome_api.model.Casa;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Utilizador;
 import pt.ua.deti.ies.smarthome.smarthome_api.repository.HouseRepository;
 import pt.ua.deti.ies.smarthome.smarthome_api.repository.UserRepository;
+import pt.ua.deti.ies.smarthome.smarthome_api.utils.SuccessfulRequest;
 
 @Service
 public class UserService {
@@ -49,5 +50,30 @@ public class UserService {
         novo.setAdmin(isAdmin);
 
         userRepository.save(novo);
+    }
+
+    public ResponseEntity<Utilizador> getUserInfo(int idUser) throws ResourceNotFoundException{
+        Utilizador user = userRepository.findById(idUser).orElseThrow(() -> new ResourceNotFoundException("Couldn't find user"));
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    public SuccessfulRequest updateUserInfo(int idUser, Utilizador user) throws ResourceNotFoundException{
+        Utilizador utilizadorExistente = userRepository.findById(idUser).orElseThrow(() -> new ResourceNotFoundException("Couldn't find user"));
+        utilizadorExistente.setCasa(user.getCasa());
+        utilizadorExistente.setAdmin(user.isAdmin());
+        utilizadorExistente.setEmail(user.getEmail());
+        utilizadorExistente.setNome(user.getNome());
+        utilizadorExistente.setPassword(user.getPassword());
+        utilizadorExistente.setProfileImage(user.getProfileImage());
+        userRepository.save(utilizadorExistente);
+        
+        return new SuccessfulRequest("User updated");
+    }
+
+    public SuccessfulRequest updateProfPic(int idUser, String profPic) throws ResourceNotFoundException{
+        Utilizador utilizadorExistente = userRepository.findById(idUser).orElseThrow(() -> new ResourceNotFoundException("Couldn't find user"));
+        utilizadorExistente.setProfileImage(profPic);
+        userRepository.save(utilizadorExistente);
+        return new SuccessfulRequest("changed profile picture sucessfully");
     }
 }
