@@ -38,6 +38,7 @@ function Basic() {
                 `http://localhost:8080/smarthome/public/login?email=${values.email}&password=${values.password}`
             )
             .then((res) => {
+                console.log(res.data);
                 setUserData(res.data);
             })
             .catch((error) => {

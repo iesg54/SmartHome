@@ -20,16 +20,41 @@ import ComplexStatisticsCard from "examples/Cards/StatisticsCards/ComplexStatist
 // Axios
 import axios from "axios";
 
-// Dispositivos Data
-import devices from "./data/devicesData";
-
 // Dispositivos Component
 import DeviceCard from "./components/DeviceCard";
 
-function DivisionDevices({ divisionID, divisionName }) {
-    const [devicesState, setDevicesState] = useState(devices);
+// other
+import { findDeviceIcon } from "./findDeviceIcon";
 
-    console.log(divisionName);
+function DivisionDevices({ divisionID, divisionName }) {
+    // Get Devices Data from the API and update the state http://localhost:8080/smarthome/private/division/{divisionID}/devices
+    const [devicesState, setDevicesState] = useState([]);
+    useEffect(() => {
+        axios
+            .get(`http://localhost:8080/smarthome/private/division/${divisionID}/devices`)
+            .then((response) => {
+                setDevicesState((prev) => {
+                    const newDevicesState = [...prev];
+                    response.data.map((device) => {
+                        newDevicesState.push({
+                            id: device.id,
+                            type: device.tipo,
+                            name: device.nome
+                                ? device.nome
+                                : device.tipo.charAt(0).toUpperCase() +
+                                  device.tipo.slice(1).toLowerCase(),
+                            icon: findDeviceIcon(device.tipo),
+                            consumption: Math.round(device.consumo_energy),
+                            state: device.estado,
+                        });
+                    });
+                    return newDevicesState;
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
 
     /* eslint-disable no-param-reassign */
     const handleDeviceState = (id) => {
@@ -39,6 +64,17 @@ function DivisionDevices({ divisionID, divisionName }) {
             }
             return device;
         });
+        axios
+            .post(
+                `http://localhost:8080/smarthome/private/division/${divisionID}/device/${id}`,
+                null
+            )
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
         setDevicesState(newDevicesState);
     };
     /* eslint-disable no-param-reassign */
@@ -116,7 +152,7 @@ function DivisionDevices({ divisionID, divisionName }) {
                             <MDBox bgColor="light" borderRadius="xl" px={0.5} py={0.5} mb={2}>
                                 <ComplexStatisticsCard
                                     title="Previsão de Consumo na próxima hora"
-                                    count={devices
+                                    count={devicesState
                                         .filter((device) => device.state)
                                         .map((device) => device.consumption)
                                         .reduce((a, b) => a + b, 0)}
@@ -150,7 +186,7 @@ function DivisionDevices({ divisionID, divisionName }) {
                 </Grid>
             </Grid>
             <Grid container mt={4} spacing={3}>
-                {devices.map((device) => (
+                {devicesState.map((device) => (
                     <Grid item xs={12} sm={12} md={3} key={device.id}>
                         <DeviceCard
                             color="dark"

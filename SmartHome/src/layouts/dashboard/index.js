@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -80,7 +81,7 @@ function Dashboard() {
                     let sum = 0;
                     let count = 0;
                     for (const key2 in res.data[key]) {
-                        let date = key2.split("T")[0]
+                        let date = key2.split("T")[0];
                         if (!lastW.includes(date)) {
                             lastW.push(date);
                         }
@@ -122,7 +123,7 @@ function Dashboard() {
                     let sum = 0;
                     let count = 0;
                     for (const key2 in res.data[key]) {
-                        let date = key2.split("T")[0]
+                        let date = key2.split("T")[0];
                         if (!lastM.includes(date)) {
                             lastM.push(date);
                         }
@@ -150,6 +151,17 @@ function Dashboard() {
     const handleTabChange = (event, newTabIndex) => {
         setTabIndex(newTabIndex);
     };
+
+    // check if the user is logged in else redirect to the login page
+    const [isLogged, setIsLogged] = useState(false);
+    useEffect(() => {
+        localStorage.getItem("userID") ? setIsLogged(true) : setIsLogged(false);
+    }, []);
+
+    const navigate = useNavigate();
+    if (!isLogged) {
+        navigate("/login");
+    }
 
     return (
         <DashboardLayout>

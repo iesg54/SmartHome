@@ -32,9 +32,7 @@ const validationSchema = yup.object({
         .string()
         .email("Por favor adicione um email válido!")
         .required("Por favor adicione um email!"),
-    password: yup
-        .string()
-        .required("Por favor adicione uma senha!"),
+    password: yup.string().required("Por favor adicione uma senha!"),
 });
 
 function EditarPerfil() {
@@ -87,7 +85,7 @@ function EditarPerfil() {
 
     const [image, setImage] = useState("");
     useEffect(() => {
-        setImage(userData.profileImage);     
+        setImage(userData.profileImage);
     }, [userData.profileImage]);
 
     const handleImageUpload = (files) => {
@@ -128,20 +126,21 @@ function EditarPerfil() {
 
                     // save image url to the database http://localhost:8080/smarthome/private/user/profilePic/{userID}
                     axios
-                        .put(`http://localhost:8080/smarthome/private/user/profilePic/${userID}`, null, {
-                            params: {
-                                profPic: downloadURL,
-                            },
-                        })
+                        .put(
+                            `http://localhost:8080/smarthome/private/user/profilePic/${userID}`,
+                            null,
+                            {
+                                params: {
+                                    profPic: downloadURL,
+                                },
+                            }
+                        )
                         .then((response) => {
                             console.log(response);
-                        }
-                        )
+                        })
                         .catch((error) => {
                             console.log(error);
-                        }
-                        );
-
+                        });
                 });
             }
         );

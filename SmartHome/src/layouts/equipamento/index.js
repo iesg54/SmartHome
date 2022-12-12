@@ -35,6 +35,7 @@ const validationSchema = yup.object({
 });
 
 function AdicionarEquipamento({ divisionID }) {
+    const [responseMessage, setResponseMessage] = useState();
     const formik = useFormik({
         initialValues: {
             tipo: "",
@@ -42,7 +43,7 @@ function AdicionarEquipamento({ divisionID }) {
             consumo: "",
         },
         validationSchema: validationSchema,
-        onSubmit: (values) => {
+        onSubmit: (values, { cleanForm }) => {
             // Post to the API http://localhost:8080/smarthome/private/division/{divisionID}/devices
             axios
                 .post(
@@ -57,11 +58,13 @@ function AdicionarEquipamento({ divisionID }) {
                     }
                 )
                 .then((response) => {
+                    setResponseMessage(response.data.message);
                     console.log(response);
                 })
                 .catch((error) => {
                     console.log(error);
                 });
+            cleanForm();
         },
         cleanForm: true,
     });
@@ -170,6 +173,13 @@ function AdicionarEquipamento({ divisionID }) {
                                 </Grid>
                             </form>
                         </MDBox>
+                        {responseMessage && (
+                            <MDBox px={3} pb={3}>
+                                <MDTypography variant="h5" color="success">
+                                    {responseMessage}
+                                </MDTypography>
+                            </MDBox>
+                        )}
                     </Card>
                 </MDBox>
             </Grid>

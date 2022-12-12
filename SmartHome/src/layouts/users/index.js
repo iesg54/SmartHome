@@ -56,12 +56,10 @@ function Users() {
                 .then((response) => {
                     console.log(response);
                     setResponseMessage(response.data.message);
-                }
-                )
+                })
                 .catch((error) => {
                     console.log(error);
-                }
-                );
+                });
 
             resetForm();
         },

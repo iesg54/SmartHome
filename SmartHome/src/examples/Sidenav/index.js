@@ -45,6 +45,7 @@ import {
     setTransparentSidenav,
     setWhiteSidenav,
 } from "context";
+import { LocalActivity, LocalSeeTwoTone } from "@mui/icons-material";
 
 function Sidenav({ color, brand, brandName, routes, ...rest }) {
     const [controller, dispatch] = useMaterialUIController();
@@ -139,6 +140,12 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
         return returnValue;
     });
 
+    const handleLogout = (e) => {
+        e.preventDefault();
+        localStorage.clear();
+        window.location.href = "/login";
+    };
+
     return (
         <SidenavRoot
             {...rest}
@@ -183,6 +190,20 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
                 }
             />
             <List>{renderRoutes}</List>
+            <Link
+                href="/logout"
+                target="_blank"
+                rel="noreferrer"
+                sx={{ textDecoration: "none" }}
+                onClick={(e) => handleLogout(e)}
+            >
+                <SidenavCollapse
+                    name="Logout"
+                    icon={<Icon sx={{ fontWeight: "bold" }}>logout</Icon>}
+                    active={false}
+                    noCollapse
+                />
+            </Link>
         </SidenavRoot>
     );
 }
