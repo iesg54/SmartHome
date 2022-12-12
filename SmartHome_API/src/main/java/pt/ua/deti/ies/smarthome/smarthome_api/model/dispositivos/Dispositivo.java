@@ -1,5 +1,6 @@
 package pt.ua.deti.ies.smarthome.smarthome_api.model.dispositivos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Divisao;
 
@@ -12,17 +13,24 @@ public class Dispositivo {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name ="id_divisao", nullable = false)
+    @JsonIgnore
+    @JoinColumn(name ="id_divisao")
     private Divisao div;
 
-    @Column(nullable = false)
+    @Column
     private Double consumo_energy;
 
-    @Column(nullable = false)
+    @Column
     private boolean estado = false;
 
     public Dispositivo(Integer id, Divisao div, Double consumo_energy, boolean estado) {
         this.id = id;
+        this.div = div;
+        this.consumo_energy = consumo_energy;
+        this.estado = estado;
+    }
+
+    public Dispositivo(Divisao div, Double consumo_energy, boolean estado) {
         this.div = div;
         this.consumo_energy = consumo_energy;
         this.estado = estado;

@@ -1,19 +1,29 @@
 package pt.ua.deti.ies.smarthome.smarthome_api.services;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import lombok.extern.slf4j.Slf4j;
+import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.InvalidTypeException;
 import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.ResourceNotFoundException;
+import pt.ua.deti.ies.smarthome.smarthome_api.model.Alerta;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Divisao;
+import pt.ua.deti.ies.smarthome.smarthome_api.model.dispositivos.*;
+import pt.ua.deti.ies.smarthome.smarthome_api.model.measurements.ConsumoCozinha;
+import pt.ua.deti.ies.smarthome.smarthome_api.model.measurements.ConsumoExterno;
+import pt.ua.deti.ies.smarthome.smarthome_api.model.measurements.ConsumoQuarto;
+import pt.ua.deti.ies.smarthome.smarthome_api.model.measurements.ConsumoSala;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.measurements.SensorMeasurements;
 import pt.ua.deti.ies.smarthome.smarthome_api.repository.*;
+import pt.ua.deti.ies.smarthome.smarthome_api.utils.SuccessfulRequest;
 
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
+import java.sql.Time;
+import java.util.*;
 
+@Slf4j
 @Service
 public class DivisionService {
 
@@ -27,6 +37,26 @@ public class DivisionService {
     private SensorMeasurementsSalaRepository sensorSalaRepository;
     @Autowired
     private SensorMeasurementsExternoRepository sensorExternoRepository;
+    @Autowired
+    private AlertaRepository alertaRepository;
+    @Autowired
+    private ConsumoCozinhaRepository consumoCozinhaRepository;
+    @Autowired
+    private ConsumoQuartoRepository consumoQuartoRepository;
+    @Autowired
+    private ConsumoExternoRepository consumoExternoRepository;
+    @Autowired
+    private ConsumoSalaRepository consumoSalaRepository;
+    @Autowired
+    private DispositivoRepository dispositivoRepository;
+    @Autowired
+    private ACRepository acRepository;
+    @Autowired
+    private TomadaRepository tomadaRepository;
+    @Autowired
+    private LampadaRepository lampadaRepository;
+    @Autowired
+    private RegadorRepository regadorRepository;
 
     public Map<String, SensorMeasurements> latestSensorInfo(Integer idDiv) throws ResourceNotFoundException {
         Divisao div =  divisionRepository.findById(idDiv).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada uma divisão com o ID " + idDiv));
@@ -248,6 +278,207 @@ public class DivisionService {
         }
 
         return processedValue;
+    }
+
+    public List<Alerta> getAlerts(Integer idDiv) throws ResourceNotFoundException {
+        Divisao div =  divisionRepository.findById(idDiv).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada uma divisão com o ID " + idDiv));
+        List<Alerta> alertas = alertaRepository.findAllByDiv(div);
+
+        if(alertas.size() > 0){
+            return alertas;
+        }else{
+            throw new ResourceNotFoundException("Não foram encontrados alertas para a divisão com o ID " + idDiv);
+        }
+    }
+
+    public List<Dispositivo> getDispositivos(Integer idDiv) throws ResourceNotFoundException {
+        Divisao div =  divisionRepository.findById(idDiv).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada uma divisão com o ID " + idDiv));
+
+        return dispositivoRepository.findAllByDiv(div);
+    }
+
+    public void addNewDevice(Integer idDiv, String type, String name, Double consumption) throws ResourceNotFoundException, InvalidTypeException{
+        Divisao div =  divisionRepository.findById(idDiv).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada uma divisão com o ID " + idDiv));
+
+        if(type.equals("LAMPADA")){
+            Dispositivo d = lampadaRepository.save(new Lampada(100.0, null, null));
+            d.setDiv(div);
+            d.setConsumo_energy(consumption);
+            d.setEstado(false);
+            dispositivoRepository.save(d);
+        }else if(type.equals("AC")){
+            Dispositivo d = acRepository.save(new AC());
+            d.setDiv(div);
+            d.setConsumo_energy(consumption);
+            d.setEstado(false);
+            dispositivoRepository.save(d);
+        }else if(type.equals("REGADOR")){
+            Dispositivo d = regadorRepository.save(new Regador());
+            d.setDiv(div);
+            d.setConsumo_energy(consumption);
+            d.setEstado(false);
+            dispositivoRepository.save(d);
+        }else if(type.equals("TOMADA")){
+            Dispositivo d = tomadaRepository.save(new Tomada(name));
+            d.setDiv(div);
+            d.setConsumo_energy(consumption);
+            d.setEstado(false);
+            dispositivoRepository.save(d);
+        }else{
+            throw new InvalidTypeException("O tipo de Dispositivo passado não é suportado na BD! Tipo deve ser TOMADA, AC, REGADOR ou LAMPADA.");
+        }
+
+    }
+
+    public SuccessfulRequest toggleDeviceStat(int idDiv, int idDevice) throws ResourceNotFoundException{
+        Divisao div = divisionRepository.findById(idDiv).orElseThrow(
+            () -> new ResourceNotFoundException("Não encontrada nenhuma divisao com o ID " + idDiv));
+
+
+        for (Dispositivo device : div.getDispositivos()){
+            if (device.getId() == idDevice){
+                device.setEstado(!(device.isEstado()));
+                dispositivoRepository.save(device);
+                return new SuccessfulRequest("Changed state");
+            }
+        }
+
+        throw new ResourceNotFoundException("Não foi encontrado um dispositivo com o ID " + idDevice);
+    }
+
+    public ResponseEntity<Map<Date, Double>> getDivisionEnergyConsumption(int idDiv) throws ResourceNotFoundException, InvalidTypeException{
+        Divisao div = divisionRepository.findById(idDiv).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada uma divisão com o ID " + idDiv));
+        log.debug("got house info");
+        Map<Date, Double> lista = new HashMap<>();
+
+        Date date1 = Date.valueOf("2022-11-30");    //mudar isto TODO
+        Date date2 = null;
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date1);
+        
+
+        if (div.getTipo().toString().equals("COZINHA")){
+            for (int i = 1; i<=7; i++){
+                cal.add(Calendar.DATE, 1);
+                date2 = new Date(cal.getTimeInMillis());
+                List<ConsumoCozinha> valores = consumoCozinhaRepository.findByDivAndDiaGreaterThanEqualAndDiaLessThan(div, date1, date2);
+                Double soma;
+                soma = valores.stream().mapToDouble(valor -> valor.getValor()).average().orElse(0);
+                lista.put(date1, soma);
+                date1 = date2;
+            }
+        }else if(div.getTipo().toString().equals("QUARTO")){
+            for (int i = 1; i<=7; i++){
+                cal.add(Calendar.DATE, 1);
+                date2 = new Date(cal.getTimeInMillis());
+                List<ConsumoQuarto> valores = consumoQuartoRepository.findByDivAndDiaGreaterThanEqualAndDiaLessThan(div, date1, date2);
+                Double soma = 0.0;
+                soma = valores.stream().mapToDouble(valor -> valor.getValor()).average().orElse(0);
+                lista.put(date1, soma);
+                date1 = date2;
+            }
+        }else if(div.getTipo().toString().equals("EXTERIOR")){ //????
+            for (int i = 1; i<=7; i++){
+                cal.add(Calendar.DATE, 1);
+                date2 = new Date(cal.getTimeInMillis());
+                List<ConsumoExterno> valores = consumoExternoRepository.findByDivAndDiaGreaterThanEqualAndDiaLessThan(div, date1, date2);
+                Double soma = 0.0;
+                soma = valores.stream().mapToDouble(valor -> valor.getValor()).average().orElse(0);
+                lista.put(date1, soma);
+                date1 = date2;
+            }
+        }else if(div.getTipo().toString().equals("SALA")){
+            for (int i = 1; i<=7; i++){
+                cal.add(Calendar.DATE, 1);
+                date2 = new Date(cal.getTimeInMillis());
+                List<ConsumoSala> valores = consumoSalaRepository.findByDivAndDiaGreaterThanEqualAndDiaLessThan(div, date1, date2);
+                Double soma = 0.0;
+                soma = valores.stream().mapToDouble(valor -> valor.getValor()).average().orElse(0);
+                lista.put(date1, soma);
+                date1 = date2;
+            }
+        }else{
+            throw new InvalidTypeException("O tipo de Divisão passado não é suportado na BD! Tipo deve ser SALA, QUARTO, COZINHA ou EXTERIOR.");
+        }
+
+        return new ResponseEntity<Map<Date, Double>> (lista, HttpStatus.OK);
+    }
+
+    public SuccessfulRequest updateRegador(int idDiv, int idDisp, Time start_time, Time end_time) throws ResourceNotFoundException{
+        Divisao div = divisionRepository.findById(idDiv).orElseThrow(
+            () -> new ResourceNotFoundException("Não foi encontrada nenhuma divisão com o ID " + idDiv));
+        boolean foundDisp = false;
+
+        for (Dispositivo disp : div.getDispositivos()){
+            if (idDisp == disp.getId()){
+                ((Regador) disp).setStart(start_time);
+                ((Regador) disp).setFinnish(end_time);
+                dispositivoRepository.save(disp);
+                foundDisp = true;
+                break;
+            }
+        }
+
+        if(!foundDisp){
+            throw new ResourceNotFoundException("Não foi encontrada nenhum dispositivo com o ID " + idDisp);
+        }
+
+        divisionRepository.save(div);
+        return new SuccessfulRequest("updated successfully");
+    }
+
+    public SuccessfulRequest updateAC(int idDiv, int idDisp, Double tautal, Double tmin, Double tmax) throws ResourceNotFoundException{
+        Divisao div = divisionRepository.findById(idDiv).orElseThrow(
+            () -> new ResourceNotFoundException("Não encontrada nenhuma divisão com o ID " + idDiv));
+        boolean foundDisp = false;
+
+        for (Dispositivo disp : div.getDispositivos()){
+            if (idDisp == disp.getId()){
+                ((AC) disp).setTempAtual(tautal);
+                ((AC) disp).setTempMax(tmax);
+                ((AC) disp).setTempMin(tmin);
+                foundDisp = true;
+                break;
+            }
+            dispositivoRepository.save(disp);
+            
+        }
+
+        if(!foundDisp){
+            throw new ResourceNotFoundException("Não foi encontrada nenhum dispositivo com o ID " + idDisp);
+        }
+
+        divisionRepository.save(div);
+        return new SuccessfulRequest("updated successfully");
+    }
+
+    public SuccessfulRequest updateLampada(int idDiv, int idDisp, Double luminosidade, Time startTime, Time endTime) throws ResourceNotFoundException{
+        Divisao div = divisionRepository.findById(idDiv).orElseThrow(
+            () -> new ResourceNotFoundException("Não encontrada nenhuma divisão com o ID " + idDiv));
+        boolean foundDisp = false;
+
+        if(luminosidade > 100 || luminosidade < 0){
+            throw new ResourceNotFoundException("O valor de luminosidade utilizado não é permitido!");
+        }
+
+        for (Dispositivo disp : div.getDispositivos()){
+            if (disp instanceof Lampada){
+                ((Lampada) disp).setLuminosidade(luminosidade);
+                ((Lampada) disp).setStartTime(startTime);
+                ((Lampada) disp).setEndTime(endTime);
+                foundDisp = true;
+                break;
+            }
+            dispositivoRepository.save(disp);
+            
+        }
+
+        if(!foundDisp){
+            throw new ResourceNotFoundException("Não foi encontrada nenhum dispositivo com o ID " + idDisp);
+        }
+
+        divisionRepository.save(div);
+        return new SuccessfulRequest("updated successfully");
     }
 
 }

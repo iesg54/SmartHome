@@ -1,5 +1,6 @@
 package pt.ua.deti.ies.smarthome.smarthome_api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,5 +29,6 @@ public class Utilizador {
     private boolean isAdmin;
     @ManyToOne
     @JoinColumn(name ="id_casa")
+    @JsonIgnore
     private Casa casa;
 }

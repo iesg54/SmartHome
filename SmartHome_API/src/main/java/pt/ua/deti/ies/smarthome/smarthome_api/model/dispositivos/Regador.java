@@ -1,13 +1,13 @@
 package pt.ua.deti.ies.smarthome.smarthome_api.model.dispositivos;
 
+import java.sql.Time;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.sql.Time;
 
 @Entity
 @Getter
@@ -20,4 +20,13 @@ public class Regador extends Dispositivo{
 
     @Column(name="end_time")
     private Time endTime;
+
+    public void setStart(Time start){
+        this.startTime = start;
+    }
+
+    public void setFinnish(Time finish){
+        this.endTime = finish;
+    }
+
 }

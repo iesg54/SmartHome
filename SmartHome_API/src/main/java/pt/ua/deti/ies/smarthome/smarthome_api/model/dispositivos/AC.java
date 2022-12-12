@@ -19,4 +19,16 @@ public class AC extends Dispositivo{
     private double tempMin;
     @Column(name = "tMax")
     private double tempMax;
+
+    public void setTempAtual(Double tempa){
+        this.tempAtual = tempa;
+    }
+
+    public void setTempMin(Double tempmin){
+        this.tempMin = tempmin;
+    }
+
+    public void setTempMax(Double tempmax){
+        this.tempMax = tempmax;
+    }
 }
