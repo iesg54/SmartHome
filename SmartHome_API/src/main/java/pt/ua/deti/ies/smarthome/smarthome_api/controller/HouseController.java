@@ -80,8 +80,8 @@ public class HouseController {
 
     // Adds a new user to the House Page, in case they are already registered in the DB
     @PostMapping("/{idCasa}/users")
-    public SuccessfulRequest addUser(@PathVariable(value="idCasa") int idCasa, @RequestParam(value="idUser") int idUser) throws ResourceNotFoundException{
-        return houseService.addUser(idCasa, idUser);
+    public SuccessfulRequest addUser(@PathVariable(value="idCasa") int idCasa, @RequestParam(value="email") String email) throws ResourceNotFoundException{
+        return houseService.addUser(idCasa, email);
     }
 
 }

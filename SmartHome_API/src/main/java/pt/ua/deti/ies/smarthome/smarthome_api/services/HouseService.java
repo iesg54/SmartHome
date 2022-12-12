@@ -208,11 +208,11 @@ public class HouseService {
         return new ResponseEntity<List<Utilizador>>(casa.getUtilizadoresCasa(), HttpStatus.OK);
     }
 
-    public SuccessfulRequest addUser(int idCasa, int idUser) throws ResourceNotFoundException{
+    public SuccessfulRequest addUser(int idCasa, String email) throws ResourceNotFoundException{
         Casa casa = houseRepository.findById(idCasa).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + idCasa));
-        if (userRepository.findById(idUser).isPresent()){
+        if (userRepository.existsByEmail(email)){
             List<Utilizador> users = casa.getUtilizadoresCasa();
-            Utilizador user = userRepository.findById(idUser).orElseThrow(()-> new ResourceNotFoundException("Could not find that user..."));
+            Utilizador user = userRepository.findByEmail(email);
             users.add(user);
             casa.setUtilizadoresCasa(users);
             user.setCasa(casa);
