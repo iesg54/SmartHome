@@ -7,22 +7,25 @@ const sensorsData = [
         id: 1,
         name: "Temperatura",
         icon: "device_thermostat",
-        value: "25ºC",
+        value: "",
         color: "primary",
+        units: "ºC",
     },
     {
         id: 2,
         name: "Humidade",
         icon: "water",
-        value: "50%",
+        value: "",
         color: "info",
+        units: "%",
     },
     {
         id: 3,
         name: "CO",
         icon: "gas_meter",
-        value: "0.5%",
+        value: "",
         color: "warning",
+        units: "ppm",
     },
 ];
 

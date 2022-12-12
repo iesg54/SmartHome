@@ -104,4 +104,24 @@ const routes = [
     },
 ];
 
+// get divisions from API and add to routes http://localhost:8080/smarthome/private/house/1/divisions
+axios
+    .get(`http://localhost:8080/smarthome/private/house/${casaID}/divisions`)
+    .then((response) => {
+        const divisions = response.data;
+        divisions.forEach((division) => {
+            routes.push({
+                type: "collapse",
+                name: division.nome,
+                key: division.id,
+                icon: <Icon fontSize="small">devices</Icon>,
+                route: `/division/${division.nome}`,
+                component: <Division divisionID={division.id} />,
+            });
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+
 export default routes;

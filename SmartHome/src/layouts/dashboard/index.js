@@ -18,10 +18,6 @@ import MDButton from "components/MDButton";
 import MDTypography from "components/MDTypography";
 import SimpleBlogCard from "examples/Cards/BlogCards/SimpleBlogCard";
 
-// Data
-import { monthlyEnergyCostData, yearlyEnergyCostData } from "./data/homeEnergyCostData";
-import { monthlyDivisionStats, yearlyDivisionStats } from "./data/divisionStatsData";
-
 // Components
 import HomeStats from "./components/HomeStats";
 
@@ -36,7 +32,6 @@ function Dashboard() {
     // Get divisions from the database http://localhost:8080/smarthome/private/house/1/divisions
     const [divisions, setDivisions] = useState([]);
     useEffect(() => {
-        console.log("Getting divisons of casaID: " + casaID + "...");
         axios
             .get(`http://localhost:8080/smarthome/private/house/${casaID}/divisions`)
             .then((res) => {
@@ -50,7 +45,6 @@ function Dashboard() {
     // Get the energy cost of each division and save it in an array from the database http://localhost:8080/smarthome/private/house/1/energy/current
     const [energyCost, setEnergyCost] = useState([]);
     useEffect(() => {
-        console.log("Getting energy cost of casaID: " + casaID + "...");
         axios
             .get(`http://localhost:8080/smarthome/private/house/${casaID}/energy/current`)
             .then((res) => {
@@ -71,7 +65,6 @@ function Dashboard() {
     const [energyCostPerWeekDay, setEnergyCostPerWeekDay] = useState([]);
     const [energyCostPerDivision, setEnergyCostPerDivision] = useState([]);
     useEffect(() => {
-        console.log("Getting energy cost of casaID: " + casaID + " for the last month...");
         axios
             .get(`http://localhost:8080/smarthome/private/house/${casaID}/energy/week`)
             .then((res) => {
@@ -107,7 +100,6 @@ function Dashboard() {
     const [energyCostPerDay, setEnergyCostPerDay] = useState([]);
     const [energyCostPerDivision2, setEnergyCostPerDivision2] = useState([]);
     useEffect(() => {
-        console.log("Getting energy cost of casaID: " + casaID + " for the last week...");
         axios
             .get(`http://localhost:8080/smarthome/private/house/${casaID}/energy/month`)
             .then((res) => {

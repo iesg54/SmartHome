@@ -9,9 +9,6 @@ import DefaultLineChart from "examples/Charts/LineCharts/DefaultLineChart";
 import PieChart from "examples/Charts/PieChart";
 
 function HomeStats({ LineChartObject, PieChartObject }) {
-    console.log("HomeStats");
-    console.log(LineChartObject);
-    console.log(PieChartObject);
     return (
         <Grid container spacing={3} mt={4}>
             <Grid item xs={12} sm={6} md={8}>
