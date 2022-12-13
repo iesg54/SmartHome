@@ -222,5 +222,17 @@ public class HouseService {
         return new SuccessfulRequest("Added user sucessfully");
     }
 
+    public void removeUser(int idCasa, String email) throws ResourceNotFoundException{
+        Casa casa = houseRepository.findById(idCasa).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + idCasa));
+        if (userRepository.existsByEmail(email)){
+            List<Utilizador> users = casa.getUtilizadoresCasa();
+            Utilizador user = userRepository.findByEmail(email);
+            users.remove(user);
+            user.setCasa(null);
+            userRepository.save(user);
+            houseRepository.save(casa);
+        }
+    }
+
 
 }

@@ -61,6 +61,14 @@ public class DivisionController {
         return new SuccessfulRequest("Dispositivo adicionado com sucesso.");
     }
 
+    // Removes a device from a division
+    @DeleteMapping("/{idDiv}/devices")
+    public SuccessfulRequest removeDevice(@PathVariable(value="idDiv") int idDiv, @RequestParam(name="id", required = true) Integer idDev)
+            throws ResourceNotFoundException, InvalidTypeException {
+        divisionService.removeDevice(idDiv, idDev);
+        return new SuccessfulRequest("Dispositivo removido com sucesso.");
+    }
+
     // Toggles the state of a device between on and off.
     @PostMapping("{idDiv}/device/{idDevice}")
     public SuccessfulRequest toggleDeviceState(@PathVariable(value="idDiv") int idDiv, @PathVariable(value="idDevice") int idDevice) throws ResourceNotFoundException{

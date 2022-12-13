@@ -334,6 +334,15 @@ public class DivisionService {
 
     }
 
+    public void removeDevice(Integer idDiv, Integer idDev) throws ResourceNotFoundException, InvalidTypeException{
+        Divisao div =  divisionRepository.findById(idDiv).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada uma divisão com o ID " + idDiv));
+        Dispositivo device = dispositivoRepository.findById(idDev).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada um dispositivo com o ID " + idDiv));
+
+        div.getDispositivos().remove(device);
+        divisionRepository.save(div);
+        dispositivoRepository.delete(device);
+    }
+
     public SuccessfulRequest toggleDeviceStat(int idDiv, int idDevice) throws ResourceNotFoundException{
         Divisao div = divisionRepository.findById(idDiv).orElseThrow(
             () -> new ResourceNotFoundException("Não encontrada nenhuma divisao com o ID " + idDiv));

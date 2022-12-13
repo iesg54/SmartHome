@@ -84,4 +84,11 @@ public class HouseController {
         return houseService.addUser(idCasa, email);
     }
 
+    // Delete a user from the House Page
+    @DeleteMapping("/{idCasa}/users")
+    public SuccessfulRequest removeUser(@PathVariable(value="idCasa") int idCasa, @RequestParam(value="email") String email) throws ResourceNotFoundException{
+        houseService.removeUser(idCasa, email);
+        return new SuccessfulRequest("Utilizador removido com sucesso");
+    }
+
 }
