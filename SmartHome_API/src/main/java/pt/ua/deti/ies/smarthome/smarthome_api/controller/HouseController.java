@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.InvalidTypeException;
-import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.ResourceAlreadyExistsException;
 import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.ResourceNotFoundException;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Divisao;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Sensors;
@@ -40,10 +39,10 @@ public class HouseController {
 
     // Associates a new division to a House
     @PostMapping("/{idCasa}/divisions")
-    public SuccessfulRequest addDivision(@PathVariable(value="idCasa") int idCasa, @RequestParam(name="idDiv", required = true) Integer idDiv, @RequestParam(name="tipo", required = true) String type,
+    public SuccessfulRequest addDivision(@PathVariable(value="idCasa") int idCasa, @RequestParam(name="tipo", required = true) String type,
                                          @RequestParam(name="nome", required = true) String name)
-    throws ResourceNotFoundException, ResourceAlreadyExistsException {
-        houseService.addDivisao(idCasa, idDiv, type, name);
+    throws ResourceNotFoundException {
+        houseService.addDivisao(idCasa, type, name);
         SuccessfulRequest successfulRequest = new SuccessfulRequest("Nova divisão adicionada com sucesso.");
         return successfulRequest;
     }
