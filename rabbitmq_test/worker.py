@@ -40,7 +40,6 @@ def callback(ch, method, properties, body):
     data= decode_msg(body)
     work_data(data)
 
-    #time.sleep(body.count(b'.'))
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
