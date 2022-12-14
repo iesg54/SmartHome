@@ -70,7 +70,7 @@ const routes = [
     },
     {
         type: "collapse",
-        name: "EditarPerfil",
+        name: "Perfil",
         key: "editarPerfil",
         icon: <Icon fontSize="small">person</Icon>,
         route: "/editarPerfil",
@@ -80,6 +80,7 @@ const routes = [
 
 // get divisions from API and add to routes http://localhost:8080/smarthome/private/house/1/divisions
 const divisionsRoutes = [];
+const addDeviceRoutes = [];
 axios
     .get(`http://localhost:8080/smarthome/private/house/${casaID}/divisions`)
     .then((response) => {
@@ -93,26 +94,18 @@ axios
                 route: `/division/${division.nome}`,
                 component: <Division divisionID={division.id} divisionName={division.nome} />,
             });
+            addDeviceRoutes.push({
+                type: "collapse",
+                name: division.nome,
+                key: division.id,
+                icon: <Icon fontSize="small">devices</Icon>,
+                route: `/adicionarEquipamento/${division.nome}`,
+                component: <AdicionarEquipamento divisionID={division.id} />,
+            });
         });
     })
     .catch((error) => {
         console.log(error);
     });
-
-// get divisions from API and add to routes http://localhost:8080/smarthome/private/house/1/divisions
-const addDeviceRoutes = [];
-axios.get(`http://localhost:8080/smarthome/private/house/${casaID}/divisions`).then((response) => {
-    const divisions = response.data;
-    divisions.forEach((division) => {
-        addDeviceRoutes.push({
-            type: "collapse",
-            name: division.nome,
-            key: division.id,
-            icon: <Icon fontSize="small">devices</Icon>,
-            route: `/adicionarEquipamento/${division.nome}`,
-            component: <AdicionarEquipamento divisionID={division.id} />,
-        });
-    });
-});
 
 export { routes, divisionsRoutes, addDeviceRoutes };

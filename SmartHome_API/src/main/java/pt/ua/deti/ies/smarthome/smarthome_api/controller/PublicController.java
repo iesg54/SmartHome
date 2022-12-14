@@ -26,7 +26,7 @@ public class PublicController {
     }
 
     // Registers a new user in the DB
-    @PostMapping("/register") // DID NOT CHECK IF WORKING TODO!!!!!!
+    @PostMapping("/register")
     public SuccessfulRequest registerUser(@RequestParam(name="name", required = true) String name, 
                                         @RequestParam(name="email", required = true) String email, 
                                         @RequestParam(name="password", required = true) String password, 

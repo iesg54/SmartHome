@@ -52,6 +52,7 @@ function EditarPerfil() {
             });
     }, []);
 
+    const [responseMessage, setResponseMessage] = useState("");
     const formik = useFormik({
         initialValues: {
             nome: userData.nome,
@@ -71,10 +72,19 @@ function EditarPerfil() {
                 })
                 .then((response) => {
                     console.log(response);
+                    setUserData({
+                        ...userData,
+                        nome: values.nome,
+                        email: values.email,
+                        password: values.password,
+                        profileImage: image,
+                    });
+                    setResponseMessage("Dados atualizados com sucesso!");
                     resetForm();
                 })
                 .catch((error) => {
                     console.log(error);
+                    setResponseMessage("Erro ao atualizar os dados!");
                 });
         },
         cleanForm: true,
@@ -257,6 +267,15 @@ function EditarPerfil() {
                                 </Grid>
                             </form>
                         </Grid>
+                        {responseMessage && (
+                            <Grid container justifyContent="center">
+                                <Grid item mb={2}>
+                                    <MDTypography variant="body2" color="info">
+                                        {responseMessage}
+                                    </MDTypography>
+                                </Grid>
+                            </Grid>
+                        )}
                     </Card>
                 </MDBox>
             </Grid>
