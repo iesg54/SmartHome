@@ -3,7 +3,6 @@ package pt.ua.deti.ies.smarthome.smarthome_api.model.dispositivos;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Divisao;
-import pt.ua.deti.ies.smarthome.smarthome_api.model.TipoDivisao;
 
 @Entity
 @Table(name = "Dispositivo")

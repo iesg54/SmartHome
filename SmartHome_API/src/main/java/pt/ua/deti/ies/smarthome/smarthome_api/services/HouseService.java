@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.InvalidTypeException;
-import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.ResourceAlreadyExistsException;
 import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.ResourceNotFoundException;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.*;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.dispositivos.Dispositivo;
@@ -57,16 +56,9 @@ public class HouseService {
         return casa.getDivisoesCasa();
     }
 
-    public void addDivisao(Integer id_casa, Integer id_div, String tipo, String name) throws ResourceNotFoundException, ResourceAlreadyExistsException {
+    public void addDivisao(Integer id_casa, String tipo, String name) throws ResourceNotFoundException {
         Casa house = houseRepository.findById(id_casa).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + id_casa));
         Divisao newDiv;
-
-        // Verificar se já existe uma Divisão com este ID
-        for (Divisao div : house.getDivisoesCasa()){
-            if (div.getId() == id_div){
-                throw new ResourceAlreadyExistsException("Já existe uma divisão com o ID " + id_div + " associada à Casa!");
-            }
-        }
 
         // Adicionar a nova Divisão
         if(tipo.equals(TipoDivisao.COZINHA.toString())){
