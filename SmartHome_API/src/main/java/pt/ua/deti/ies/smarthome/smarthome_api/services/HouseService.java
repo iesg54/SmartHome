@@ -217,9 +217,10 @@ public class HouseService {
             casa.setUtilizadoresCasa(users);
             user.setCasa(casa);
             userRepository.save(user);
+            houseRepository.save(casa);
+            return new SuccessfulRequest("Added user sucessfully");
         }
-        houseRepository.save(casa);
-        return new SuccessfulRequest("Added user sucessfully");
+        return new SuccessfulRequest("User not found");
     }
 
 

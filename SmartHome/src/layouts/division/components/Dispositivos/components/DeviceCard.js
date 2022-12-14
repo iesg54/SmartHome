@@ -6,12 +6,23 @@ import Card from "@mui/material/Card";
 import Divider from "@mui/material/Divider";
 import Icon from "@mui/material/Icon";
 import Switch from "@mui/material/Switch";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
+import MDButton from "components/MDButton";
 
-function DeviceCard({ color, name, state, icon, consumption, deviceStateHandler }) {
+function DeviceCard({
+    color,
+    name,
+    state,
+    icon,
+    consumption,
+    deviceStateHandler,
+    deviceActionHandler,
+}) {
     return (
         <Card>
             <MDBox display="flex" justifyContent="space-between" pt={1} px={2}>
@@ -40,17 +51,15 @@ function DeviceCard({ color, name, state, icon, consumption, deviceStateHandler 
                 </MDBox>
             </MDBox>
             <Divider />
-            <MDBox pb={2} px={2}>
-                {state ? (
-                    <MDTypography variant="h6" color="success">
-                        Ligado
-                    </MDTypography>
-                ) : (
-                    <MDTypography variant="h6" color="error">
-                        Desligado
-                    </MDTypography>
-                )}
-                <Switch onChange={deviceStateHandler} checked={state} />
+            <MDBox display="flex" justifyContent="space-between" px={2} pb={2}>
+                <MDBox display="flex" alignItems="center">
+                    <FormGroup>
+                        <FormControlLabel control={<Switch onChange={deviceStateHandler} checked={state} />} label={state ? "Ligado" : "Desligado"} />
+                    </FormGroup>
+                    <MDButton variant="gradient" color={color} onClick={deviceActionHandler} circular>
+                        <Icon fontSize="small">settings</Icon>
+                    </MDButton>
+                </MDBox>
             </MDBox>
         </Card>
     );
@@ -79,6 +88,7 @@ DeviceCard.propTypes = {
     state: PropTypes.bool.isRequired,
     deviceStateHandler: PropTypes.func.isRequired,
     consumption: PropTypes.number,
+    deviceActionHandler: PropTypes.func.isRequired,
 };
 
 export default DeviceCard;

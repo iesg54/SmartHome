@@ -89,9 +89,9 @@ public class DivisionController {
     @PutMapping("/{idDiv}/AC/{idDisp}")
     public SuccessfulRequest updateAC(@PathVariable(value="idDiv") int idDiv,
                                       @PathVariable(value="idDisp") int idDisp,
-                                      @RequestParam(value="temp-atual", required = false) Double tempAtual,
-                                      @RequestParam(value="temp-min", required = false) Double tempMin,
-                                      @RequestParam(value="temp-max", required = false) Double tempMax)
+                                      @RequestParam(value="temp_atual", required = false) Double tempAtual,
+                                      @RequestParam(value="temp_min", required = false) Double tempMin,
+                                      @RequestParam(value="temp_max", required = false) Double tempMax)
                                         throws ResourceNotFoundException{
         return divisionService.updateAC(idDiv, idDisp, tempAtual, tempMin, tempMax);
     }

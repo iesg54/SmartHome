@@ -29,6 +29,5 @@ public class Utilizador {
     private boolean isAdmin;
     @ManyToOne
     @JoinColumn(name ="id_casa")
-    @JsonIgnore
     private Casa casa;
 }
