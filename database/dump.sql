@@ -228,7 +228,7 @@ CREATE TABLE `dispositivo` (
   PRIMARY KEY (`id`),
   KEY `FKc5tesiy4nfpu29qhttx7u5l9a` (`id_divisao`),
   CONSTRAINT `FKc5tesiy4nfpu29qhttx7u5l9a` FOREIGN KEY (`id_divisao`) REFERENCES `divisao` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -256,7 +256,7 @@ CREATE TABLE `divisao` (
   PRIMARY KEY (`id`),
   KEY `FKj4awjxssbhlvnmx22qomxsquu` (`id_casa`),
   CONSTRAINT `FKj4awjxssbhlvnmx22qomxsquu` FOREIGN KEY (`id_casa`) REFERENCES `casa` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -268,6 +268,24 @@ LOCK TABLES `divisao` WRITE;
 INSERT INTO `divisao` VALUES (1,'sala',1,'SALA'),(2,'cozinha',1,'COZINHA'),(3,'exterior',1,'EXTERIOR'),(4,'quarto1',1,'QUARTO');
 /*!40000 ALTER TABLE `divisao` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50003 TRIGGER `sensor_trigger` AFTER INSERT ON `divisao` FOR EACH ROW begin
+    insert into sensors(generator_type, division_id) values (1, NEW.id);
+    insert into sensors(generator_type, division_id) values (2, NEW.id);
+end */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `lampada`
@@ -451,12 +469,12 @@ DROP TABLE IF EXISTS `sensors`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sensors` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `tipo` varchar(255) NOT NULL,
-  `id_div` int NOT NULL,
+  `generator_type` int NOT NULL,
+  `division_id` int NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `FK36ygvj9c1dlfq9t7r8lcw1ke4` (`id_div`),
-  CONSTRAINT `FK36ygvj9c1dlfq9t7r8lcw1ke4` FOREIGN KEY (`id_div`) REFERENCES `divisao` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `FK36ygvj9c1dlfq9t7r8lcw1ke4` (`division_id`),
+  CONSTRAINT `FK36ygvj9c1dlfq9t7r8lcw1ke4` FOREIGN KEY (`division_id`) REFERENCES `divisao` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -465,7 +483,6 @@ CREATE TABLE `sensors` (
 
 LOCK TABLES `sensors` WRITE;
 /*!40000 ALTER TABLE `sensors` DISABLE KEYS */;
-INSERT INTO `sensors` VALUES (1,'temperatura',1),(2,'humidade',2),(3,'ar',3),(4,'temperatura',1),(5,'humidade',2),(6,'ar',3),(7,'temperatura',1),(8,'humidade',2),(9,'ar',3),(10,'temperatura',1),(11,'humidade',2),(12,'ar',3);
 /*!40000 ALTER TABLE `sensors` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -513,7 +530,7 @@ CREATE TABLE `utilizador` (
   UNIQUE KEY `UK_eougu510uft70icifeafv6cll` (`email`),
   KEY `FKs869r2e0pk8ym2ceos208xepd` (`id_casa`),
   CONSTRAINT `FKs869r2e0pk8ym2ceos208xepd` FOREIGN KEY (`id_casa`) REFERENCES `casa` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -535,4 +552,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-12-12 18:49:48
+-- Dump completed on 2022-12-14 17:36:11

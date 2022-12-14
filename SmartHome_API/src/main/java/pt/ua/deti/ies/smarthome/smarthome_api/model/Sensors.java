@@ -1,5 +1,6 @@
 package pt.ua.deti.ies.smarthome.smarthome_api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,8 +17,9 @@ public class Sensors {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
     @Column(nullable = false)
-    private String tipo;
+    private Integer generator_type;                   // 1 - Temp_hum 2 - Air
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="id_div", nullable = false)
+    @JoinColumn(name ="division_id", nullable = false)
+    @JsonIgnore
     private Divisao div;
 }
