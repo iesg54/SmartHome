@@ -6,6 +6,7 @@ import java.sql.Date;
 import java.sql.Time;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pt.ua.deti.ies.smarthome.smarthome_api.Authentication.AuthenticationHandler;
 import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.InvalidTypeException;
 import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.ResourceNotFoundException;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Alerta;
@@ -23,6 +24,8 @@ import java.util.Map;
 public class DivisionController {
     @Autowired
     private DivisionService divisionService;
+    @Autowired
+    private AuthenticationHandler authenticationHandler;
 
     // Division Page API Methods
     // SENSORS SECTION
