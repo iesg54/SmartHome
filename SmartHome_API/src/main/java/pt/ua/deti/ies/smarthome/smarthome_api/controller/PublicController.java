@@ -34,8 +34,6 @@ public class PublicController {
     @Autowired
     private UserService userService;
     @Autowired
-    private SmartHomeAuthenticationProvider authenticationManager;
-    @Autowired
     private AuthenticationHandler authenticationHandler;
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
@@ -43,6 +41,8 @@ public class PublicController {
     private JwtUserDetailsService userDetailsService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     // construtor
     /*
@@ -58,7 +58,8 @@ public class PublicController {
     }
 
     @PostMapping("/login")
-    public JwtResponse createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws InvalidCredentialsException {
+    public JwtResponse createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws
+            Exception {
         String email = authenticationRequest.getEmail();
         String password = authenticationRequest.getPassword();
         String token;
@@ -71,18 +72,16 @@ public class PublicController {
         userDetails = userDetailsService.loadUserByUsername(email);
 
         if(!passwordEncoder.matches(password, userDetails.getPassword())){
-            log.info(password);
-            log.info(userDetails.getPassword());
-            log.info(passwordEncoder.encode(password));
-            throw new InvalidCredentialsException("Credenciais de login inválidas");
+            throw new BadCredentialsException("Credenciais de login inválidas");
         }
 
-        Authentication authenticate = authenticationManager
-                .authenticate(
-                        new UsernamePasswordAuthenticationToken(
-                                email, password
-                        )
-                );
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+        } catch (DisabledException e) {
+            throw new Exception("USER_DISABLED", e);
+        } catch (BadCredentialsException e) {
+            throw new Exception("INVALID_CREDENTIALS", e);
+        }
 
         log.info(authenticationHandler.getUserName());
 
