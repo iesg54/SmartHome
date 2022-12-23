@@ -16,26 +16,12 @@ public class JwtUserDetailsService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Utilizador user = userRepository.findByEmail(email);
         if (user == null) {
             throw new UsernameNotFoundException("Não foi encontrado um Utilizador com o email: " + email);
         }
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
-                new ArrayList<>());
-    }
-
-    public void registerUser(Utilizador user) throws InvalidUserException {
-        try {
-            UserDetails userDetails = loadUserByUsername(user.getEmail());
-            if (userDetails != null)
-                throw new InvalidUserException("O email já foi registado.");
-        } catch (UsernameNotFoundException e) {
-            if (!user.utilizadorValido())
-                throw new InvalidUserException("Utilizador inválido");
-            userRepository.save(user);
-        }
+        return user;
     }
 }
