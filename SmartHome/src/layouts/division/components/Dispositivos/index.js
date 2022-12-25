@@ -130,6 +130,27 @@ function DivisionDevices({ divisionID, divisionName }) {
         });
     };
 
+    const handleDeleteDevice = (id) => {
+        axios
+            .delete(`http://localhost:8080/smarthome/private/division/${divisionID}/devices`, {
+                params: {
+                    id,
+                },
+            })
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        setDevicesState((prev) => {
+            const newDevicesState = [...prev];
+            const index = newDevicesState.findIndex((device) => device.id === id);
+            newDevicesState.splice(index, 1);
+            return newDevicesState;
+        });
+    };
+
     return (
         <>
             <Grid container justifyContent="center" mt={4}>
@@ -164,11 +185,11 @@ function DivisionDevices({ divisionID, divisionName }) {
                             </MDTypography>
                         </MDBox>
                         <MDBox pt={3}>
-                            <MDBox bgColor="light" borderRadius="xl" px={0.5} py={0.5} mb={2}>
+                            <MDBox bgColor="light" borderRadius="xl" px={0.5} py={0.5} mb={1}>
                                 <ComplexStatisticsCard
                                     title="Previsão de Consumo na próxima hora"
                                     count={devicesState
-                                        .filter((device) => device.state)
+                                        .filter((device) => device.estado)
                                         .map((device) => device.consumption)
                                         .reduce((a, b) => a + b, 0)}
                                     icon="bolt"
@@ -178,7 +199,7 @@ function DivisionDevices({ divisionID, divisionName }) {
                             <MDBox bgColor="light" borderRadius="xl" px={0.5} py={0.5} mb={2}>
                                 <ComplexStatisticsCard
                                     title="Dispositivos Ligados"
-                                    count={devicesState.filter((device) => device.state).length}
+                                    count={devicesState.filter((device) => device.estado).length}
                                     icon="power"
                                     color="dark"
                                 />
@@ -212,6 +233,7 @@ function DivisionDevices({ divisionID, divisionName }) {
                             consumption={device.consumption}
                             deviceStateHandler={() => handleDeviceState(device.id)}
                             deviceActionHandler={() => handleDeviceDialog(device.id)}
+                            deviceDeleteHandler={() => handleDeleteDevice(device.id)}
                         />
                     </Grid>
                 ))}
@@ -226,9 +248,7 @@ function DivisionDevices({ divisionID, divisionName }) {
                 tempAtual={deviceOpen.tempAtual ? deviceOpen.tempAtual : null}
                 tempMax={deviceOpen.tempMax ? deviceOpen.tempMax : null}
                 tempMin={deviceOpen.tempMin ? deviceOpen.tempMin : null}
-                luminosidade={
-                    deviceOpen.luminosidade ? deviceOpen.luminosidade : null
-                }
+                luminosidade={deviceOpen.luminosidade ? deviceOpen.luminosidade : null}
                 closeAction={() => handleDeviceDialog(deviceOpen.id)}
             />
         </>

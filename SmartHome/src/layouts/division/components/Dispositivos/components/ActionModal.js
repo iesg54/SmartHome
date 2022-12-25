@@ -44,7 +44,6 @@ function ActionModal({
     open,
     tipoDisp,
 }) {
-
     const formik = useFormik({
         initialValues: {
             startTime: startTime,
@@ -75,12 +74,10 @@ function ActionModal({
                         .then((res) => {
                             console.log(res);
                             closeAction();
-                        }
-                        )
+                        })
                         .catch((err) => {
                             console.log(err);
-                        }
-                        );
+                        });
                     break;
                 case "AC":
                     axios
@@ -98,12 +95,10 @@ function ActionModal({
                         .then((res) => {
                             console.log(res);
                             closeAction();
-                        }
-                        )
+                        })
                         .catch((err) => {
                             console.log(err);
-                        }
-                        );
+                        });
                     break;
                 case "REGADOR":
                     axios
@@ -120,12 +115,10 @@ function ActionModal({
                         .then((res) => {
                             console.log(res);
                             closeAction();
-                        }
-                        )
+                        })
                         .catch((err) => {
                             console.log(err);
-                        }
-                        );
+                        });
                     break;
                 default:
                     break;
@@ -153,38 +146,42 @@ function ActionModal({
 
     return (
         <Dialog open={open} onClose={closeAction} aria-labelledby="form-dialog-title">
-            <DialogTitle id="form-dialog-title">Ações do Disositivo</DialogTitle>
+            <DialogTitle id="form-dialog-title">Ações do Dispositivo</DialogTitle>
             <form onSubmit={formik.handleSubmit}>
                 <DialogContent>
-                    <DialogContentText>Efetue as ações desejadas para o dispositivo.</DialogContentText>
+                    <DialogContentText>
+                        Efetue as ações desejadas para o dispositivo.
+                    </DialogContentText>
                     {(tipoDisp === "LAMPADA" || tipoDisp === "REGADOR") && (
-                        <MDBox display="flex" flexDirection="column" alignItems="center">
+                        <MDBox display="flex" flexDirection="column" alignItems="center" m={3}>
                             <MDTypography variant="h6" color="primary">
                                 Horário de Ativação
+                            </MDTypography>
+                            <MDBox display="flex" flexDirection="row" alignItems="center">
+                                <MDInput
+                                    id="startTime"
+                                    name="startTime"
+                                    type="time"
+                                    value={formik.values.startTime}
+                                    onChange={formik.handleChange}
+                                    error={
+                                        formik.touched.startTime && Boolean(formik.errors.startTime)
+                                    }
+                                    helperText={formik.touched.startTime && formik.errors.startTime}
+                                />
+                                <MDTypography variant="h6" color="dark" m={2}>
+                                    até
                                 </MDTypography>
-                                <MDBox display="flex" flexDirection="row" alignItems="center">
-                                    <MDInput
-                                        id="startTime"
-                                        name="startTime"
-                                        type="time"
-                                        value={formik.values.startTime}
-                                        onChange={formik.handleChange}
-                                        error={formik.touched.startTime && Boolean(formik.errors.startTime)}
-                                        helperText={formik.touched.startTime && formik.errors.startTime}
-                                    />
-                                    <MDTypography variant="h6" color="dark" m={2}>
-                                        até
-                                    </MDTypography>
-                                    <MDInput
-                                        id="endTime"
-                                        name="endTime"
-                                        type="time"
-                                        value={formik.values.endTime}
-                                        onChange={formik.handleChange}
-                                        error={formik.touched.endTime && Boolean(formik.errors.endTime)}
-                                        helperText={formik.touched.endTime && formik.errors.endTime}
-                                    />
-                                </MDBox>
+                                <MDInput
+                                    id="endTime"
+                                    name="endTime"
+                                    type="time"
+                                    value={formik.values.endTime}
+                                    onChange={formik.handleChange}
+                                    error={formik.touched.endTime && Boolean(formik.errors.endTime)}
+                                    helperText={formik.touched.endTime && formik.errors.endTime}
+                                />
+                            </MDBox>
                         </MDBox>
                     )}
                     {tipoDisp === "AC" && (
@@ -256,7 +253,7 @@ function ActionModal({
                     <MDButton onClick={closeAction} color="primary">
                         Cancelar
                     </MDButton>
-                    <MDButton type="submit" color="primary">
+                    <MDButton type="submit" color="success">
                         Salvar
                     </MDButton>
                 </DialogActions>

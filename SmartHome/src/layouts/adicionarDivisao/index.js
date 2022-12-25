@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -30,12 +30,23 @@ import axios from "axios";
 
 const validationSchema = yup.object({});
 
-function AdicionarDivisao() {
+function AdicionarDivisao({ casaID }) {
+    console.log(casaID)
     const [responseMessage, setResponseMessage] = useState();
     const formik = useFormik({
         initialValues: {},
         validationSchema: validationSchema,
-        onSubmit: (values, { cleanForm }) => {},
+        onSubmit: (values, { cleanForm }) => {
+            axios
+                .post(`http://localhost:8080/smarthome/private/house/${casaID}/divisions`,
+                null,
+                {
+                    params: {
+                        tipo: values.tipo,
+                        nome: values.nome,
+                }
+            })
+        },
         cleanForm: true,
     });
 
@@ -56,7 +67,7 @@ function AdicionarDivisao() {
                             textAlign="center"
                         >
                             <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-                                Adicionar Equipamento
+                                Adicionar Divisão
                             </MDTypography>
                         </MDBox>
                         <MDBox pt={4} pb={3} px={3}>
@@ -64,7 +75,7 @@ function AdicionarDivisao() {
                                 <Grid item mb={2}>
                                     <FormControl component="fieldset">
                                         <FormLabel component="legend">
-                                            <MDTypography>Tipo de Equipamento</MDTypography>
+                                            <MDTypography>Tipo de Divisão</MDTypography>
                                         </FormLabel>
                                         <RadioGroup
                                             aria-label="tipo"
@@ -73,24 +84,24 @@ function AdicionarDivisao() {
                                             onChange={formik.handleChange}
                                         >
                                             <FormControlLabel
-                                                value="LAMPADA"
+                                                value="SALA"
                                                 control={<Radio />}
-                                                label="Lâmpada"
+                                                label="Sala"
                                             />
                                             <FormControlLabel
-                                                value="AC"
+                                                value="COZINHA"
                                                 control={<Radio />}
-                                                label="Ar Condicionado"
+                                                label="Cozinha"
                                             />
                                             <FormControlLabel
-                                                value="REGADOR"
+                                                value="QUARTO"
                                                 control={<Radio />}
-                                                label="Regador"
+                                                label="Quarto"
                                             />
                                             <FormControlLabel
-                                                value="TOMADA"
+                                                value="EXTERIOR"
                                                 control={<Radio />}
-                                                label="Outro"
+                                                label="Exterior"
                                             />
                                         </RadioGroup>
                                         <FormHelperText>
@@ -107,21 +118,7 @@ function AdicionarDivisao() {
                                         error={formik.touched.nome && Boolean(formik.errors.nome)}
                                         helperText={formik.touched.nome && formik.errors.nome}
                                         fullWidth
-                                        label="Nome do Equipamento"
-                                    />
-                                </Grid>
-                                <Grid item mb={3}>
-                                    <MDInput
-                                        id="consumo"
-                                        name="consumo"
-                                        value={formik.values.consumo}
-                                        onChange={formik.handleChange}
-                                        error={
-                                            formik.touched.consumo && Boolean(formik.errors.consumo)
-                                        }
-                                        helperText={formik.touched.consumo && formik.errors.consumo}
-                                        fullWidth
-                                        label="Consumo Energético"
+                                        label="Nome da Divisão"
                                     />
                                 </Grid>
                                 <Grid container spacing={2} justifyContent="center">
@@ -158,4 +155,4 @@ function AdicionarDivisao() {
     );
 }
 
-export default AdicionarEquipamento;
+export default AdicionarDivisao;

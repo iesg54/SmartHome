@@ -39,6 +39,11 @@ function Users() {
     const [showForm, toggleForm] = useState(false);
     const [responseMessage, setResponseMessage] = useState("");
 
+    const handleClick = (e) => {
+        e.preventDefault();
+        toggleForm((prevValue) => !prevValue);
+    };
+
     const formik = useFormik({
         initialValues: {
             email: "",
@@ -62,27 +67,43 @@ function Users() {
                 });
 
             resetForm();
+            users.push(values);
         },
         cleanForm: true,
     });
 
-    const handleClick = (e) => {
-        e.preventDefault();
-        toggleForm((prevValue) => !prevValue);
+    const CasaID = localStorage.getItem("CasaID");
+
+    // Implement Method to delete user http://localhost:8080/smarthome/private/house/{houseID}/users
+    const handleDelete = (id) => {
+        let user = users.find((user) => user.id === id);
+        axios
+            .delete(`http://localhost:8080/smarthome/private/house/${CasaID}/users`, {
+                params: {
+                    email: user.email,
+                },
+            })
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        users.splice(users.indexOf(user), 1);
     };
 
     // Get Users Data from the API and update the state http://localhost:8080/smarthome/private/house/{houseID}/users
     const [users, setUsers] = useState([]);
     useEffect(() => {
         axios
-            .get("http://localhost:8080/smarthome/private/house/1/users")
+            .get(`http://localhost:8080/smarthome/private/house/${CasaID}/users`)
             .then((response) => {
                 setUsers(response.data);
             })
             .catch((error) => {
                 console.log(error);
             });
-    }, []);
+    }, [users]);
 
     return (
         <DashboardLayout>
@@ -97,7 +118,9 @@ function Users() {
                             <UserCard
                                 nome={user.nome}
                                 isAdmin={user.admin}
-                                foto={user.profileImage}
+                                foto={user.profileImage ? user.profileImage : ""}
+                                id={user.id}
+                                handleDelete={(e) => handleDelete(user.id)}
                             />
                         </MDBox>
                     </Grid>
@@ -183,7 +206,7 @@ function Users() {
                                 </MDBox>
                                 {responseMessage && (
                                     <MDBox p={3}>
-                                        <MDTypography variant="h5" color="primary">
+                                        <MDTypography variant="subtitle1" color="primary">
                                             {responseMessage}
                                         </MDTypography>
                                     </MDBox>

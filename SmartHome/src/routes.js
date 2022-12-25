@@ -37,9 +37,7 @@ Coded by www.creative-tim.com
 
 // Material Dashboard 2 React layouts
 import Dashboard from "layouts/dashboard";
-import Division from "layouts/division";
 import Users from "layouts/users";
-import AdicionarEquipamento from "layouts/equipamento";
 import EditarPerfil from "layouts/editarPerfil";
 
 // @mui icons
@@ -78,34 +76,5 @@ const routes = [
     },
 ];
 
-// get divisions from API and add to routes http://localhost:8080/smarthome/private/house/1/divisions
-const divisionsRoutes = [];
-const addDeviceRoutes = [];
-axios
-    .get(`http://localhost:8080/smarthome/private/house/${casaID}/divisions`)
-    .then((response) => {
-        const divisions = response.data;
-        divisions.forEach((division) => {
-            divisionsRoutes.push({
-                type: "collapse",
-                name: division.nome,
-                key: division.id,
-                icon: <Icon fontSize="small">devices</Icon>,
-                route: `/division/${division.nome}`,
-                component: <Division divisionID={division.id} divisionName={division.nome} />,
-            });
-            addDeviceRoutes.push({
-                type: "collapse",
-                name: division.nome,
-                key: division.id,
-                icon: <Icon fontSize="small">devices</Icon>,
-                route: `/adicionarEquipamento/${division.nome}`,
-                component: <AdicionarEquipamento divisionID={division.id} />,
-            });
-        });
-    })
-    .catch((error) => {
-        console.log(error);
-    });
 
-export { routes, divisionsRoutes, addDeviceRoutes };
+export { routes };
