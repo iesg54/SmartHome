@@ -2,8 +2,6 @@ package pt.ua.deti.ies.smarthome.smarthome_api.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -11,17 +9,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import pt.ua.deti.ies.smarthome.smarthome_api.Authentication.AuthenticationHandler;
 import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.InvalidCredentialsException;
-import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.ResourceNotFoundException;
 import pt.ua.deti.ies.smarthome.smarthome_api.jwt_handler.JwtRequest;
 import pt.ua.deti.ies.smarthome.smarthome_api.jwt_handler.JwtResponse;
 import pt.ua.deti.ies.smarthome.smarthome_api.jwt_handler.JwtTokenUtil;
 import pt.ua.deti.ies.smarthome.smarthome_api.jwt_handler.JwtUserDetailsService;
-import pt.ua.deti.ies.smarthome.smarthome_api.model.Utilizador;
 import pt.ua.deti.ies.smarthome.smarthome_api.services.UserService;
 import pt.ua.deti.ies.smarthome.smarthome_api.utils.SuccessfulRequest;
 
@@ -58,7 +53,7 @@ public class PublicController {
         return userService.getUser(email, password);
     }
     */
-    
+
     @PostMapping("/login")
     public JwtResponse createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws
             Exception {
