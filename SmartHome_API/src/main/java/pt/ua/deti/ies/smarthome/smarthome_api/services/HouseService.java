@@ -210,9 +210,10 @@ public class HouseService {
             user.setCasa(casa);
             userRepository.save(user);
             houseRepository.save(casa);
-            return new SuccessfulRequest("Added user sucessfully");
+            return new SuccessfulRequest("Utilizador adicionado com sucesso!");
+        } else {
+            throw new ResourceNotFoundException("Não foi encontrado um Utilizador com o email: " + email);
         }
-        return new SuccessfulRequest("User not found");
     }
 
     public void removeUser(int idCasa, String email) throws ResourceNotFoundException{
