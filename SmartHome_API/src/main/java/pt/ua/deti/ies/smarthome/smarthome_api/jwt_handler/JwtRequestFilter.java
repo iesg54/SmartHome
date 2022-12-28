@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +19,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
@@ -37,10 +39,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String jwtToken = null;
         // JWT Token is in the form "Bearer token". Remove Bearer word and get
         // only the Token
-        if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer")) {
+        if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
             jwtToken = requestTokenHeader.substring(7);
+            log.info(jwtToken);
+
             try {
                 email = jwtTokenUtil.getUsernameFromToken(jwtToken);
+                log.info(email);
             } catch (IllegalArgumentException e) {
                 System.out.println("Unable to get JWT Token");
             } catch (ExpiredJwtException e) {
@@ -68,7 +73,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 // Spring Security Configurations successfully.
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
+
+            log.info(SecurityContextHolder.getContext().getAuthentication().toString());
+            log.info(String.valueOf(SecurityContextHolder.getContext().getAuthentication().isAuthenticated()));
         }
+
+
         chain.doFilter(request, response);
     }
 }

@@ -17,10 +17,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import pt.ua.deti.ies.smarthome.smarthome_api.jwt_handler.JwtAuthenticationEntryPoint;
 import pt.ua.deti.ies.smarthome.smarthome_api.jwt_handler.JwtRequestFilter;
+
+import java.util.List;
 
 
 @Configuration
@@ -43,15 +48,34 @@ public class SecurityConfig {
 
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.cors().and().csrf().disable().authorizeRequests()
-                .requestMatchers("/smarthome/public/*").permitAll()
+        httpSecurity.cors().and().csrf().disable()
+                .authorizeHttpRequests().requestMatchers("/smarthome/public/*").permitAll()
                 .anyRequest().authenticated().and()
+                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authenticationProvider(authenticationProvider)
-                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint);
+                .authenticationProvider(authenticationProvider);
 
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
+        httpSecurity.csrf().disable();
+
         return httpSecurity.build();
     }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource(){
+        final CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:8080"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        // setAllowCredentials(true) is important, otherwise:
+        // The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*' when the request's credentials mode is 'include'.
+        configuration.setAllowCredentials(true);
+        // setAllowedHeaders is important! Without it, OPTIONS preflight request
+        // will fail with 403 Invalid CORS request
+        configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
 }
