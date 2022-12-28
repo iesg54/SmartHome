@@ -1,6 +1,5 @@
 import random
 from datetime import date, timedelta
-import numpy as np
 import sys
 
 
@@ -9,24 +8,22 @@ def all_energy_by_day(id_div, days=60):
 
     if id_div == 1:
         tabela = "consumo_sala"
-        file = "energy_sala.sql"
         min = 600
         max = 3000
     elif id_div == 2:
         tabela = "consumo_cozinha"
-        file = "energy_cozinha.sql"
         min = 600
         max = 3000
     elif id_div == 3:
         tabela = "consumo_externo"
-        file = "energy_externo.sql"
         min = 200
         max = 1500
     else:
         tabela = "consumo_quarto"
-        file = "energy_quarto.sql"
         min = 200
         max = 1500
+
+    file = "historical_data.sql"
 
     with open(file, "a") as f:
         sys.stdout = f
@@ -46,8 +43,9 @@ def all_energy_by_day(id_div, days=60):
 
 
 def main():
-    id_div = 1
-    all_energy_by_day(id_div)
+    for i in range(1, 5):
+        id_div = i
+        all_energy_by_day(id_div)
 
 
 if __name__ == '__main__':

@@ -130,19 +130,19 @@ public class HouseService {
     }
 
     public Map<Integer, Map<Date, Double>> consumoLastWeek(Integer id_casa) throws ResourceNotFoundException, InvalidTypeException{
-        // TODO: Alterar para trabalhar com qualquer dia de query?
         Casa house = houseRepository.findById(id_casa).orElseThrow(() ->
                 new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + id_casa));
 
+        // TODO: Date firstDay = new Date(System.currentTimeMillis());
         return getConsumoAllDivs(Date.valueOf("2022-11-30"), 7, house);
         
     }
 
     public Map<Integer, Map<Date, Double>> consumoLastMonth(Integer id_casa) throws ResourceNotFoundException, InvalidTypeException{
-        // TODO: Alterar para trabalhar com qualquer dia de query?
         Casa house = houseRepository.findById(id_casa).orElseThrow(() ->
                 new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + id_casa));
 
+        // TODO: Date firstDay = new Date(System.currentTimeMillis());
         return getConsumoAllDivs(Date.valueOf("2022-11-06"), 30, house);
     }
     
