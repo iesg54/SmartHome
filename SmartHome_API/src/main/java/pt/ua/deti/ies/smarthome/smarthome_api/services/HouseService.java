@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.*;
 
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,6 +37,14 @@ public class HouseService {
     private DivisionRepository divisionRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private SensorMeasurementsSalaRepository sensorMeasurementsSalaRepository;
+    @Autowired
+    private SensorMeasurementsCozinhaRepository sensorMeasurementsCozinhaRepository;
+    @Autowired
+    private SensorMeasurementsQuartoRepository sensorMeasurementsQuartoRepository;
+    @Autowired
+    private SensorMeasurementsExternoRepository sensorMeasurementsExternoRepository;
 
     public ResponseEntity<List<Sensors>> getSensors(Integer id_casa) throws ResourceNotFoundException{
         ArrayList<Sensors> sensores = new ArrayList<>();
@@ -56,8 +65,8 @@ public class HouseService {
         return casa.getDivisoesCasa();
     }
 
-    public void addDivisao(Integer id_casa, String tipo, String name) throws ResourceNotFoundException {
-        Casa house = houseRepository.findById(id_casa).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + id_casa));
+    public void addDivisao(Integer idCasa, String tipo, String name) throws ResourceNotFoundException {
+        Casa house = houseRepository.findById(idCasa).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + idCasa));
         Divisao newDiv;
 
         // Adicionar a nova Divisão
@@ -72,6 +81,30 @@ public class HouseService {
         }
 
         divisionRepository.save(newDiv);
+    }
+
+    @Transactional
+    public void removeDivisao(Integer idCasa, Integer idDiv) throws ResourceNotFoundException {
+        Casa house = houseRepository.findById(idCasa).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + idCasa));
+        Divisao div = divisionRepository.findById(idDiv).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada uma Divisão com o ID: " + idDiv));
+
+        // Apagar as instâncias de medições de Sensores ou de Consumo Energético associados com a Divisão
+        if(div.getTipo().equals(TipoDivisao.EXTERIOR)){
+            consumoExternoRepository.deleteAllByDiv(div);
+            consumoExternoRepository.deleteAllByDiv(div);
+        }else if(div.getTipo().equals(TipoDivisao.SALA)){
+            sensorMeasurementsSalaRepository.deleteAllByDiv(div);
+            consumoSalaRepository.deleteAllByDiv(div);
+        }else if(div.getTipo().equals(TipoDivisao.COZINHA)){
+            sensorMeasurementsCozinhaRepository.deleteAllByDiv(div);
+            consumoCozinhaRepository.deleteAllByDiv(div);
+        }else if(div.getTipo().equals(TipoDivisao.QUARTO)){
+            sensorMeasurementsQuartoRepository.deleteAllByDiv(div);
+            consumoQuartoRepository.deleteAllByDiv(div);
+        }
+
+        // Apagar a Divisão
+        divisionRepository.delete(div);
     }
 
     public Map<Integer, Double> getLatestConsumo(Integer id_casa) throws ResourceNotFoundException, InvalidTypeException{

@@ -13,4 +13,7 @@ public interface SensorMeasurementsSalaRepository extends JpaRepository<SensorMe
     SensorMeasurementsSala findTopByTipoAndDivOrderByIdDesc(String tipo, Divisao div);
     Boolean existsByTipoAndDiv(String tipo, Divisao div);
     List<SensorMeasurementsSala> findAllByTipoAndDivAndDiaEquals(String tipo, Divisao div, Date dia);
+    List<SensorMeasurementsSala> findAllByDiv(Divisao div);
+    void deleteAllByDiv(Divisao div);
+
 }
