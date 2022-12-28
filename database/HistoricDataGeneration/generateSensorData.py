@@ -1,7 +1,6 @@
 # This is a sample Python script.
 import random
 from datetime import date, timedelta
-import numpy as np
 import sys
 
 
@@ -43,16 +42,14 @@ def all_temperatures_humidities_by_minute(base_temperature, temperatures, id_div
 
     if id_div == 1:
         tabela = "sensor_measurements_sala"
-        file = "sala.sql"
     elif id_div == 2:
         tabela = "sensor_measurements_cozinha"
-        file = "cozinha.sql"
     elif id_div == 3:
         tabela = "sensor_measurements_externo"
-        file = "externo.sql"
     else:
         tabela = "sensor_measurements_quarto"
-        file = "quarto.sql"
+
+    file = "historical_data.sql"
 
     with open(file, "a") as f:
         sys.stdout = f
@@ -72,7 +69,8 @@ def all_temperatures_humidities_by_minute(base_temperature, temperatures, id_div
                 h= hour,
                 if hour < 10:
                     h = f'0{hour}'
-
+                else:
+                    h = f'{hour}'
 
                 timestamp = f'{today} {h}:00:00'  # 'YYYY-MM-DD hh:mm:ss'
 
@@ -85,10 +83,11 @@ def all_temperatures_humidities_by_minute(base_temperature, temperatures, id_div
 
 
 def main():
-    id_div = 4
     base_temperature = random.randint(10, 20)  # random every day
     temps_by_hour = all_temperatures_by_hour(base_temperature)
-    all_temperatures_humidities_by_minute(base_temperature, temps_by_hour, id_div)
+    for i in range(1,5):
+        id_div = i
+        all_temperatures_humidities_by_minute(base_temperature, temps_by_hour, id_div)
 
 
 if __name__ == '__main__':

@@ -14,4 +14,5 @@ public interface ConsumoExternoRepository extends JpaRepository<ConsumoExterno, 
 
     List<ConsumoExterno> findByDivAndDiaGreaterThanEqualAndDiaLessThan(Divisao div, Date date1, Date date2);
     List<ConsumoExterno> findAllByDiaEquals(Date dia);
+    void deleteAllByDiv(Divisao div);
 }

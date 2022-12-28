@@ -2,27 +2,21 @@ package pt.ua.deti.ies.smarthome.smarthome_api.model.measurements;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Divisao;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ConsumoCozinha extends Consumo{
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "id_div", referencedColumnName = "id")
     @JsonIgnore
     private Divisao div;
 
-    public ConsumoCozinha(Divisao div) {
-        this.div = div;
-    }
-
-    public ConsumoCozinha() {
-    }
-
-    public Divisao getDiv() {
-        return this.div;
-    }
-
-    public void setDiv(Divisao div) {
-        this.div = div;
-    }
 }

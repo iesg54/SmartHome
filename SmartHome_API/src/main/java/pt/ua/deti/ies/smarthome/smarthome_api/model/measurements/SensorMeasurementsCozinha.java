@@ -14,7 +14,7 @@ import pt.ua.deti.ies.smarthome.smarthome_api.model.Divisao;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SensorMeasurementsCozinha extends SensorMeasurements {
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "id_div", referencedColumnName = "id")
     @JsonIgnore
     private Divisao div;
