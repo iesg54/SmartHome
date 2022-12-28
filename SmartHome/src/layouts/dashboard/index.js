@@ -155,13 +155,13 @@ function Dashboard() {
     // check if the user is logged in else redirect to the login page
     const [isLogged, setIsLogged] = useState(false);
     useEffect(() => {
-        localStorage.getItem("userID") ? setIsLogged(true) : setIsLogged(false);
+        if (localStorage.getItem("userID") === null) {
+            setIsLogged(false);
+            window.location.href = "/login";
+        } else {
+            setIsLogged(true);
+        }
     }, []);
-
-    const navigate = useNavigate();
-    if (!isLogged) {
-        navigate("/login");
-    }
 
     return (
         <DashboardLayout>
@@ -193,7 +193,7 @@ function Dashboard() {
                 </Grid>
                 <Grid container spacing={3} justifyContent="center">
                     <Grid item xs={12} sm={6} md={3}>
-                        <MDButton variant="contained" color="primary" fullWidth>
+                        <MDButton variant="contained" color="primary" fullWidth href="/addDivision">
                             Adicionar divisão
                         </MDButton>
                     </Grid>

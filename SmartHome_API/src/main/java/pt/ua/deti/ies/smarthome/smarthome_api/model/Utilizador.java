@@ -35,7 +35,6 @@ public class Utilizador implements UserDetails {
     private boolean isAdmin;
     @ManyToOne
     @JoinColumn(name ="id_casa")
-    @JsonIgnore
     private Casa casa;
 
     public boolean utilizadorValido(){

@@ -1,30 +1,25 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
+// React
+import { useState, useEffect } from "react";
 
 // react-router-dom components
 import { Link } from "react-router-dom";
 
 // @mui material components
+import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
-import Checkbox from "@mui/material/Checkbox";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
+import FormHelperText from "@mui/material/FormHelperText";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
+import MDAlert from "components/MDAlert";
 
 // Authentication layout components
 import CoverLayout from "layouts/authentication/components/CoverLayout";
@@ -32,7 +27,51 @@ import CoverLayout from "layouts/authentication/components/CoverLayout";
 // Images
 import bgImage from "assets/images/bg-sign-up-cover.jpeg";
 
+// other imports
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import axios from "axios";
+
+const validationSchema = Yup.object({
+    name: Yup.string().required("Please add a name!"),
+    email: Yup.string().email("Please add a valid email!").required("Please add an email!"),
+    password: Yup.string().required("Please add a password!"),
+    userType: Yup.string().required("Please select a user type!"),
+});
+
 function Cover() {
+    const [responseMessage, setResponseMessage] = useState();
+    const formik = useFormik({
+        initialValues: {
+            name: "",
+            email: "",
+            password: "",
+            userType: "",
+        },
+        validationSchema: validationSchema,
+        onSubmit: (values) => {
+            console.log(values)
+            axios
+                .post("http://localhost:8080/smarthome/public/register",
+                null,
+                {
+                    params: {
+                        name: values.name,
+                        email: values.email,
+                        password: values.password,
+                        isAdmin: values.userType === "admin" ? true : false,
+                    },
+                }
+                )
+                .then((res) => {
+                    setResponseMessage(res.data.message);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        },
+    });
+
     return (
         <CoverLayout image={bgImage}>
             <Card>
@@ -48,72 +87,92 @@ function Cover() {
                     textAlign="center"
                 >
                     <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-                        Join us today
-                    </MDTypography>
-                    <MDTypography display="block" variant="button" color="white" my={1}>
-                        Enter your email and password to register
+                        Join us today!
                     </MDTypography>
                 </MDBox>
                 <MDBox pt={4} pb={3} px={3}>
-                    <MDBox component="form" role="form">
-                        <MDBox mb={2}>
-                            <MDInput type="text" label="Name" variant="standard" fullWidth />
-                        </MDBox>
-                        <MDBox mb={2}>
-                            <MDInput type="email" label="Email" variant="standard" fullWidth />
-                        </MDBox>
-                        <MDBox mb={2}>
-                            <MDInput
-                                type="password"
-                                label="Password"
-                                variant="standard"
-                                fullWidth
-                            />
-                        </MDBox>
-                        <MDBox display="flex" alignItems="center" ml={-1}>
-                            <Checkbox />
-                            <MDTypography
-                                variant="button"
-                                fontWeight="regular"
-                                color="text"
-                                sx={{ cursor: "pointer", userSelect: "none", ml: -1 }}
-                            >
-                                &nbsp;&nbsp;I agree the&nbsp;
-                            </MDTypography>
-                            <MDTypography
-                                component="a"
-                                href="#"
-                                variant="button"
-                                fontWeight="bold"
-                                color="info"
-                                textGradient
-                            >
-                                Terms and Conditions
-                            </MDTypography>
-                        </MDBox>
-                        <MDBox mt={4} mb={1}>
-                            <MDButton variant="gradient" color="info" fullWidth>
-                                sign in
-                            </MDButton>
-                        </MDBox>
-                        <MDBox mt={3} mb={1} textAlign="center">
-                            <MDTypography variant="button" color="text">
-                                Already have an account?{" "}
-                                <MDTypography
-                                    component={Link}
-                                    to="/authentication/sign-in"
-                                    variant="button"
-                                    color="info"
-                                    fontWeight="medium"
-                                    textGradient
-                                >
-                                    Sign In
-                                </MDTypography>
-                            </MDTypography>
-                        </MDBox>
+                    <MDBox mb={3}>
+                        <MDTypography variant="h5" fontWeight="medium">
+                            Sign up
+                        </MDTypography>
+                        <MDTypography variant="body2" color="textSecondary">
+                            Already have an account?{" "}
+                            <Link to="/login" className="text-info">
+                                Sign in
+                            </Link>
+                        </MDTypography>
                     </MDBox>
+                    <form onSubmit={formik.handleSubmit}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <MDInput
+                                    id="name"
+                                    name="name"
+                                    label="Name"
+                                    variant="outlined"
+                                    fullWidth
+                                    value={formik.values.name}
+                                    onChange={formik.handleChange}
+                                    error={formik.touched.name && Boolean(formik.errors.name)}
+                                    helperText={formik.touched.name && formik.errors.name}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <MDInput
+                                    id="email"
+                                    name="email"
+                                    label="Email"
+                                    variant="outlined"
+                                    fullWidth
+                                    value={formik.values.email}
+                                    onChange={formik.handleChange}
+                                    error={formik.touched.email && Boolean(formik.errors.email)}
+                                    helperText={formik.touched.email && formik.errors.email}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <MDInput
+                                    id="password"
+                                    name="password"
+                                    label="Password"
+                                    variant="outlined"
+                                    fullWidth
+                                    type="password"
+                                    value={formik.values.password}
+                                    onChange={formik.handleChange}
+                                    error={formik.touched.password && Boolean(formik.errors.password)}
+                                    helperText={formik.touched.password && formik.errors.password}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <FormControl component="fieldset" error={formik.touched.userType && Boolean(formik.errors.userType)}>
+                                    <FormLabel component="legend">User Type</FormLabel>
+                                    <RadioGroup
+                                        aria-label="userType"
+                                        name="userType"
+                                        value={formik.values.userType}
+                                        onChange={formik.handleChange}
+                                    >
+                                        <FormControlLabel value="admin" control={<Radio />} label="Admin" />
+                                        <FormControlLabel value="user" control={<Radio />} label="User" />
+                                    </RadioGroup>
+                                    <FormHelperText>{formik.touched.userType && formik.errors.userType}</FormHelperText>
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <MDButton type="submit" variant="contained" color="info" fullWidth>
+                                    Sign up
+                                </MDButton>
+                            </Grid>
+                        </Grid>
+                    </form>
                 </MDBox>
             </Card>
+            {responseMessage && (
+                <MDAlert color="success" mt={3}>
+                    {responseMessage}
+                </MDAlert>
+            )}
         </CoverLayout>
     );
 }

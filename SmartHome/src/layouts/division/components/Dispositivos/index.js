@@ -22,6 +22,7 @@ import axios from "axios";
 
 // Dispositivos Component
 import DeviceCard from "./components/DeviceCard";
+import ActionModal from "./components/ActionModal";
 
 // other
 import { findDeviceIcon } from "./findDeviceIcon";
@@ -37,15 +38,14 @@ function DivisionDevices({ divisionID, divisionName }) {
                     const newDevicesState = [...prev];
                     response.data.map((device) => {
                         newDevicesState.push({
-                            id: device.id,
-                            type: device.tipo,
                             name: device.nome
                                 ? device.nome
                                 : device.tipo.charAt(0).toUpperCase() +
                                   device.tipo.slice(1).toLowerCase(),
                             icon: findDeviceIcon(device.tipo),
                             consumption: Math.round(device.consumo_energy),
-                            state: device.estado,
+                            dialog: false,
+                            ...device,
                         });
                     });
                     return newDevicesState;
@@ -60,7 +60,7 @@ function DivisionDevices({ divisionID, divisionName }) {
     const handleDeviceState = (id) => {
         const newDevicesState = devicesState.map((device) => {
             if (device.id === id) {
-                device.state = !device.state;
+                device.estado = !device.estado;
             }
             return device;
         });
@@ -115,6 +115,42 @@ function DivisionDevices({ divisionID, divisionName }) {
             });
     }, []);
 
+    const [deviceOpen, setDeviceOpen] = useState({});
+    const handleDeviceDialog = (id) => {
+        setDevicesState((prev) => {
+            const newDevicesState = [...prev];
+            newDevicesState.map((device) => {
+                if (device.id === id) {
+                    device.dialog = !device.dialog;
+                }
+                return device;
+            });
+            setDeviceOpen(newDevicesState.find((device) => device.id === id));
+            return newDevicesState;
+        });
+    };
+
+    const handleDeleteDevice = (id) => {
+        axios
+            .delete(`http://localhost:8080/smarthome/private/division/${divisionID}/devices`, {
+                params: {
+                    id,
+                },
+            })
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        setDevicesState((prev) => {
+            const newDevicesState = [...prev];
+            const index = newDevicesState.findIndex((device) => device.id === id);
+            newDevicesState.splice(index, 1);
+            return newDevicesState;
+        });
+    };
+
     return (
         <>
             <Grid container justifyContent="center" mt={4}>
@@ -149,11 +185,11 @@ function DivisionDevices({ divisionID, divisionName }) {
                             </MDTypography>
                         </MDBox>
                         <MDBox pt={3}>
-                            <MDBox bgColor="light" borderRadius="xl" px={0.5} py={0.5} mb={2}>
+                            <MDBox bgColor="light" borderRadius="xl" px={0.5} py={0.5} mb={1}>
                                 <ComplexStatisticsCard
                                     title="Previsão de Consumo na próxima hora"
                                     count={devicesState
-                                        .filter((device) => device.state)
+                                        .filter((device) => device.estado)
                                         .map((device) => device.consumption)
                                         .reduce((a, b) => a + b, 0)}
                                     icon="bolt"
@@ -163,7 +199,7 @@ function DivisionDevices({ divisionID, divisionName }) {
                             <MDBox bgColor="light" borderRadius="xl" px={0.5} py={0.5} mb={2}>
                                 <ComplexStatisticsCard
                                     title="Dispositivos Ligados"
-                                    count={devicesState.filter((device) => device.state).length}
+                                    count={devicesState.filter((device) => device.estado).length}
                                     icon="power"
                                     color="dark"
                                 />
@@ -191,15 +227,30 @@ function DivisionDevices({ divisionID, divisionName }) {
                         <DeviceCard
                             color="dark"
                             icon={device.icon}
-                            type={device.type}
+                            type={device.tipo}
                             name={device.name}
-                            state={device.state}
+                            state={device.estado}
                             consumption={device.consumption}
                             deviceStateHandler={() => handleDeviceState(device.id)}
+                            deviceActionHandler={() => handleDeviceDialog(device.id)}
+                            deviceDeleteHandler={() => handleDeleteDevice(device.id)}
                         />
                     </Grid>
                 ))}
             </Grid>
+            <ActionModal
+                open={deviceOpen.dialog}
+                idDisp={deviceOpen.id}
+                tipoDisp={deviceOpen.tipo}
+                idDivision={divisionID}
+                startTime={deviceOpen.startTime ? deviceOpen.startTime : null}
+                endTime={deviceOpen.endTime ? deviceOpen.endTime : null}
+                tempAtual={deviceOpen.tempAtual ? deviceOpen.tempAtual : null}
+                tempMax={deviceOpen.tempMax ? deviceOpen.tempMax : null}
+                tempMin={deviceOpen.tempMin ? deviceOpen.tempMin : null}
+                luminosidade={deviceOpen.luminosidade ? deviceOpen.luminosidade : null}
+                closeAction={() => handleDeviceDialog(deviceOpen.id)}
+            />
         </>
     );
 }

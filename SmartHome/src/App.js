@@ -37,7 +37,7 @@ import theme from "assets/theme";
 import themeDark from "assets/theme-dark";
 
 // Material Dashboard 2 React routes
-import { routes, divisionsRoutes, addDeviceRoutes } from "routes";
+import { routes } from "routes";
 
 // Material Dashboard 2 React contexts
 import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "context";
@@ -49,6 +49,12 @@ import brandDark from "assets/images/logo-ct-dark.png";
 // Other
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
+import AdicionarDivisao from "layouts/adicionarDivisao";
+import Division from "layouts/division";
+import AdicionarEquipamento from "layouts/equipamento";
+
+// Axios
+import axios from "axios";
 
 export default function App() {
     const [controller, dispatch] = useMaterialUIController();
@@ -132,6 +138,39 @@ export default function App() {
         </MDBox>
     );
 
+    const casaID = localStorage.getItem("CasaID");
+    // get divisions from API and add to routes http://localhost:8080/smarthome/private/house/1/divisions
+    const [divisionsRoutes, setDivisionsRoutes] = useState([]);
+    const [addDeviceRoutes, setAddDeviceRoutes] = useState([]);
+    
+    useEffect(() => {
+        axios
+            .get(`http://localhost:8080/smarthome/private/house/${casaID}/divisions`)
+            .then((response) => {
+                const divisions = response.data;
+                const divisionsRoutes = divisions.map((division) => {
+                    return {
+                        key: division.id,
+                        route: `/division/${division.nome}`,
+                        component: <Division divisionID={division.id} divisionName={division.nome} />,
+                    };
+                });
+                setDivisionsRoutes(divisionsRoutes);
+
+                const addDeviceRoutes = divisions.map((division) => {
+                    return {
+                        key: division.id,
+                        route: `/adicionarEquipamento/${division.nome}`,
+                        component: <AdicionarEquipamento divisionID={division.id} />,
+                    };
+                });
+                setAddDeviceRoutes(addDeviceRoutes);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
+
     return (
         <ThemeProvider theme={darkMode ? themeDark : theme}>
             <CssBaseline />
@@ -155,6 +194,7 @@ export default function App() {
             )}
             {layout === "vr" && <Configurator />}
             <Routes>
+                {console.log(divisionsRoutes)}
                 {getRoutes(routes)}
                 {getRoutes(divisionsRoutes)}
                 {getRoutes(addDeviceRoutes)}
@@ -162,6 +202,7 @@ export default function App() {
                 <Route path="/logout" element={<SignIn />} />
                 <Route path="/register" element={<SignUp />} />
                 <Route path="/login" element={<SignIn />} />
+                <Route path="/addDivision" element={<AdicionarDivisao casaID={casaID}/>} />
             </Routes>
         </ThemeProvider>
     );

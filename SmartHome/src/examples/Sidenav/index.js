@@ -1,22 +1,7 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 
 // react-router-dom components
-import { useLocation, NavLink } from "react-router-dom";
+import { useLocation, NavLink, Link } from "react-router-dom";
 
 // prop-types is a library for typechecking of props.
 import PropTypes from "prop-types";
@@ -24,7 +9,6 @@ import PropTypes from "prop-types";
 // @mui material components
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
-import Link from "@mui/material/Link";
 import Icon from "@mui/material/Icon";
 
 // Material Dashboard 2 React components
@@ -45,7 +29,9 @@ import {
     setTransparentSidenav,
     setWhiteSidenav,
 } from "context";
-import { LocalActivity, LocalSeeTwoTone } from "@mui/icons-material";
+
+// Axios
+import axios from "axios";
 
 function Sidenav({ color, brand, brandName, routes, ...rest }) {
     const [controller, dispatch] = useMaterialUIController();
@@ -146,6 +132,20 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
         window.location.href = "/login";
     };
 
+    const [divisionRoutes, setDivisionRoutes] = useState([]);
+    const houseID = localStorage.getItem("CasaID");
+    // get divisions from api
+    useEffect(() => {
+        axios
+            .get(`http://localhost:8080/smarthome/private/house/${houseID}/divisions`)
+            .then((res) => {
+                setDivisionRoutes(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, []);
+
     return (
         <SidenavRoot
             {...rest}
@@ -190,20 +190,23 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
                 }
             />
             <List>{renderRoutes}</List>
-            <Link
-                href="/logout"
-                target="_blank"
-                rel="noreferrer"
-                sx={{ textDecoration: "none" }}
-                onClick={(e) => handleLogout(e)}
-            >
-                <SidenavCollapse
-                    name="Logout"
-                    icon={<Icon sx={{ fontWeight: "bold" }}>logout</Icon>}
-                    active={false}
-                    noCollapse
-                />
-            </Link>
+            {divisionRoutes.map((division) => (
+                <Link key={division.id} to={`/division/${division.nome}`}>
+                    <SidenavCollapse
+                        name={division.nome}
+                        icon={<Icon sx={{ fontWeight: "bold" }}>home</Icon>}
+                        active={"division/" + division.nome == collapseName}
+                        noCollapse
+                    />
+                </Link>
+            ))}
+            <SidenavCollapse
+                name="Logout"
+                icon={<Icon sx={{ fontWeight: "bold" }}>logout</Icon>}
+                active={false}
+                noCollapse
+                onClick={handleLogout}
+            />
         </SidenavRoot>
     );
 }

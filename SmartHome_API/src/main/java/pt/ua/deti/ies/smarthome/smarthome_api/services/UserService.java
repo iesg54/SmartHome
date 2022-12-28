@@ -59,7 +59,6 @@ public class UserService {
 
     public SuccessfulRequest updateUser(int idUser, Utilizador user) throws ResourceNotFoundException{
         Utilizador utilizadorExistente = userRepository.findById(idUser).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado o utilizador com ID " + idUser));
-        utilizadorExistente.setCasa(user.getCasa());
         utilizadorExistente.setAdmin(user.isAdmin());
         utilizadorExistente.setEmail(user.getEmail());
         utilizadorExistente.setNome(user.getNome());

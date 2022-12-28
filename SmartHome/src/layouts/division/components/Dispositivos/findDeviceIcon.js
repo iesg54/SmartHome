@@ -5,7 +5,7 @@ export function findDeviceIcon(type) {
         case "AC":
             return "air";
         case "REGADOR":
-            return "sprinkler";
+            return "water";
         case "TOMADA":
             return "power";
         default:

@@ -28,6 +28,23 @@ def checkForNewGenerators():
     return generators_needed
 
 
+def cleanUpDatabase():
+    mycursor = mydb.cursor(buffered=True)
+    mycursor.execute("USE smarthome")
+    mycursor.execute("DELETE * FROM generators")
+    mydb.commit()
+
+
+def checkIfTableExists():
+    """ returns True if the generators table exists, False otherwise"""
+
+    mycursor = mydb.cursor(buffered=True)
+    mycursor.execute("USE smarthome")
+    mycursor.execute("SHOW TABLES LIKE 'generators'")
+    mydb.commit()
+    return bool(mycursor.fetchall())
+
+
 def removeGeneratorFromDatabase(generator_id):
     mycursor = mydb.cursor(buffered=True)
     mycursor.execute("USE smarthome")
@@ -63,19 +80,28 @@ def startGenerator(generator_type, arguments):
 def main():
     connectToDatabase()
 
+    #cleanUpDatabase() # clean sensors table to prevent conflicts when users close the app whithout logging out
+
     generators_needed= []
     while True:
         while not generators_needed:
+            if not checkIfTableExists():
+                finish= True #---------------TODO also stop generators
+                break
+
             generators_needed= checkForNewGenerators()
             time.sleep(5)
-            print("so am I, still waiting")
-        print("omg stuff!")
+            """ print("so am I, still waiting")
+        print("omg stuff!") """
 
         for generator in generators_needed:
             setupGenerator(generator)
 
             removeGeneratorFromDatabase(generator[0])
             generators_needed.remove(generator)
+
+        if finish:
+            break
 
 
 

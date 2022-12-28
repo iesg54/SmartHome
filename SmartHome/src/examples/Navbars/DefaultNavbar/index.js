@@ -124,12 +124,7 @@ function DefaultNavbar({ transparent, light, action }) {
                         route="/register"
                         light={light}
                     />
-                    <DefaultNavbarLink
-                        icon="key"
-                        name="sign in"
-                        route="/login"
-                        light={light}
-                    />
+                    <DefaultNavbarLink icon="key" name="sign in" route="/login" light={light} />
                 </MDBox>
                 <MDBox
                     display={{ xs: "inline-block", lg: "none" }}

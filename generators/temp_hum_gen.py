@@ -21,7 +21,7 @@ class temp_humi_gen:
         self.division_id = division_id
         self.type= "temp_hum"
 
-        #coeficient of temperature deviation by hour
+        #coeficient of temperature deviation for each 3 hours
         # 0 - 3 am cold af
         # 3 - 6 am
         # 6 - 9 pm
@@ -61,7 +61,7 @@ class temp_humi_gen:
 
 
 
-    def all_temperatures_humidities_by_minute(self, temperatures, channel):
+    def all_temperatures_humidities_by_minute(self, temperatures):
         for hour in range(0, 24):
             temperature_hour= temperatures[hour]
             next_temperature_hour= temperatures[(hour + 1) % 24]
@@ -79,14 +79,15 @@ class temp_humi_gen:
                 if minute < 10:
                     m= f'0{minute}'
                 timestamp= f'2022-12-06 {h}:{m}:00' # 'YYYY-MM-DD hh:mm:ss'
+                day= timestamp.split(' ')[0]
 
 
-                jsonMessage= f'{{"division_id": {self.division_id}, "type": {self.type}, "timestamp": "{timestamp}", "humidity": {humidity}, "temperature": {temp}}}'
+                jsonMessage= f'{{"division_id": {self.division_id}, "type": "{self.type}", "day": "{day}", "timestamp": "{timestamp}", "humidity": {humidity}, "temperature": {temp}}}'
 
                 # sending to broker
-                channel.basic_publish(
+                self.channel.basic_publish(
                     exchange='',
-                    routing_key='temperature_humidity_queue',
+                    routing_key='generators',
                     body=jsonMessage,
                     properties=pika.BasicProperties(
                         delivery_mode=pika.spec.PERSISTENT_DELIVERY_MODE
@@ -95,7 +96,6 @@ class temp_humi_gen:
 
                 time.sleep(self.sleep_time_seconds)
                 minute+= 1
-                #generation_id+= 1
 
         
 
@@ -104,7 +104,7 @@ class temp_humi_gen:
         connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
         
         channel = connection.channel()
-        channel.queue_declare(queue='temperature_humidity_queue', durable=True)
+        channel.queue_declare(queue='generators', durable=True)
 
         return channel
 
@@ -114,18 +114,17 @@ class temp_humi_gen:
 
     def run(self):
 
-        channel= self.connect_to_broker()
+        self.channel= self.connect_to_broker()
 
 
         while(True):
 
             temps_by_hour= self.all_temperatures_by_hour()
 
-            self.all_temperatures_humidities_by_minute(temps_by_hour, channel)
+            self.all_temperatures_humidities_by_minute(temps_by_hour)
 
 
 def parseArgs(argv):
-    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", argv)
     division_id= argv[1]
     if len(argv) > 2:
         temp_base= argv[2]
@@ -140,11 +139,13 @@ def parseArgs(argv):
     return division_id, temp_base, sleep_time
 
 
-
-if __name__ == "__main__":
-    
+def main():
     division_id, temp_base, sleep_time= parseArgs(sys.argv)
 
     gen=temp_humi_gen(division_id, temp_base, sleep_time) 
     
     gen.run()
+
+
+if __name__ == "__main__":
+    main()
