@@ -3,6 +3,7 @@ package pt.ua.deti.ies.smarthome.smarthome_api.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.ResourceNotFoundException;
@@ -19,6 +20,8 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private HouseRepository houseRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public ResponseEntity<Utilizador> getUser(String email, String password) throws ResourceNotFoundException {
         if(userRepository.existsByEmail(email)){
@@ -45,7 +48,7 @@ public class UserService {
         }
         novo.setEmail(email);
         novo.setNome(nome);
-        novo.setPassword(password);
+        novo.setPassword(passwordEncoder.encode(password));
         novo.setProfileImage(profile_image);
         novo.setAdmin(isAdmin);
 

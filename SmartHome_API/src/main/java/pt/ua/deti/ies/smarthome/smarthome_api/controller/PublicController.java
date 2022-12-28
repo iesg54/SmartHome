@@ -51,12 +51,14 @@ public class PublicController {
     susana.mendes000@gmail.com -> password
      */
 
+    /*
     // Returns the User corresponding to the e-mail and password used for a login, if they exist in the database
     @GetMapping("/login")
     public ResponseEntity<Utilizador> getUser(@RequestParam(name="email", required = true) String email, @RequestParam(name="password", required = true) String password) throws ResourceNotFoundException {
         return userService.getUser(email, password);
     }
-
+    */
+    
     @PostMapping("/login")
     public JwtResponse createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws
             Exception {
