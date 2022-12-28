@@ -238,19 +238,21 @@ function DivisionDevices({ divisionID, divisionName }) {
                     </Grid>
                 ))}
             </Grid>
-            <ActionModal
-                open={deviceOpen.dialog}
-                idDisp={deviceOpen.id}
-                tipoDisp={deviceOpen.tipo}
-                idDivision={divisionID}
-                startTime={deviceOpen.startTime ? deviceOpen.startTime : null}
-                endTime={deviceOpen.endTime ? deviceOpen.endTime : null}
-                tempAtual={deviceOpen.tempAtual ? deviceOpen.tempAtual : null}
-                tempMax={deviceOpen.tempMax ? deviceOpen.tempMax : null}
-                tempMin={deviceOpen.tempMin ? deviceOpen.tempMin : null}
-                luminosidade={deviceOpen.luminosidade ? deviceOpen.luminosidade : null}
-                closeAction={() => handleDeviceDialog(deviceOpen.id)}
-            />
+            {deviceOpen.dialog && (
+                <ActionModal
+                    open={deviceOpen.dialog}
+                    idDisp={deviceOpen.id}
+                    tipoDisp={deviceOpen.tipo}
+                    idDivision={divisionID}
+                    startTime={deviceOpen.startTime ? deviceOpen.startTime : null}
+                    endTime={deviceOpen.endTime ? deviceOpen.endTime : null}
+                    tempAtual={deviceOpen.tempAtual ? deviceOpen.tempAtual : null}
+                    tempMax={deviceOpen.tempMax ? deviceOpen.tempMax : null}
+                    tempMin={deviceOpen.tempMin ? deviceOpen.tempMin : null}
+                    luminosidade={deviceOpen.luminosidade ? deviceOpen.luminosidade : null}
+                    closeAction={() => handleDeviceDialog(deviceOpen.id)}
+                />
+            )}
         </>
     );
 }

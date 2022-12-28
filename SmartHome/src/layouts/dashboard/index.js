@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -37,9 +37,6 @@ function Dashboard() {
             .get(`http://localhost:8080/smarthome/private/house/${casaID}/divisions`)
             .then((res) => {
                 setDivisions(res.data);
-            })
-            .catch((error) => {
-                console.log(error);
             });
     }, []);
 
@@ -193,9 +190,11 @@ function Dashboard() {
                 </Grid>
                 <Grid container spacing={3} justifyContent="center">
                     <Grid item xs={12} sm={6} md={3}>
-                        <MDButton variant="contained" color="primary" fullWidth href="/addDivision">
-                            Adicionar divisão
-                        </MDButton>
+                        <Link to="/addDivision">
+                            <MDButton variant="contained" color="primary" fullWidth>
+                                Adicionar divisão
+                            </MDButton>
+                        </Link>
                     </Grid>
                 </Grid>
                 <Divider />

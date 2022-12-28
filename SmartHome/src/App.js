@@ -1,18 +1,3 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 import { useState, useEffect } from "react";
 
 // react-router components
@@ -28,7 +13,6 @@ import MDBox from "components/MDBox";
 
 // Material Dashboard 2 React example components
 import Sidenav from "examples/Sidenav";
-import Configurator from "examples/Configurator";
 
 // Material Dashboard 2 React themes
 import theme from "assets/theme";
@@ -37,7 +21,7 @@ import theme from "assets/theme";
 import themeDark from "assets/theme-dark";
 
 // Material Dashboard 2 React routes
-import { routes } from "routes";
+import routes from "routes";
 
 // Material Dashboard 2 React contexts
 import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "context";
@@ -142,7 +126,7 @@ export default function App() {
     // get divisions from API and add to routes http://localhost:8080/smarthome/private/house/1/divisions
     const [divisionsRoutes, setDivisionsRoutes] = useState([]);
     const [addDeviceRoutes, setAddDeviceRoutes] = useState([]);
-    
+
     useEffect(() => {
         axios
             .get(`http://localhost:8080/smarthome/private/house/${casaID}/divisions`)
@@ -152,7 +136,9 @@ export default function App() {
                     return {
                         key: division.id,
                         route: `/division/${division.nome}`,
-                        component: <Division divisionID={division.id} divisionName={division.nome} />,
+                        component: (
+                            <Division divisionID={division.id} divisionName={division.nome} />
+                        ),
                     };
                 });
                 setDivisionsRoutes(divisionsRoutes);
@@ -188,13 +174,9 @@ export default function App() {
                         onMouseEnter={handleOnMouseEnter}
                         onMouseLeave={handleOnMouseLeave}
                     />
-                    <Configurator />
-                    {configsButton}
                 </>
             )}
-            {layout === "vr" && <Configurator />}
             <Routes>
-                {console.log(divisionsRoutes)}
                 {getRoutes(routes)}
                 {getRoutes(divisionsRoutes)}
                 {getRoutes(addDeviceRoutes)}
@@ -202,7 +184,7 @@ export default function App() {
                 <Route path="/logout" element={<SignIn />} />
                 <Route path="/register" element={<SignUp />} />
                 <Route path="/login" element={<SignIn />} />
-                <Route path="/addDivision" element={<AdicionarDivisao casaID={casaID}/>} />
+                <Route path="/addDivision" element={<AdicionarDivisao casaID={casaID} />} />
             </Routes>
         </ThemeProvider>
     );
