@@ -19,9 +19,9 @@ public class ProfileController {
     private UserService userService;
 
     // Gets the info of the currently logged in User
-    @GetMapping("/{id}")
-    public ResponseEntity<Utilizador> getUserInfo(@PathVariable(value="id") int id) throws ResourceNotFoundException{
-        return userService.getUserInfo(id);
+    @GetMapping("/info")
+    public ResponseEntity<Utilizador> getUserInfo() throws ResourceNotFoundException{
+        return userService.getUserInfo();
     }
 
     // Updates Info of the User
