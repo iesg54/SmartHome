@@ -50,19 +50,16 @@ function Cover() {
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            console.log(values)
+            console.log(values);
             axios
-                .post("http://localhost:8080/smarthome/public/register",
-                null,
-                {
+                .post("http://localhost:8080/smarthome/public/register", null, {
                     params: {
                         name: values.name,
                         email: values.email,
                         password: values.password,
                         isAdmin: values.userType === "admin" ? true : false,
                     },
-                }
-                )
+                })
                 .then((res) => {
                     setResponseMessage(res.data.message);
                 })
@@ -140,12 +137,19 @@ function Cover() {
                                     type="password"
                                     value={formik.values.password}
                                     onChange={formik.handleChange}
-                                    error={formik.touched.password && Boolean(formik.errors.password)}
+                                    error={
+                                        formik.touched.password && Boolean(formik.errors.password)
+                                    }
                                     helperText={formik.touched.password && formik.errors.password}
                                 />
                             </Grid>
                             <Grid item xs={12}>
-                                <FormControl component="fieldset" error={formik.touched.userType && Boolean(formik.errors.userType)}>
+                                <FormControl
+                                    component="fieldset"
+                                    error={
+                                        formik.touched.userType && Boolean(formik.errors.userType)
+                                    }
+                                >
                                     <FormLabel component="legend">User Type</FormLabel>
                                     <RadioGroup
                                         aria-label="userType"
@@ -153,10 +157,20 @@ function Cover() {
                                         value={formik.values.userType}
                                         onChange={formik.handleChange}
                                     >
-                                        <FormControlLabel value="admin" control={<Radio />} label="Admin" />
-                                        <FormControlLabel value="user" control={<Radio />} label="User" />
+                                        <FormControlLabel
+                                            value="admin"
+                                            control={<Radio />}
+                                            label="Admin"
+                                        />
+                                        <FormControlLabel
+                                            value="user"
+                                            control={<Radio />}
+                                            label="User"
+                                        />
                                     </RadioGroup>
-                                    <FormHelperText>{formik.touched.userType && formik.errors.userType}</FormHelperText>
+                                    <FormHelperText>
+                                        {formik.touched.userType && formik.errors.userType}
+                                    </FormHelperText>
                                 </FormControl>
                             </Grid>
                             <Grid item xs={12}>

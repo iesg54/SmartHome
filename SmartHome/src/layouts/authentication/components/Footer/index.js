@@ -16,23 +16,14 @@ function Footer({ light }) {
     const { size } = typography;
 
     return (
-        <MDBox
-            component="footer"
-            variant={light ? "transparent" : "dark"}
-            py={3}
-        >
+        <MDBox component="footer" variant={light ? "transparent" : "dark"} py={3}>
             <Container maxWidth="lg">
                 <MDBox display="flex" justifyContent="space-between" alignItems="center">
                     <MDTypography variant="caption" fontSize={size.sm}>
-                        <Link
-                            href="https://www.ua.pt/"
-                            target="_blank"
-                            rel="noreferrer"
-                        >
+                        <Link href="https://www.ua.pt/" target="_blank" rel="noreferrer">
                             Universidade de Aveiro
                         </Link>
-                        &nbsp;|&nbsp; 
-                        2022 - 2023 IES Project - Grupo 54
+                        &nbsp;|&nbsp; 2022 - 2023 IES Project - Grupo 54
                     </MDTypography>
                 </MDBox>
             </Container>

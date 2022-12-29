@@ -55,8 +55,6 @@ function ActionModal({
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            console.log(values);
-
             switch (tipoDisp) {
                 case "LAMPADA":
                     axios
@@ -71,13 +69,9 @@ function ActionModal({
                                 },
                             }
                         )
-                        .then((res) => {
-                            console.log(res);
+                        .then(() => {
                             closeAction();
                         })
-                        .catch((err) => {
-                            console.log(err);
-                        });
                     break;
                 case "AC":
                     axios
@@ -92,13 +86,9 @@ function ActionModal({
                                 },
                             }
                         )
-                        .then((res) => {
-                            console.log(res);
+                        .then(() => {
                             closeAction();
                         })
-                        .catch((err) => {
-                            console.log(err);
-                        });
                     break;
                 case "REGADOR":
                     axios
@@ -112,13 +102,9 @@ function ActionModal({
                                 },
                             }
                         )
-                        .then((res) => {
-                            console.log(res);
+                        .then(() => {
                             closeAction();
                         })
-                        .catch((err) => {
-                            console.log(err);
-                        });
                     break;
                 default:
                     break;
