@@ -1,5 +1,6 @@
 package pt.ua.deti.ies.smarthome.smarthome_api.controller;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,6 +45,15 @@ public class HouseController {
     throws ResourceNotFoundException {
         houseService.addDivisao(idCasa, type, name);
         SuccessfulRequest successfulRequest = new SuccessfulRequest("Nova divisão adicionada com sucesso.");
+        return successfulRequest;
+    }
+
+    // Removes a division from the House
+    @DeleteMapping("/{idCasa}/divisions")
+    public SuccessfulRequest removeDivision(@PathVariable(value="idCasa") int idCasa, @RequestParam(name="idDiv", required = true) int idDiv)
+            throws ResourceNotFoundException {
+        houseService.removeDivisao(idCasa, idDiv);
+        SuccessfulRequest successfulRequest = new SuccessfulRequest("Divisão removida com sucesso.");
         return successfulRequest;
     }
 

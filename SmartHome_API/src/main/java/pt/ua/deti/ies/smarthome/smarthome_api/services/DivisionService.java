@@ -163,8 +163,8 @@ public class DivisionService {
         Map<Integer, Map<String, String>> weeklyInfo = new HashMap<>();
 
         // Percorrer os últimos 7 dias, e ir buscar os valores de Tmax, Tmin, Hmedia e COmedio para cada dia
-        // TODO: Alterar para trabalhar com qualquer dia de query?
         Date firstDay = Date.valueOf("2022-12-07");
+        // TODO: Date firstDay = new Date(System.currentTimeMillis());
         Date lastDay;
         Calendar cal = Calendar.getInstance();
         cal.setTime(firstDay);
@@ -364,7 +364,8 @@ public class DivisionService {
         log.debug("got house info");
         Map<Date, Double> lista = new HashMap<>();
 
-        Date date1 = Date.valueOf("2022-11-30");    //mudar isto TODO
+        // TODO: Date date1 = new Date(System.currentTimeMillis());
+        Date date1 = Date.valueOf("2022-11-30");
         Date date2 = null;
         Calendar cal = Calendar.getInstance();
         cal.setTime(date1);

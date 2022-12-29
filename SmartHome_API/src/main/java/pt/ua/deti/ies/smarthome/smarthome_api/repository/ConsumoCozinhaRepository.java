@@ -13,4 +13,5 @@ public interface ConsumoCozinhaRepository extends JpaRepository<ConsumoCozinha, 
 
     List<ConsumoCozinha> findByDivAndDiaGreaterThanEqualAndDiaLessThan(Divisao div, Date today, Date today2);
     List<ConsumoCozinha> findAllByDiaEquals(Date dia);
+    void deleteAllByDiv(Divisao div);
 }

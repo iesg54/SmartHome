@@ -14,4 +14,5 @@ public interface ConsumoQuartoRepository extends JpaRepository<ConsumoQuarto, In
 
     List<ConsumoQuarto> findByDivAndDiaGreaterThanEqualAndDiaLessThan(Divisao div, Date date1, Date date2);
     List<ConsumoQuarto> findAllByDiaEquals(Date dia);
+    void deleteAllByDiv(Divisao div);
 }

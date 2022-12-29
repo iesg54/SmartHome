@@ -77,7 +77,7 @@ public class DivisionController {
 
 
     // Method to get Energy Consumption in the division in the past 7 days. Type refers to the type of division(Cozinha, Sala,...) so we can use the correct DB table.
-    @GetMapping("/{idDiv}/energy") // done - TODO testing
+    @GetMapping("/{idDiv}/energy")
     public ResponseEntity<Map<Date, Double>> getDivisionEnergyConsumption(@PathVariable(value="idDiv") int idDiv)
             throws ResourceNotFoundException, InvalidTypeException{
         return divisionService.getDivisionEnergyConsumption(idDiv);

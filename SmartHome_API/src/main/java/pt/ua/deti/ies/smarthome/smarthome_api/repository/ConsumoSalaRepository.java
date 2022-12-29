@@ -14,4 +14,5 @@ public interface ConsumoSalaRepository extends JpaRepository<ConsumoSala, Intege
 
     List<ConsumoSala> findByDivAndDiaGreaterThanEqualAndDiaLessThan(Divisao div, Date date1, Date date2);
     List<ConsumoSala> findAllByDiaEquals(Date dia);
+    void deleteAllByDiv(Divisao div);
 }

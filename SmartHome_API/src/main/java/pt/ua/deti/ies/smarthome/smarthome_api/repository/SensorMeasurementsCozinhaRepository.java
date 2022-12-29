@@ -13,4 +13,5 @@ public interface SensorMeasurementsCozinhaRepository extends JpaRepository<Senso
     SensorMeasurementsCozinha findTopByTipoAndDivOrderByIdDesc(String tipo, Divisao div);
     Boolean existsByTipoAndDiv(String tipo, Divisao div);
     List<SensorMeasurementsCozinha> findAllByTipoAndDivAndDiaEquals(String tipo, Divisao div, Date dia);
+    void deleteAllByDiv(Divisao div);
 }
