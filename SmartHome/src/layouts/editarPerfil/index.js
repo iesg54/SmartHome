@@ -168,7 +168,7 @@ function EditarPerfil() {
     return (
         <DashboardLayout>
             <DashboardNavbar />
-            <Grid container justifyContent="center">
+            <Grid container justifyContent="center" minHeight="100vh">
                 {messageResponse.message && (
                     <Grid item xs={12} md={12}>
                         <MDAlert color={messageResponse.type} dismissible>

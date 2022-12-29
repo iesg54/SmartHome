@@ -17,10 +17,11 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import MDButton from "components/MDButton";
 import MDTypography from "components/MDTypography";
-import SimpleBlogCard from "examples/Cards/BlogCards/SimpleBlogCard";
+import DivisionCard from "./components/DivisionCard";
 
 // Components
 import HomeStats from "./components/HomeStats";
+import selectDivisionImage from "./selectDivisionImage";
 
 // Axios
 import axios from "axios";
@@ -160,6 +161,23 @@ function Dashboard() {
         }
     }, []);
 
+    const handleDeleteDivision = (divID) => {
+        axios
+            .delete(`http://localhost:8080/smarthome/private/house/${casaID}/divisions`,
+            {
+                params: {
+                    idDiv: divID,
+                }
+            })
+            .then((res) => {
+                console.log(res);
+                window.location.reload();
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
     return (
         <DashboardLayout>
             <DashboardNavbar />
@@ -171,18 +189,17 @@ function Dashboard() {
                     {divisions.map((division) => (
                         <Grid item xs={12} sm={6} md={3} key={division.id}>
                             <MDBox mb={3}>
-                                <SimpleBlogCard
-                                    image="https://bit.ly/3Hlw1MQ"
-                                    title={division.nome}
-                                    description={`Gasto energético atual: ${
-                                        energyCost[division.id]
-                                    }W`}
+                                <DivisionCard
+                                    image={selectDivisionImage(division.tipo)}
+                                    name={division.nome}
+                                    energyConsumption={energyCost[division.id]}
                                     action={{
                                         type: "internal",
                                         route: `/division/${division.nome}`,
                                         color: "dark",
-                                        label: "Ver divisão",
+                                        label: "Ver",
                                     }}
+                                    handleDeleteDiv={() => handleDeleteDivision(division.id)}
                                 />
                             </MDBox>
                         </Grid>
