@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+
+  # Spring Boot API
+  api:
+    build:
+      context: SmartHome_API
+      dockerfile: Dockerfile
+    ports: 
+      - #TODO
+    restart: unless-stopped
+    environment: # Pass environment variables to the service
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/SmartHome #TODO: Update Port
+      SPRING_DATASOURCE_USERNAME: springuser
+      SPRING_DATASOURCE_PASSWORD: password 
+    depends_on:
+      - db
+      - data_generators
+    networks:
+      #TODO
+
+
+  # FrontEnd
+  frontend:
+    build:
+      context: SmartHome
+      dockerfile: Dockerfile
+    ports:
+      - #TODO
+    restart: unless-stopped
+    depends_on:
+      - api
+      - db
+    networks:
+      #TODO
+
+
+  # Database
+  db:
+    image: mysql
+    ports:
+      - #TODO
+    restart: always
+    environment:
+      MYSQL_DATABASE: SmartHome
+      MYSQL_USER: springuser
+      MYSQL_PASSWORD: password
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      #TODO
+
+
+  # Message Queue
+  rabbitmq:
+    #TODO
+
+
+  # Geração de dados
+  data_generators:
+    build:
+      context: generators
+      dockerfile: Dockerfile
+    depends_on:
+      - rabbitmq
+      - db
+    networks:
+      #TODO
+
+
+networks: 
+  #TODO
