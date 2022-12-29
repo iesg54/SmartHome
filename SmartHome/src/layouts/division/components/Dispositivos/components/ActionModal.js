@@ -44,6 +44,7 @@ function ActionModal({
     open,
     tipoDisp,
 }) {
+    const token = localStorage.getItem("token");
     const formik = useFormik({
         initialValues: {
             startTime: startTime,
@@ -62,6 +63,10 @@ function ActionModal({
                             `http://localhost:8080/smarthome/private/division/${idDivision}/lampadas/${idDisp}`,
                             null,
                             {
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    "Authorization": `Bearer ${token}`,
+                                },
                                 params: {
                                     start_time: values.startTime,
                                     end_time: values.endTime,
@@ -79,6 +84,10 @@ function ActionModal({
                             `http://localhost:8080/smarthome/private/division/${idDivision}/AC/${idDisp}`,
                             null,
                             {
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    "Authorization": `Bearer ${token}`,
+                                },
                                 params: {
                                     temp_atual: values.tempAtual,
                                     temp_max: values.tempMax,
@@ -96,6 +105,10 @@ function ActionModal({
                             `http://localhost:8080/smarthome/private/division/${idDivision}/regadores/${idDisp}`,
                             null,
                             {
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    "Authorization": `Bearer ${token}`,
+                                },
                                 params: {
                                     start_time: values.startTime,
                                     end_time: values.endTime,

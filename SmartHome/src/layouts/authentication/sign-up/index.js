@@ -40,6 +40,7 @@ const validationSchema = Yup.object({
 });
 
 function Cover() {
+    const token = localStorage.getItem("token");
     const [responseMessage, setResponseMessage] = useState();
     const formik = useFormik({
         initialValues: {
@@ -53,6 +54,10 @@ function Cover() {
             console.log(values);
             axios
                 .post("http://localhost:8080/smarthome/public/register", null, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`,
+                    },
                     params: {
                         name: values.name,
                         email: values.email,

@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 
 // react-router-dom components
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -30,28 +30,27 @@ const validationSchema = Yup.object({
 });
 
 function Basic() {
-    const [userData, setUserData] = useState({});
     const [errorMessage, setErrorMessage] = useState("");
+    const navigate = useNavigate();
     const getUserData = (values) => {
-        axios
-            .get(
-                `http://localhost:8080/smarthome/public/login?email=${values.email}&password=${values.password}`
-            )
+        axios.post(
+            "http://localhost:8080/smarthome/public/login",
+            {
+                email: values.email,
+                password: values.password,
+            },
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+        )
             .then((res) => {
-                console.log(res.data);
-                setUserData(res.data);
+                localStorage.setItem("token", res.data.jwttoken);
+                navigate("/dashboard");
             })
             .catch((error) => {
-                switch (error.response.status) {
-                    case 401:
-                        setErrorMessage("Password incorreta!");
-                        break;
-                    case 404:
-                        setErrorMessage("Email não encontrado!");
-                        break;
-                    default:
-                        setErrorMessage("Erro desconhecido!");
-                }
+                setErrorMessage(error.response.data.message);
             });
     };
 
@@ -65,14 +64,6 @@ function Basic() {
             getUserData(values);
         },
     });
-
-    useEffect(() => {
-        if (userData.id) {
-            localStorage.setItem("userID", userData.id);
-            localStorage.setItem("CasaID", userData.casa.id);
-            window.location.href = "/dashboard";
-        }
-    }, [userData]);
 
     return (
         <BasicLayout image={bgImage}>

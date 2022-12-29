@@ -27,6 +27,8 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 // Axios
 import axios from "axios";
 
+import { getUserInfo } from "appServices";
+
 const validationSchema = yup.object({
     nome: yup.string().required("Por favor adicione um nome!"),
     email: yup
@@ -37,8 +39,7 @@ const validationSchema = yup.object({
 });
 
 function EditarPerfil() {
-    // get userID from local storage
-    const userID = localStorage.getItem("userID");
+    const token = localStorage.getItem("token");
 
     const [messageResponse, setMessageResponse] = useState({ type: "", message: "" });
 
@@ -50,13 +51,11 @@ function EditarPerfil() {
 
     // get user data from the API and set it to the state http://localhost:8080/smarthome/private/user/{userID}
     const [userData, setUserData] = useState({});
-    useEffect(() => {
-        axios.get(`http://localhost:8080/smarthome/private/user/${userID}`).then((response) => {
-            setUserData(response.data);
-        });
+    useEffect(async () => {
+        const user = await getUserInfo(token);
+        setUserData(user);
     }, []);
 
-    const [responseMessage, setResponseMessage] = useState("");
     const formik = useFormik({
         initialValues: {
             nome: userData.nome,
@@ -67,13 +66,19 @@ function EditarPerfil() {
         onSubmit: (values, { resetForm }) => {
             setMessageResponse({ type: "", message: "" });
             axios
-                .put(`http://localhost:8080/smarthome/private/user/${userID}`, {
-                    id: userID,
+                .put(`http://localhost:8080/smarthome/private/user/${userData.id}`, {
+                    id: userData.id,
                     email: values.email,
                     nome: values.nome,
                     password: values.password,
                     profileImage: image,
                     admin: userData.admin,
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`,
+                    },
                 })
                 .then((response) => {
                     console.log(response);
@@ -140,9 +145,13 @@ function EditarPerfil() {
                     setImage(downloadURL);
                     axios
                         .put(
-                            `http://localhost:8080/smarthome/private/user/profilePic/${userID}`,
+                            `http://localhost:8080/smarthome/private/user/profilePic/${userData.id}`,
                             null,
                             {
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    "Authorization": `Bearer ${token}`,
+                                },
                                 params: {
                                     profPic: downloadURL,
                                 },

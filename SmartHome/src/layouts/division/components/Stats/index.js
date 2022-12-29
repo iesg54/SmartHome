@@ -19,11 +19,18 @@ import axios from "axios";
 import getAlertMessage from "./getAlertMessage";
 
 function DivisionStats({ divisionID }) {
+    const token = localStorage.getItem("token");
+
     // Get sensors data from API http://localhost:8080/smarthome/private/division/{divisionID}/currentInfo
     const [sensorsCurrentData, setSensorsCurrentData] = useState([]);
     useEffect(() => {
         axios
-            .get(`http://localhost:8080/smarthome/private/division/${divisionID}/currentInfo`)
+            .get(`http://localhost:8080/smarthome/private/division/${divisionID}/currentInfo`,{
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            })
             .then((res) => {
                 // set data
                 const sensorsData = [];
@@ -162,7 +169,12 @@ function DivisionStats({ divisionID }) {
     ]);
     useEffect(() => {
         axios
-            .get(`http://localhost:8080/smarthome/private/division/${divisionID}/weeklyInfo`)
+            .get(`http://localhost:8080/smarthome/private/division/${divisionID}/weeklyInfo`,{
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                }
+            })
             .then((res) => {
                 setSensorsWeeklyData((prev) => {
                     const sensorsData = [...prev];
@@ -188,7 +200,12 @@ function DivisionStats({ divisionID }) {
     const [alertsData, setAlertsData] = useState([]);
     useEffect(() => {
         axios
-            .get(`http://localhost:8080/smarthome/private/division/${divisionID}/alerts`)
+            .get(`http://localhost:8080/smarthome/private/division/${divisionID}/alerts`,{
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                }
+            })
             .then((res) => {
                 res.data.map((alert) => {
                     setAlertsData((prev) => [

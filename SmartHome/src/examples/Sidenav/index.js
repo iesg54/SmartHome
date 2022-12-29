@@ -22,6 +22,8 @@ import SidenavCollapse from "examples/Sidenav/SidenavCollapse";
 import SidenavRoot from "examples/Sidenav/SidenavRoot";
 import sidenavLogoLabel from "examples/Sidenav/styles/sidenav";
 
+import { getUserInfo, getDivisions } from "appServices";
+
 // Material Dashboard 2 React context
 import {
     useMaterialUIController,
@@ -132,18 +134,11 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
         window.location.href = "/login";
     };
 
-    const [divisionRoutes, setDivisionRoutes] = useState([]);
-    const houseID = localStorage.getItem("CasaID");
-    // get divisions from api
-    useEffect(() => {
-        axios
-            .get(`http://localhost:8080/smarthome/private/house/${houseID}/divisions`)
-            .then((res) => {
-                setDivisionRoutes(res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+    const [divisions, setDivisions] = useState([]);
+    useEffect(async () => {
+        const user = await getUserInfo();
+        const divisions = await getDivisions(user.casa.id);
+        setDivisions(divisions);
     }, []);
 
     return (
@@ -190,12 +185,12 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
                 }
             />
             <List>{renderRoutes}</List>
-            {divisionRoutes.map((division) => (
-                <Link key={division.id} to={`/division/${division.nome}`}>
+            {divisions.map((division) => (
+                <Link key={division.id} to={`/division/${division.id}`}>
                     <SidenavCollapse
                         name={division.nome}
                         icon={<Icon sx={{ fontWeight: "bold" }}>home</Icon>}
-                        active={"division/" + division.nome == collapseName}
+                        active={"division/" + division.id == collapseName}
                         noCollapse
                     />
                 </Link>

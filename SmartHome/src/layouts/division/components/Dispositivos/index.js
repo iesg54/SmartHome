@@ -27,14 +27,20 @@ import ActionModal from "./components/ActionModal";
 // other
 import { findDeviceIcon } from "./findDeviceIcon";
 
-function DivisionDevices({ divisionID, divisionName }) {
+function DivisionDevices({ divisionID }) {
+    const token = localStorage.getItem("token");
     const [deviceOpen, setDeviceOpen] = useState({});
 
     // Get Devices Data from the API and update the state http://localhost:8080/smarthome/private/division/{divisionID}/devices
     const [devicesState, setDevicesState] = useState([]);
     useEffect(() => {
         axios
-            .get(`http://localhost:8080/smarthome/private/division/${divisionID}/devices`)
+            .get(`http://localhost:8080/smarthome/private/division/${divisionID}/devices`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                },
+            })
             .then((response) => {
                 setDevicesState((prev) => {
                     const newDevicesState = [...prev];
@@ -66,8 +72,13 @@ function DivisionDevices({ divisionID, divisionName }) {
         axios
             .post(
                 `http://localhost:8080/smarthome/private/division/${divisionID}/device/${id}`,
-                null
-            )
+                null, 
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`,
+                    },
+                })
         setDevicesState(newDevicesState);
     };
     /* eslint-disable no-param-reassign */
@@ -90,7 +101,12 @@ function DivisionDevices({ divisionID, divisionName }) {
     });
     useEffect(() => {
         axios
-            .get(`http://localhost:8080/smarthome/private/division/${divisionID}/energy`)
+            .get(`http://localhost:8080/smarthome/private/division/${divisionID}/energy`,{
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                },
+            })
             .then((response) => {
                 setEnergyData((prev) => {
                     const newEnergyData = { ...prev };
@@ -122,6 +138,10 @@ function DivisionDevices({ divisionID, divisionName }) {
     const handleDeleteDevice = (id) => {
         axios
             .delete(`http://localhost:8080/smarthome/private/division/${divisionID}/devices`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                },
                 params: {
                     id,
                 },
@@ -197,7 +217,7 @@ function DivisionDevices({ divisionID, divisionName }) {
                     <MDTypography variant="h2">Dispositivos Ligados</MDTypography>
                 </Grid>
                 <Grid item>
-                    <Link to={"/adicionarEquipamento/" + divisionName}>
+                    <Link to={"/adicionarEquipamento/" + divisionID}>
                         <MDButton variant="gradient" color="dark" iconOnly size="large" circular>
                             <Icon>add</Icon>
                         </MDButton>

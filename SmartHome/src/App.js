@@ -41,10 +41,12 @@ import MDSnackbar from "components/MDSnackbar";
 // Axios
 import axios from "axios";
 
+import { getUserInfo, getDivisions } from "appServices";
+
 export default function App() {
     const [isLogged, setIsLogged] = useState(null);
     useEffect(() => {
-        const userLogged = localStorage.getItem("userID");
+        const userLogged = localStorage.getItem("token");
         if (userLogged) {
             setIsLogged(true);
         } else {
@@ -137,39 +139,36 @@ export default function App() {
             return null;
         });
 
-    const casaID = localStorage.getItem("CasaID");
     // get divisions from API and add to routes http://localhost:8080/smarthome/private/house/1/divisions
+    const [user, setUser] = useState({});
     const [divisionsRoutes, setDivisionsRoutes] = useState([]);
     const [addDeviceRoutes, setAddDeviceRoutes] = useState([]);
 
-    useEffect(() => {
-        axios
-            .get(`http://localhost:8080/smarthome/private/house/${casaID}/divisions`)
-            .then((response) => {
-                const divisions = response.data;
-                const divisionsRoutes = divisions.map((division) => {
-                    return {
-                        key: division.id,
-                        route: `/division/${division.nome}`,
-                        component: (
-                            <Division divisionID={division.id} divisionName={division.nome} />
-                        ),
-                    };
-                });
-                setDivisionsRoutes(divisionsRoutes);
+    useEffect(async () => {
+        const user = await getUserInfo();
+        setUser(user);
 
-                const addDeviceRoutes = divisions.map((division) => {
-                    return {
-                        key: division.id,
-                        route: `/adicionarEquipamento/${division.nome}`,
-                        component: <AdicionarEquipamento divisionID={division.id} />,
-                    };
-                });
-                setAddDeviceRoutes(addDeviceRoutes);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        const divisions = await getDivisions(user.casa.id);
+
+        const divisionsRoutes = divisions.map((division) => {
+            return {
+                key: division.id,
+                route: `/division/${division.id}`,
+                component: (
+                    <Division />
+                ),
+            };
+        });
+        setDivisionsRoutes(divisionsRoutes);
+
+        const addDeviceRoutes = divisions.map((division) => {
+            return {
+                key: division.id,
+                route: `/adicionarEquipamento/${division.id}`,
+                component: <AdicionarEquipamento />,
+            };
+        });
+        setAddDeviceRoutes(addDeviceRoutes);
     }, []);
 
     const [showSnackbar, setShowSnackbar] = useState(false);
@@ -211,7 +210,7 @@ export default function App() {
                 <Route path="/logout" element={<SignIn />} />
                 <Route path="/register" element={<SignUp />} />
                 <Route path="/login" element={<SignIn />} />
-                <Route path="/addDivision" element={<AdicionarDivisao casaID={casaID} />} />
+                <Route path="/addDivision" element={<AdicionarDivisao/>} />
             </Routes>
             {(isLogged && lastMessageReceived) && (
                 <MDSnackbar

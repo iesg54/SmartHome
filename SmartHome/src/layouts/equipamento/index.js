@@ -35,7 +35,10 @@ const validationSchema = yup.object({
     consumo: yup.number().required("Por favor adicione um consumo energético ao equipamento!"),
 });
 
-function AdicionarEquipamento({ divisionID }) {
+function AdicionarEquipamento() {
+    const token = localStorage.getItem("token");
+    const divisionID = window.location.pathname.split("/")[2];
+
     const [responseMessage, setResponseMessage] = useState({ type: "", message: "" });
     const formik = useFormik({
         initialValues: {
@@ -50,6 +53,10 @@ function AdicionarEquipamento({ divisionID }) {
                     `http://localhost:8080/smarthome/private/division/${divisionID}/devices`,
                     null,
                     {
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`,
+                        },
                         params: {
                             tipo: values.tipo,
                             nome: values.nome,

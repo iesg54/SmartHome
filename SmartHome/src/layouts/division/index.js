@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useEffect, useState } from "react";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -18,12 +18,24 @@ import Footer from "examples/Footer";
 import DivionStats from "layouts/division/components/Stats";
 import DivisionDisp from "layouts/division/components/Dispositivos";
 
-function Division({ divisionID, divisionName }) {
-    const [tabIndex, setTabIndex] = React.useState(0);
+import { getUserInfo, getDivisions } from "appServices";
+import { getDivisionInfo } from "./divisionServices";
+
+function Division() {
+    const [tabIndex, setTabIndex] = useState(0);
 
     const handleTabChange = (event, newTabIndex) => {
         setTabIndex(newTabIndex);
     };
+
+    // get division id from url
+    const divID = window.location.pathname.split("/")[2];
+    const [divInfo, setDivInfo] = useState();
+    useEffect(async () => {
+        const user = await getUserInfo();
+        const divInfo = await getDivisionInfo(user.casa.id, divID);
+        setDivInfo(divInfo);
+    }, []);
 
     return (
         <DashboardLayout>
@@ -38,9 +50,9 @@ function Division({ divisionID, divisionName }) {
                     </Grid>
                 </Grid>
                 <Grid container mb={4}>
-                    {tabIndex === 0 && <DivionStats divisionID={divisionID} />}
+                    {tabIndex === 0 && <DivionStats divisionID={divID} />}
                     {tabIndex === 1 && (
-                        <DivisionDisp divisionID={divisionID} divisionName={divisionName} />
+                        <DivisionDisp divisionID={divID} />
                     )}
                 </Grid>
             </MDBox>

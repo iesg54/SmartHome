@@ -1,5 +1,4 @@
-import { useState } from "react";
-import PropTypes from "prop-types";
+import { useState, useEffect } from "react";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -32,8 +31,24 @@ import axios from "axios";
 
 const validationSchema = yup.object({});
 
-function AdicionarDivisao({ casaID }) {
+function AdicionarDivisao() {
     const [responseMessage, setResponseMessage] = useState({ type: "", message: "" });
+
+    const token = localStorage.getItem("token");
+    const [user, setUser] = useState({});
+    useEffect(() => {
+        axios
+        .get("http://localhost:8080/smarthome/private/user/info", {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`,
+            },
+        })
+        .then((response) => {
+            setUser(response.data);
+        })
+    }, [token]);
+
     const formik = useFormik({
         initialValues: {
             tipo: "",
@@ -43,7 +58,11 @@ function AdicionarDivisao({ casaID }) {
         onSubmit: (values, { resetForm }) => {
             setResponseMessage({ type: "", message: "" });
             axios
-                .post(`http://localhost:8080/smarthome/private/house/${casaID}/divisions`, null, {
+                .post(`http://localhost:8080/smarthome/private/house/${user.casa.id}/divisions`, null, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`,
+                    },
                     params: {
                         tipo: values.tipo,
                         nome: values.nome,
@@ -182,9 +201,5 @@ function AdicionarDivisao({ casaID }) {
         </DashboardLayout>
     );
 }
-
-AdicionarDivisao.propTypes = {
-    casaID: PropTypes.string,
-};
 
 export default AdicionarDivisao;

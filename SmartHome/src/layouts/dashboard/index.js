@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // @mui material components
 import Grid from "@mui/material/Grid";
@@ -23,125 +23,57 @@ import DivisionCard from "./components/DivisionCard";
 import HomeStats from "./components/HomeStats";
 import selectDivisionImage from "./selectDivisionImage";
 
-// Axios
-import axios from "axios";
+import { getUserInfo, getDivisions } from "appServices";
+import { getEnergyCost, getEnergyCostInfoLastWeek, getEnergyCostInfoLastMonth, deleteDivision } from "./dashboardServices";
 
 function Dashboard() {
-    // Get UserID and HomeID from local storage
-    const userID = localStorage.getItem("userID");
-    const casaID = localStorage.getItem("CasaID");
+    const navigate = useNavigate();
 
-    // Get divisions from the database http://localhost:8080/smarthome/private/house/1/divisions
+    // check if the user is logged in else redirect to the login page
+    const [isLogged, setIsLogged] = useState(false);
+    useEffect(() => {
+        if (localStorage.getItem("token") === null) {
+            setIsLogged(false);
+            navigate("/login");
+        } else {
+            setIsLogged(true);
+        }
+    }, []);
+
+    // User Data
+    const [userData, setUserData] = useState();
+
+    // House Divisions
     const [divisions, setDivisions] = useState([]);
-    useEffect(() => {
-        axios
-            .get(`http://localhost:8080/smarthome/private/house/${casaID}/divisions`)
-            .then((res) => {
-                setDivisions(res.data);
-            });
-    }, []);
 
-    // Get the energy cost of each division and save it in an array from the database http://localhost:8080/smarthome/private/house/1/energy/current
+    // Energy Cost
     const [energyCost, setEnergyCost] = useState([]);
-    useEffect(() => {
-        axios
-            .get(`http://localhost:8080/smarthome/private/house/${casaID}/energy/current`)
-            .then((res) => {
-                // res.data is an array of objects with the following structure:
-                // {1: 3232.4700000000003, 2: 1282.4700000000003,}
-                // round the energy cost to units of 10W
-                for (const key in res.data) {
-                    res.data[key] = Math.round(res.data[key] / 10) * 10;
-                }
-                setEnergyCost(res.data);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }, []);
 
-    // Get the energy cost of each division for the last week and save it in an array from the database http://localhost:8080/smarthome/private/house/1/energy/month
+    // Energy Cost Info for the last week
     const [energyCostPerWeekDay, setEnergyCostPerWeekDay] = useState([]);
     const [energyCostPerDivision, setEnergyCostPerDivision] = useState([]);
     const [lastWeek, setLastWeek] = useState([]);
-    useEffect(() => {
-        axios
-            .get(`http://localhost:8080/smarthome/private/house/${casaID}/energy/week`)
-            .then((res) => {
-                // res.data is an array of objects with the following structure:
-                // {1: {1: 3232.4700000000003, 2: 1282.4700000000003,}, 2: {1: 3232.4700000000003, 2: 1282.4700000000003,}}
-                // each object is a division and each division has an array of objects with the energy cost for each day
-                // round the energy cost to units of 10W save the mean value of the energy cost for each day in an array and save the mean value of the energy cost for each division in an array
-                let costPerDay = new Array(Object.keys(res.data[1]).length).fill(0);
-                let costPerDivision = [];
-                let lastW = [];
-                for (const key in res.data) {
-                    let sum = 0;
-                    let count = 0;
-                    for (const key2 in res.data[key]) {
-                        let date = key2.split("T")[0];
-                        if (!lastW.includes(date)) {
-                            lastW.push(date);
-                        }
-                        let day = Math.round(res.data[key][key2] / 10) * 10;
-                        costPerDay[count] += day;
-                        sum += day;
-                        count++;
-                    }
-                    costPerDivision.push(sum);
-                }
-                for (let i = 0; i < costPerDay.length; i++) {
-                    costPerDay[i] = costPerDay[i] / Object.keys(res.data).length;
-                }
-                setEnergyCostPerWeekDay(costPerDay);
-                setEnergyCostPerDivision(costPerDivision);
-                setLastWeek(lastW.sort());
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }, []);
 
-    // Get the energy cost of each division for the last month and save it in an array from the database http://localhost:8080/smarthome/private/house/1/energy/week
-    const [energyCostPerDay, setEnergyCostPerDay] = useState([]);
-    const [energyCostPerDivision2, setEnergyCostPerDivision2] = useState([]);
+    // Energy Cost Info for the last month
+    const [energyCostPerMonthDay, setEnergyCostPerMonthDay] = useState([]);
+    const [energyCostPerMonthDivision, setEnergyCostPerMonthDivision] = useState([]);
     const [lastMonth, setLastMonth] = useState([]);
-    useEffect(() => {
-        axios
-            .get(`http://localhost:8080/smarthome/private/house/${casaID}/energy/month`)
-            .then((res) => {
-                // res.data is an array of objects with the following structure:
-                // {1: {1: 3232.4700000000003, 2: 1282.4700000000003,}, 2: {1: 3232.4700000000003, 2: 1282.4700000000003,}}
-                // round the energy cost to units of 10W and save the mean of the values in an array
 
-                let costPerDay = new Array(Object.keys(res.data[1]).length).fill(0);
-                let costPerDivision = [];
-                let lastM = [];
-                for (const key in res.data) {
-                    let sum = 0;
-                    let count = 0;
-                    for (const key2 in res.data[key]) {
-                        let date = key2.split("T")[0];
-                        if (!lastM.includes(date)) {
-                            lastM.push(date);
-                        }
-                        let day = Math.round(res.data[key][key2] / 10) * 10;
-                        costPerDay[count] += day;
-                        sum += day;
-                        count++;
-                    }
-                    costPerDivision.push(sum);
-                }
-                for (let i = 0; i < costPerDay.length; i++) {
-                    costPerDay[i] = costPerDay[i] / Object.keys(res.data).length;
-                }
-                setEnergyCostPerDay(costPerDay);
-                setEnergyCostPerDivision2(costPerDivision);
-                setLastMonth(lastM.sort());
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+    useEffect(async () => {
+        const user = await getUserInfo()
+        setUserData(user);
+        const divisions = await getDivisions(user.casa.id);
+        setDivisions(divisions);
+        const energyCost = await getEnergyCost(user.casa.id);
+        setEnergyCost(energyCost);
+        const energyCostWeek = await getEnergyCostInfoLastWeek(user.casa.id);
+        setEnergyCostPerWeekDay(energyCostWeek.costPerDay);
+        setEnergyCostPerDivision(energyCostWeek.costPerDivision);
+        setLastWeek(energyCostWeek.lastWeek);
+        const energyCostMonth = await getEnergyCostInfoLastMonth(user.casa.id);
+        setEnergyCostPerMonthDay(energyCostMonth.costPerDay);
+        setEnergyCostPerMonthDivision(energyCostMonth.costPerDivision);
+        setLastMonth(energyCostMonth.lastMonth);
     }, []);
 
     // Tab index for the home stats
@@ -150,32 +82,11 @@ function Dashboard() {
         setTabIndex(newTabIndex);
     };
 
-    // check if the user is logged in else redirect to the login page
-    const [isLogged, setIsLogged] = useState(false);
-    useEffect(() => {
-        if (localStorage.getItem("userID") === null) {
-            setIsLogged(false);
-            window.location.href = "/login";
-        } else {
-            setIsLogged(true);
-        }
-    }, []);
 
     const handleDeleteDivision = (divID) => {
-        axios
-            .delete(`http://localhost:8080/smarthome/private/house/${casaID}/divisions`,
-            {
-                params: {
-                    idDiv: divID,
-                }
-            })
-            .then((res) => {
-                console.log(res);
-                window.location.reload();
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        if (deleteDivision(userData.casa.id, divID)) {
+            setDivisions(divisions.filter((division) => division.id !== divID));
+        }
     };
 
     return (
@@ -195,7 +106,7 @@ function Dashboard() {
                                     energyConsumption={energyCost[division.id]}
                                     action={{
                                         type: "internal",
-                                        route: `/division/${division.nome}`,
+                                        route: `/division/${division.id}`,
                                         color: "dark",
                                         label: "Ver",
                                     }}
@@ -250,13 +161,13 @@ function Dashboard() {
                                     title: "Mês",
                                     description: "Gasto energético dos últimos 30 dias",
                                     labels: lastMonth,
-                                    data: energyCostPerDay,
+                                    data: energyCostPerMonthDay,
                                 }}
                                 PieChartObject={{
                                     title: "Mês",
                                     description: "Gasto energético por divisão",
                                     labels: divisions.map((division) => division.nome),
-                                    data: energyCostPerDivision2,
+                                    data: energyCostPerMonthDivision,
                                 }}
                             />
                         )}
