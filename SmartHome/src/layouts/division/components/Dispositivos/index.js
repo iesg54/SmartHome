@@ -28,6 +28,8 @@ import ActionModal from "./components/ActionModal";
 import { findDeviceIcon } from "./findDeviceIcon";
 
 function DivisionDevices({ divisionID, divisionName }) {
+    const [deviceOpen, setDeviceOpen] = useState({});
+
     // Get Devices Data from the API and update the state http://localhost:8080/smarthome/private/division/{divisionID}/devices
     const [devicesState, setDevicesState] = useState([]);
     useEffect(() => {
@@ -51,9 +53,6 @@ function DivisionDevices({ divisionID, divisionName }) {
                     return newDevicesState;
                 });
             })
-            .catch((error) => {
-                console.log(error);
-            });
     }, []);
 
     /* eslint-disable no-param-reassign */
@@ -69,12 +68,6 @@ function DivisionDevices({ divisionID, divisionName }) {
                 `http://localhost:8080/smarthome/private/division/${divisionID}/device/${id}`,
                 null
             )
-            .then((response) => {
-                console.log(response);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
         setDevicesState(newDevicesState);
     };
     /* eslint-disable no-param-reassign */
@@ -110,12 +103,8 @@ function DivisionDevices({ divisionID, divisionName }) {
                     return newEnergyData;
                 });
             })
-            .catch((error) => {
-                console.log(error);
-            });
     }, []);
 
-    const [deviceOpen, setDeviceOpen] = useState({});
     const handleDeviceDialog = (id) => {
         setDevicesState((prev) => {
             const newDevicesState = [...prev];
@@ -137,12 +126,6 @@ function DivisionDevices({ divisionID, divisionName }) {
                     id,
                 },
             })
-            .then((response) => {
-                console.log(response);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
         setDevicesState((prev) => {
             const newDevicesState = [...prev];
             const index = newDevicesState.findIndex((device) => device.id === id);
@@ -238,19 +221,21 @@ function DivisionDevices({ divisionID, divisionName }) {
                     </Grid>
                 ))}
             </Grid>
-            <ActionModal
-                open={deviceOpen.dialog}
-                idDisp={deviceOpen.id}
-                tipoDisp={deviceOpen.tipo}
-                idDivision={divisionID}
-                startTime={deviceOpen.startTime ? deviceOpen.startTime : null}
-                endTime={deviceOpen.endTime ? deviceOpen.endTime : null}
-                tempAtual={deviceOpen.tempAtual ? deviceOpen.tempAtual : null}
-                tempMax={deviceOpen.tempMax ? deviceOpen.tempMax : null}
-                tempMin={deviceOpen.tempMin ? deviceOpen.tempMin : null}
-                luminosidade={deviceOpen.luminosidade ? deviceOpen.luminosidade : null}
-                closeAction={() => handleDeviceDialog(deviceOpen.id)}
-            />
+            {deviceOpen.dialog && (
+                <ActionModal
+                    open={deviceOpen.dialog}
+                    idDisp={deviceOpen.id}
+                    tipoDisp={deviceOpen.tipo}
+                    idDivision={divisionID}
+                    startTime={deviceOpen.startTime ? deviceOpen.startTime : null}
+                    endTime={deviceOpen.endTime ? deviceOpen.endTime : null}
+                    tempAtual={deviceOpen.tempAtual ? deviceOpen.tempAtual : null}
+                    tempMax={deviceOpen.tempMax ? deviceOpen.tempMax : null}
+                    tempMin={deviceOpen.tempMin ? deviceOpen.tempMin : null}
+                    luminosidade={deviceOpen.luminosidade ? deviceOpen.luminosidade : null}
+                    closeAction={() => handleDeviceDialog(deviceOpen.id)}
+                />
+            )}
         </>
     );
 }

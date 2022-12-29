@@ -28,6 +28,33 @@ function DivisionStats({ divisionID }) {
                 // set data
                 const sensorsData = [];
                 Object.keys(res.data).map((key) => {
+
+                    // calculate time difference
+                    let timeDiff = "";
+                    if (res.data[key] !== null) {
+                        const stamp = new Date(res.data[key].stamp);
+                        const now = new Date();
+                        const diff = now - stamp;
+                        const diffInMinutes = Math.floor(diff / 1000 / 60);
+                        const diffInHours = Math.floor(diffInMinutes / 60);
+                        const diffInDays = Math.floor(diffInHours / 24);
+
+                        // concatenate time difference
+                        if (diffInDays > 0) {
+                            timeDiff = `${diffInDays}dias`;
+                        } else if (diffInHours > 0) {
+                            timeDiff = `${diffInHours}horas`;
+                        } else if (diffInMinutes > 0) {
+                            timeDiff = `${diffInMinutes}minutos`;
+                        } else {
+                            timeDiff = "agora";
+                        }
+                    } else {
+                        timeDiff = "n/a";
+                    }
+
+                    // set unit, icon and color
+
                     let unit = "";
                     let icon = "";
                     let color = "";
@@ -59,6 +86,7 @@ function DivisionStats({ divisionID }) {
                             unit,
                             icon,
                             color,
+                            timeDiff,
                         });
                     } else {
                         sensorsData.push({
@@ -67,6 +95,7 @@ function DivisionStats({ divisionID }) {
                             unit,
                             icon,
                             color,
+                            timeDiff,
                         });
                     }
                 });
@@ -185,6 +214,9 @@ function DivisionStats({ divisionID }) {
                             count={sensor.value ? sensor.value + sensor.unit : "Sem dados"}
                             icon={sensor.icon}
                             color={sensor.color}
+                            percentage={{
+                                label: sensor.timeDiff,
+                            }}
                         />
                     </Grid>
                 ))}

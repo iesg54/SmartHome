@@ -15,6 +15,7 @@ import MDBox from "components/MDBox";
 import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
 import MDTypography from "components/MDTypography";
+import MDAlert from "components/MDAlert";
 
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -35,7 +36,7 @@ const validationSchema = yup.object({
 });
 
 function AdicionarEquipamento({ divisionID }) {
-    const [responseMessage, setResponseMessage] = useState();
+    const [responseMessage, setResponseMessage] = useState({ type: "", message: "" });
     const formik = useFormik({
         initialValues: {
             tipo: "",
@@ -43,8 +44,7 @@ function AdicionarEquipamento({ divisionID }) {
             consumo: "",
         },
         validationSchema: validationSchema,
-        onSubmit: (values, { cleanForm }) => {
-            // Post to the API http://localhost:8080/smarthome/private/division/{divisionID}/devices
+        onSubmit: (values, { resetForm }) => {
             axios
                 .post(
                     `http://localhost:8080/smarthome/private/division/${divisionID}/devices`,
@@ -58,130 +58,144 @@ function AdicionarEquipamento({ divisionID }) {
                     }
                 )
                 .then((response) => {
-                    setResponseMessage(response.data.message);
-                    console.log(response);
+                    setResponseMessage({ type: "success", message: response.data.message });
                 })
                 .catch((error) => {
-                    console.log(error);
+                    setResponseMessage({ type: "error", message: error.data.message });
                 });
-            cleanForm();
+            resetForm();
         },
-        cleanForm: true,
     });
 
     return (
         <DashboardLayout>
             <DashboardNavbar />
             <Grid container justifyContent="center">
-                <MDBox py={3}>
-                    <Card>
-                        <MDBox
-                            variant="gradient"
-                            bgColor="info"
-                            borderRadius="lg"
-                            coloredShadow="info"
-                            mx={2}
-                            mt={-3}
-                            p={2}
-                            textAlign="center"
-                        >
-                            <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-                                Adicionar Equipamento
-                            </MDTypography>
-                        </MDBox>
-                        <MDBox pt={4} pb={3} px={3}>
-                            <form onSubmit={formik.handleSubmit}>
-                                <Grid item mb={2}>
-                                    <FormControl component="fieldset">
-                                        <FormLabel component="legend">
-                                            <MDTypography>Tipo de Equipamento</MDTypography>
-                                        </FormLabel>
-                                        <RadioGroup
-                                            aria-label="tipo"
-                                            name="tipo"
-                                            value={formik.values.tipo}
-                                            onChange={formik.handleChange}
-                                        >
-                                            <FormControlLabel
-                                                value="LAMPADA"
-                                                control={<Radio />}
-                                                label="Lâmpada"
-                                            />
-                                            <FormControlLabel
-                                                value="AC"
-                                                control={<Radio />}
-                                                label="Ar Condicionado"
-                                            />
-                                            <FormControlLabel
-                                                value="REGADOR"
-                                                control={<Radio />}
-                                                label="Regador"
-                                            />
-                                            <FormControlLabel
-                                                value="TOMADA"
-                                                control={<Radio />}
-                                                label="Outro"
-                                            />
-                                        </RadioGroup>
-                                        <FormHelperText>
-                                            {formik.touched.tipo && formik.errors.tipo}
-                                        </FormHelperText>
-                                    </FormControl>
-                                </Grid>
-                                <Grid item mb={3}>
-                                    <MDInput
-                                        id="nome"
-                                        name="nome"
-                                        value={formik.values.nome}
-                                        onChange={formik.handleChange}
-                                        error={formik.touched.nome && Boolean(formik.errors.nome)}
-                                        helperText={formik.touched.nome && formik.errors.nome}
-                                        fullWidth
-                                        label="Nome do Equipamento"
-                                    />
-                                </Grid>
-                                <Grid item mb={3}>
-                                    <MDInput
-                                        id="consumo"
-                                        name="consumo"
-                                        value={formik.values.consumo}
-                                        onChange={formik.handleChange}
-                                        error={
-                                            formik.touched.consumo && Boolean(formik.errors.consumo)
-                                        }
-                                        helperText={formik.touched.consumo && formik.errors.consumo}
-                                        fullWidth
-                                        label="Consumo Energético"
-                                    />
-                                </Grid>
-                                <Grid container spacing={2} justifyContent="center">
-                                    <Grid item>
-                                        <MDButton type="submit" color="success" variant="contained">
-                                            Adicionar
-                                        </MDButton>
-                                    </Grid>
-                                    <Grid item>
-                                        <MDButton
-                                            type="button"
-                                            color="error"
-                                            variant="contained"
-                                            onClick={() => formik.resetForm()}
-                                        >
-                                            Cancelar
-                                        </MDButton>
-                                    </Grid>
-                                </Grid>
-                            </form>
-                        </MDBox>
-                        {responseMessage && (
-                            <MDBox px={3} pb={3}>
-                                <MDTypography variant="h5" color="success">
-                                    {responseMessage}
+                {responseMessage.message && (
+                    <Grid item xs={12} md={12} lg={12}>
+                        <MDAlert color={responseMessage.type} dismissible>
+                            {responseMessage.message}
+                        </MDAlert>
+                    </Grid>
+                )}
+                <Grid item xs={12} md={12} lg={12}>
+                    <MDBox
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                        minHeight="100vh"
+                    >
+                        <Card>
+                            <MDBox
+                                variant="gradient"
+                                bgColor="info"
+                                borderRadius="lg"
+                                coloredShadow="info"
+                                mx={2}
+                                mt={-3}
+                                p={2}
+                                textAlign="center"
+                            >
+                                <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
+                                    Adicionar Equipamento
                                 </MDTypography>
                             </MDBox>
-                        )}
-                    </Card>
-                </MDBox>
+                            <MDBox pt={4} pb={3} px={3}>
+                                <form onSubmit={formik.handleSubmit}>
+                                    <Grid item mb={2}>
+                                        <FormControl component="fieldset">
+                                            <FormLabel component="legend">
+                                                <MDTypography>Tipo de Equipamento</MDTypography>
+                                            </FormLabel>
+                                            <RadioGroup
+                                                aria-label="tipo"
+                                                name="tipo"
+                                                value={formik.values.tipo}
+                                                onChange={formik.handleChange}
+                                            >
+                                                <FormControlLabel
+                                                    value="LAMPADA"
+                                                    control={<Radio />}
+                                                    label="Lâmpada"
+                                                />
+                                                <FormControlLabel
+                                                    value="AC"
+                                                    control={<Radio />}
+                                                    label="Ar Condicionado"
+                                                />
+                                                <FormControlLabel
+                                                    value="REGADOR"
+                                                    control={<Radio />}
+                                                    label="Regador"
+                                                />
+                                                <FormControlLabel
+                                                    value="TOMADA"
+                                                    control={<Radio />}
+                                                    label="Outro"
+                                                />
+                                            </RadioGroup>
+                                            <FormHelperText>
+                                                {formik.touched.tipo && formik.errors.tipo}
+                                            </FormHelperText>
+                                        </FormControl>
+                                    </Grid>
+                                    <Grid item mb={3}>
+                                        <MDInput
+                                            id="nome"
+                                            name="nome"
+                                            value={formik.values.nome}
+                                            onChange={formik.handleChange}
+                                            error={
+                                                formik.touched.nome && Boolean(formik.errors.nome)
+                                            }
+                                            helperText={formik.touched.nome && formik.errors.nome}
+                                            fullWidth
+                                            label="Nome do Equipamento"
+                                        />
+                                    </Grid>
+                                    <Grid item mb={3}>
+                                        <MDInput
+                                            id="consumo"
+                                            name="consumo"
+                                            value={formik.values.consumo}
+                                            onChange={formik.handleChange}
+                                            error={
+                                                formik.touched.consumo &&
+                                                Boolean(formik.errors.consumo)
+                                            }
+                                            helperText={
+                                                formik.touched.consumo && formik.errors.consumo
+                                            }
+                                            fullWidth
+                                            label="Consumo Energético"
+                                        />
+                                    </Grid>
+                                    <Grid container spacing={2} justifyContent="center">
+                                        <Grid item>
+                                            <MDButton
+                                                type="submit"
+                                                color="success"
+                                                variant="contained"
+                                            >
+                                                Adicionar
+                                            </MDButton>
+                                        </Grid>
+                                        <Grid item>
+                                            <MDButton
+                                                type="button"
+                                                color="error"
+                                                variant="contained"
+                                                onClick={() => formik.resetForm()}
+                                            >
+                                                Cancelar
+                                            </MDButton>
+                                        </Grid>
+                                    </Grid>
+                                </form>
+                            </MDBox>
+                        </Card>
+                    </MDBox>
+                </Grid>
             </Grid>
             <Footer />
         </DashboardLayout>

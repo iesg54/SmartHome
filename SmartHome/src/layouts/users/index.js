@@ -14,6 +14,7 @@ import MDBox from "components/MDBox";
 import MDButton from "components/MDButton";
 import MDTypography from "components/MDTypography";
 import MDInput from "components/MDInput";
+import MDAlert from "components/MDAlert";
 
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
@@ -36,14 +37,15 @@ const validationSchema = yup.object({
 });
 
 function Users() {
+    const CasaID = localStorage.getItem("CasaID");
     const [showForm, toggleForm] = useState(false);
-    const [responseMessage, setResponseMessage] = useState("");
 
     const handleClick = (e) => {
         e.preventDefault();
         toggleForm((prevValue) => !prevValue);
     };
 
+    const [responseMessage, setResponseMessage] = useState({ type: "", message: "" });
     const formik = useFormik({
         initialValues: {
             email: "",
@@ -51,7 +53,7 @@ function Users() {
         },
         validationSchema,
         onSubmit: (values, { resetForm }) => {
-            // Send data to the API http://localhost:8080/smarthome/private/house/{houseID}/users
+            setDeleteUserMessage("");
             axios
                 .post("http://localhost:8080/smarthome/private/house/1/users", null, {
                     params: {
@@ -59,23 +61,21 @@ function Users() {
                     },
                 })
                 .then((response) => {
-                    console.log(response);
-                    setResponseMessage(response.data.message);
+                    setResponseMessage({ type: "success", message: response.data.message });
                 })
                 .catch((error) => {
-                    console.log(error);
+                    setResponseMessage({ type: "error", message: error.response.data.message });
                 });
-
             resetForm();
             users.push(values);
         },
         cleanForm: true,
     });
 
-    const CasaID = localStorage.getItem("CasaID");
-
     // Implement Method to delete user http://localhost:8080/smarthome/private/house/{houseID}/users
+    const [deleteUserMessage, setDeleteUserMessage] = useState("");
     const handleDelete = (id) => {
+        setDeleteUserMessage("");
         let user = users.find((user) => user.id === id);
         axios
             .delete(`http://localhost:8080/smarthome/private/house/${CasaID}/users`, {
@@ -84,10 +84,7 @@ function Users() {
                 },
             })
             .then((response) => {
-                console.log(response);
-            })
-            .catch((error) => {
-                console.log(error);
+                setDeleteUserMessage(response.data.message);
             });
         users.splice(users.indexOf(user), 1);
     };
@@ -99,123 +96,151 @@ function Users() {
             .get(`http://localhost:8080/smarthome/private/house/${CasaID}/users`)
             .then((response) => {
                 setUsers(response.data);
-            })
-            .catch((error) => {
-                console.log(error);
             });
+    }, [users]);
+
+    // check if the user is an admin
+    const [isUserAdmin, setIsUserAdmin] = useState(false);
+    useEffect(() => {
+        users.forEach((user) => {
+            if (user.id === Number(localStorage.getItem("userID")) && user.admin === true) {
+                setIsUserAdmin(true);
+            }
+        });
     }, [users]);
 
     return (
         <DashboardLayout>
             <DashboardNavbar />
-            <Grid container justifyContent="center" mb={4}>
-                <MDTypography variant="h2">Utilizadores associados à Casa</MDTypography>
-            </Grid>
-            <Grid container spacing={5} justifyContent="center">
-                {users.map((user) => (
-                    <Grid item xs={12} sm={6} md={3} key={user.id}>
-                        <MDBox mb={3}>
-                            <UserCard
-                                nome={user.nome}
-                                isAdmin={user.admin}
-                                foto={user.profileImage ? user.profileImage : ""}
-                                id={user.id}
-                                handleDelete={(e) => handleDelete(user.id)}
-                            />
-                        </MDBox>
-                    </Grid>
-                ))}
-            </Grid>
-            <Grid container justifyContent="center" mb={4}>
-                <MDButton variant="contained" color="primary" onClick={handleClick}>
-                    Adicionar Utilizador
-                </MDButton>
-            </Grid>
-            {showForm && (
-                <Grid container justifyContent="center">
-                    <Grid item xs={12} sm={6} md={4}>
-                        <Card>
-                            <Grid container justifyContent="center" mb={3}>
-                                <MDBox p={3}>
-                                    <MDTypography variant="h4" mb={3}>
-                                        Adicionar Utilizador
-                                    </MDTypography>
-                                    <form onSubmit={formik.handleSubmit}>
-                                        <MDBox mb={3}>
-                                            <MDInput
-                                                id="email"
-                                                name="email"
-                                                label="Email"
-                                                type="email"
-                                                value={formik.values.email}
-                                                onChange={formik.handleChange}
-                                                error={
-                                                    formik.touched.email &&
-                                                    Boolean(formik.errors.email)
-                                                }
-                                                helperText={
-                                                    formik.touched.email && formik.errors.email
-                                                }
-                                                fullWidth
-                                            />
-                                        </MDBox>
-                                        <MDBox mb={3}>
-                                            <MDTypography variant="h6" mb={2}>
-                                                Tipo de Utilizador
-                                            </MDTypography>
-                                            <FormControl component="fieldset">
-                                                <RadioGroup
-                                                    row
-                                                    aria-label="tipo"
-                                                    name="tipo"
-                                                    value={formik.values.tipo}
-                                                    onChange={formik.handleChange}
-                                                >
-                                                    <FormControlLabel
-                                                        value="admin"
-                                                        control={<Radio />}
-                                                        label="Admin"
-                                                    />
-                                                    <FormControlLabel
-                                                        value="user"
-                                                        control={<Radio />}
-                                                        label="User"
-                                                    />
-                                                </RadioGroup>
-                                            </FormControl>
-                                        </MDBox>
-                                        <MDBox mt={3} display="flex" justifyContent="space-between">
-                                            <MDButton
-                                                variant="contained"
-                                                color="primary"
-                                                size="small"
-                                                type="submit"
-                                            >
-                                                Adicionar
-                                            </MDButton>
-                                            <MDButton
-                                                variant="contained"
-                                                color="secondary"
-                                                size="small"
-                                                onClick={handleClick}
-                                            >
-                                                Cancelar
-                                            </MDButton>
-                                        </MDBox>
-                                    </form>
-                                </MDBox>
-                                {responseMessage && (
-                                    <MDBox p={3}>
-                                        <MDTypography variant="subtitle1" color="primary">
-                                            {responseMessage}
-                                        </MDTypography>
-                                    </MDBox>
-                                )}
-                            </Grid>
-                        </Card>
-                    </Grid>
+            <MDBox
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    minHeight: "100vh",
+                }}
+            >
+                <Grid container justifyContent="center" mb={4}>
+                    <MDTypography variant="h2">Utilizadores associados à Casa</MDTypography>
                 </Grid>
-            )}
+                {deleteUserMessage && (
+                    <Grid container justifyContent="center" mb={4}>
+                        <MDAlert color="primary" dismissible>
+                            {deleteUserMessage}
+                        </MDAlert>
+                    </Grid>
+                )}
+                <Grid container spacing={5} justifyContent="center">
+                    {users.map((user) => (
+                        <Grid item xs={12} sm={6} md={3} key={user.id}>
+                            <MDBox mb={3}>
+                                <UserCard
+                                    nome={user.nome}
+                                    isAdmin={user.admin}
+                                    foto={user.profileImage ? user.profileImage : ""}
+                                    id={user.id}
+                                    handleDelete={(e) => handleDelete(user.id)}
+                                />
+                            </MDBox>
+                        </Grid>
+                    ))}
+                </Grid>
+                <Grid container justifyContent="center" mb={4}>
+                    {!showForm && isUserAdmin && (
+                        <MDButton variant="contained" color="primary" onClick={handleClick}>
+                            Adicionar Utilizador
+                        </MDButton>
+                    )}
+                </Grid>
+                {responseMessage.message && (
+                    <Grid container justifyContent="center" mb={4}>
+                        <MDAlert color={responseMessage.type} dismissible>
+                            {responseMessage.message}
+                        </MDAlert>
+                    </Grid>
+                )}
+                {showForm && (
+                    <Grid container justifyContent="center">
+                        <Grid item xs={12} sm={6} md={4}>
+                            <Card>
+                                <Grid container justifyContent="center" mb={3}>
+                                    <MDBox p={3}>
+                                        <MDTypography variant="h4" mb={3}>
+                                            Adicionar Utilizador
+                                        </MDTypography>
+                                        <form onSubmit={formik.handleSubmit}>
+                                            <MDBox mb={3}>
+                                                <MDInput
+                                                    id="email"
+                                                    name="email"
+                                                    label="Email"
+                                                    type="email"
+                                                    value={formik.values.email}
+                                                    onChange={formik.handleChange}
+                                                    error={
+                                                        formik.touched.email &&
+                                                        Boolean(formik.errors.email)
+                                                    }
+                                                    helperText={
+                                                        formik.touched.email && formik.errors.email
+                                                    }
+                                                    fullWidth
+                                                />
+                                            </MDBox>
+                                            <MDBox mb={3}>
+                                                <MDTypography variant="h6" mb={2}>
+                                                    Tipo de Utilizador
+                                                </MDTypography>
+                                                <FormControl component="fieldset">
+                                                    <RadioGroup
+                                                        row
+                                                        aria-label="tipo"
+                                                        name="tipo"
+                                                        value={formik.values.tipo}
+                                                        onChange={formik.handleChange}
+                                                    >
+                                                        <FormControlLabel
+                                                            value="admin"
+                                                            control={<Radio />}
+                                                            label="Admin"
+                                                        />
+                                                        <FormControlLabel
+                                                            value="user"
+                                                            control={<Radio />}
+                                                            label="User"
+                                                        />
+                                                    </RadioGroup>
+                                                </FormControl>
+                                            </MDBox>
+                                            <MDBox
+                                                mt={3}
+                                                display="flex"
+                                                justifyContent="space-between"
+                                            >
+                                                <MDButton
+                                                    variant="contained"
+                                                    color="primary"
+                                                    size="small"
+                                                    type="submit"
+                                                >
+                                                    Adicionar
+                                                </MDButton>
+                                                <MDButton
+                                                    variant="contained"
+                                                    color="secondary"
+                                                    size="small"
+                                                    onClick={handleClick}
+                                                >
+                                                    Cancelar
+                                                </MDButton>
+                                            </MDBox>
+                                        </form>
+                                    </MDBox>
+                                </Grid>
+                            </Card>
+                        </Grid>
+                    </Grid>
+                )}
+            </MDBox>
             <Footer />
         </DashboardLayout>
     );

@@ -50,21 +50,13 @@ function UserCard({ nome, foto, isAdmin, id, handleDelete }) {
                         onClick={handleDelete}
                         disabled
                     >
-                       Remover 
+                        Remover
                     </MDButton>
                 )}
             </MDBox>
         </Card>
     );
 }
-
-UserCard.defaultProps = {
-    nome: "",
-    foto: "",
-    isAdmin: true,
-    id: 1,
-    handleDelete: () => {},
-};
 
 UserCard.propTypes = {
     nome: PropTypes.string.isRequired,

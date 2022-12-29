@@ -26,66 +26,72 @@ function DeviceCard({
 }) {
     return (
         <Card>
-            <MDBox display="flex" flexDirection="column" alignItems="center" p={2}>
-                <MDBox display="flex" alignItems="center">
-                    <MDBox
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center"
-                        width={50}
-                        height={50}
-                        borderRadius="50%"
-                        bgcolor={color}
-                        color={color === "light" ? "white" : "dark"}
-                        variant="gradient"
-                        coloredShadow={color}
-                        mr={2}
-                    >
-                        <Icon fontSize="medium" color="inherit">{icon}</Icon>
+            <MDBox p={2}>
+                <MDBox display="flex" justifyContent="space-between">
+                    <MDBox display="flex" alignItems="center">
+                        <MDBox
+                            variant="gradient"
+                            bgColor={color === "light" ? "dark" : "white"}
+                            borderRadius="md"
+                            coloredShadow={color}
+                            p={1}
+                            mr={2}
+                        >
+                            <Icon color="inherit">{icon}</Icon>
+                        </MDBox>
+                        <MDTypography variant="h6" fontWeight="medium">
+                            {name}
+                        </MDTypography>
                     </MDBox>
-                    <MDTypography variant="h5" mt={2}>
-                        {name}
-                    </MDTypography>
+                    <MDBox display="flex" alignItems="center">
+                        <MDTypography variant="h6" fontWeight="medium">
+                            {consumption} W
+                        </MDTypography>
+                    </MDBox>
                 </MDBox>
-                <MDBox display="flex" alignItems="center" mt={2}>
-                    <MDTypography variant="body2" color="secondary">
-                        Consumo: {consumption} W
-                    </MDTypography>
+                <MDBox display="flex" justifyContent="space-between">
+                    <MDBox display="flex" alignItems="center">
+                        <MDTypography variant="h6" fontWeight="medium">
+                            Estado
+                        </MDTypography>
+                    </MDBox>
+                    <MDBox display="flex" alignItems="center">
+                        <FormGroup>
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={state}
+                                        onChange={deviceStateHandler}
+                                        name="state"
+                                    />
+                                }
+                                label={state ? "Ligado" : "Desligado"}
+                            />
+                        </FormGroup>
+                    </MDBox>
                 </MDBox>
-                <MDBox display="flex" alignItems="center" mt={2}>
-                    <FormGroup>
-                        <FormControlLabel
-                            control={
-                                <Switch
-                                    checked={state}
-                                    onChange={deviceStateHandler}
-                                    name="state"
-                                />
-                            }
-                            label={state ? "Ligado" : "Desligado"}
-                        />
-                    </FormGroup>
-                </MDBox>
-            </MDBox>
-            <Divider />
-            <MDBox display="flex" justifyContent="center" mt={2} mb={3}>
-                <MDBox display="flex" alignItems="center" ml={2}>
-                    <MDButton
-                        variant="contained"
-                        color="primary"
-                        onClick={deviceActionHandler}
-                    >
-                        Ação
-                    </MDButton>
-                </MDBox>
-                <MDBox display="flex" alignItems="center" ml={2}>
-                    <MDButton
-                        variant="contained"
-                        color="error"
-                        onClick={deviceDeleteHandler}
-                    >
-                        Excluir
-                    </MDButton>
+                <Divider />
+                <MDBox display="flex" justifyContent="space-between" mt={2}>
+                    <MDBox display="flex" alignItems="center">
+                        <MDButton
+                            variant="contained"
+                            color="primary"
+                            size="small"
+                            onClick={deviceActionHandler}
+                        >
+                            Ações
+                        </MDButton>
+                    </MDBox>
+                    <MDBox display="flex" alignItems="center">
+                        <MDButton
+                            variant="contained"
+                            color="error"
+                            size="small"
+                            onClick={deviceDeleteHandler}
+                        >
+                            Excluir
+                        </MDButton>
+                    </MDBox>
                 </MDBox>
             </MDBox>
         </Card>

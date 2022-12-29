@@ -1,19 +1,5 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import useWebSocket from "react-use-websocket";
 
 // react-router components
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
@@ -21,14 +7,9 @@ import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 // @mui material components
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import Icon from "@mui/material/Icon";
-
-// Material Dashboard 2 React components
-import MDBox from "components/MDBox";
 
 // Material Dashboard 2 React example components
 import Sidenav from "examples/Sidenav";
-import Configurator from "examples/Configurator";
 
 // Material Dashboard 2 React themes
 import theme from "assets/theme";
@@ -37,7 +18,7 @@ import theme from "assets/theme";
 import themeDark from "assets/theme-dark";
 
 // Material Dashboard 2 React routes
-import { routes } from "routes";
+import routes from "routes";
 
 // Material Dashboard 2 React contexts
 import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "context";
@@ -53,10 +34,55 @@ import AdicionarDivisao from "layouts/adicionarDivisao";
 import Division from "layouts/division";
 import AdicionarEquipamento from "layouts/equipamento";
 
+// Material Dashboard 2 React components
+import MDButton from "components/MDButton";
+import MDSnackbar from "components/MDSnackbar";
+
 // Axios
 import axios from "axios";
 
 export default function App() {
+    const [isLogged, setIsLogged] = useState(null);
+    useEffect(() => {
+        const userLogged = localStorage.getItem("userID");
+        if (userLogged) {
+            setIsLogged(true);
+        } else {
+            setIsLogged(false);
+        }
+    }, []);
+
+    // Websocket Connection
+    const [socketUrl, setSocketUrl] = useState('ws://localhost:8765');
+    const [messageHistory, setMessageHistory] = useState([]);
+    const [lastMessageReceived, setLastMessageReceived] = useState(null);
+
+    const {
+        sendMessage,
+        lastMessage,
+        readyState,
+      } = useWebSocket(socketUrl, {
+        onOpen: () => console.log('opened'),
+        shouldReconnect: (closeEvent) => true,
+    });
+
+    useEffect(() => {
+        if (lastMessage !== null) {
+          setMessageHistory([...messageHistory, lastMessage.data]);
+          setLastMessageReceived(
+            JSON.parse(lastMessage.data)
+          )
+        }
+    }, [lastMessage]);
+
+    const handleSendMessage = useCallback((message) => sendMessage(message), [sendMessage]);
+
+    useEffect(() => {
+        if (isLogged) {
+            handleSendMessage(JSON.stringify({ type: "react" }));
+        }
+    }, [isLogged]);
+
     const [controller, dispatch] = useMaterialUIController();
     const {
         miniSidenav,
@@ -87,9 +113,6 @@ export default function App() {
         }
     };
 
-    // Change the openConfigurator state
-    const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
-
     // Setting the dir attribute for the body element
     useEffect(() => {
         document.body.setAttribute("dir", direction);
@@ -114,35 +137,11 @@ export default function App() {
             return null;
         });
 
-    const configsButton = (
-        <MDBox
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            width="3.25rem"
-            height="3.25rem"
-            bgColor="white"
-            shadow="sm"
-            borderRadius="50%"
-            position="fixed"
-            right="2rem"
-            bottom="2rem"
-            zIndex={99}
-            color="dark"
-            sx={{ cursor: "pointer" }}
-            onClick={handleConfiguratorOpen}
-        >
-            <Icon fontSize="small" color="inherit">
-                settings
-            </Icon>
-        </MDBox>
-    );
-
     const casaID = localStorage.getItem("CasaID");
     // get divisions from API and add to routes http://localhost:8080/smarthome/private/house/1/divisions
     const [divisionsRoutes, setDivisionsRoutes] = useState([]);
     const [addDeviceRoutes, setAddDeviceRoutes] = useState([]);
-    
+
     useEffect(() => {
         axios
             .get(`http://localhost:8080/smarthome/private/house/${casaID}/divisions`)
@@ -152,7 +151,9 @@ export default function App() {
                     return {
                         key: division.id,
                         route: `/division/${division.nome}`,
-                        component: <Division divisionID={division.id} divisionName={division.nome} />,
+                        component: (
+                            <Division divisionID={division.id} divisionName={division.nome} />
+                        ),
                     };
                 });
                 setDivisionsRoutes(divisionsRoutes);
@@ -171,6 +172,17 @@ export default function App() {
             });
     }, []);
 
+    const [showSnackbar, setShowSnackbar] = useState(false);
+    const toggleSnackbar = () => {
+        setShowSnackbar(!showSnackbar);
+    };
+
+    useEffect(() => {
+        if (lastMessageReceived) {
+            setShowSnackbar(true);
+        }
+    }, [lastMessageReceived]);
+
     return (
         <ThemeProvider theme={darkMode ? themeDark : theme}>
             <CssBaseline />
@@ -188,13 +200,10 @@ export default function App() {
                         onMouseEnter={handleOnMouseEnter}
                         onMouseLeave={handleOnMouseLeave}
                     />
-                    <Configurator />
-                    {configsButton}
                 </>
             )}
-            {layout === "vr" && <Configurator />}
+            {}
             <Routes>
-                {console.log(divisionsRoutes)}
                 {getRoutes(routes)}
                 {getRoutes(divisionsRoutes)}
                 {getRoutes(addDeviceRoutes)}
@@ -202,8 +211,19 @@ export default function App() {
                 <Route path="/logout" element={<SignIn />} />
                 <Route path="/register" element={<SignUp />} />
                 <Route path="/login" element={<SignIn />} />
-                <Route path="/addDivision" element={<AdicionarDivisao casaID={casaID}/>} />
+                <Route path="/addDivision" element={<AdicionarDivisao casaID={casaID} />} />
             </Routes>
+            {(isLogged && lastMessageReceived) && (
+                <MDSnackbar
+                    open={showSnackbar}
+                    close={toggleSnackbar}
+                    color="error"
+                    content={lastMessageReceived.message}
+                    title={lastMessageReceived.type}
+                    dateTime={lastMessageReceived.dateTime}
+                    icon="notifications"
+                />
+            )}
         </ThemeProvider>
     );
 }
