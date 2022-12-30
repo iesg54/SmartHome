@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.InvalidTypeException;
 import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.ResourceNotFoundException;
+import pt.ua.deti.ies.smarthome.smarthome_api.model.Alerta;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Divisao;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Sensors;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Utilizador;
@@ -106,6 +107,18 @@ public class HouseController {
     public SuccessfulRequest removeUser(@PathVariable(value="idCasa") int idCasa, @RequestParam(value="email") String email) throws ResourceNotFoundException{
         houseService.removeUser(idCasa, email);
         return new SuccessfulRequest("Utilizador removido com sucesso");
+    }
+
+    // Get latest Alerts
+    @GetMapping("{idCasa}/latestAlerts")
+    public ResponseEntity<List<Alerta>> getLatestAlerts(@PathVariable(value="idCasa") int idCasa) throws ResourceNotFoundException {
+        List<Alerta> alertas = houseService.getLatestAlerts(idCasa);
+
+        if(alertas.size() > 0){
+            return ResponseEntity.ok(alertas);
+        }else{
+            throw new ResourceNotFoundException("Não existem alertas associados à Casa com ID " + idCasa);
+        }
     }
 
 }

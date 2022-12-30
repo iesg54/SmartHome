@@ -14,7 +14,7 @@ import pt.ua.deti.ies.smarthome.smarthome_api.repository.AlertaRepository;
 import pt.ua.deti.ies.smarthome.smarthome_api.repository.DivisionRepository;
 
 @Service
-public class AlertService {
+public class AlertsService {
     @Autowired 
     AlertaRepository alertaRepository;
 

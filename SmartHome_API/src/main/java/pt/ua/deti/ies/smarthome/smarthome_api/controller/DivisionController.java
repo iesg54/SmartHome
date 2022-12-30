@@ -11,9 +11,11 @@ import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.ResourceNotFoundExcepti
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Alerta;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.dispositivos.Dispositivo;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.measurements.SensorMeasurements;
+import pt.ua.deti.ies.smarthome.smarthome_api.services.AlertsService;
 import pt.ua.deti.ies.smarthome.smarthome_api.services.DivisionService;
 import pt.ua.deti.ies.smarthome.smarthome_api.utils.SuccessfulRequest;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +25,8 @@ import java.util.Map;
 public class DivisionController {
     @Autowired
     private DivisionService divisionService;
+    @Autowired
+    AlertsService alertaService;
 
     // Division Page API Methods
     // SENSORS SECTION
@@ -104,7 +108,7 @@ public class DivisionController {
         return divisionService.updateAC(idDiv, idDisp, tempAtual, tempMin, tempMax);
     }
 
-    //Update values in lampadas
+    // Update values in lampadas
     @PutMapping("/{idDiv}/lampadas/{idDisp}")
     public SuccessfulRequest updateLampadas(@PathVariable(value="idDiv") int idDiv,
                                             @PathVariable(value="idDisp") int idDisp,
@@ -113,6 +117,15 @@ public class DivisionController {
                                             @RequestParam(value="end_time", required = false) Time endTime)
                                             throws ResourceNotFoundException{
         return divisionService.updateLampada(idDiv, idDisp, luminosidade, startTime, endTime);
+    }
+
+    // Adicionar um novo alerta
+    @PostMapping("{idDiv}/addAlert")
+    public ResponseEntity<Alerta> addAlert(@PathVariable(name="idDiv") int div,
+                                           @RequestParam(name="sensor") String sensor,
+                                           @RequestParam(name="valor") Double valor,
+                                           @RequestParam(name="stamp") Timestamp stamp) throws ResourceNotFoundException{
+        return alertaService.adicionarAlerta(div, sensor, valor, stamp);
     }
 
 }
