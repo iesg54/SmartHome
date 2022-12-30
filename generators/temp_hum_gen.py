@@ -1,8 +1,10 @@
+import json
 import sys
 import random
 import time
 import pika
 import numpy as np
+import websocket
 
 
 class temp_humi_gen:
@@ -60,6 +62,113 @@ class temp_humi_gen:
         return temperatures
 
 
+    def chance_bad_value(self, type):
+        if random.randint(0, 100) == 0: # very low chance
+            print(type+ " demasiado baixa!")
+            return 1
+
+        elif random.randint(0, 100) == 0:
+            print(type+ " demasiado alta!")
+            return 2
+
+        return 0
+
+
+    def get_bad_temperature(self, type):
+        if type == 1:
+            return random.randint(-10, 0)
+        else:
+            return random.randint(30, 40)
+
+
+    def send_to_broker(self, jsonMessage):
+        self.channel.basic_publish(
+            exchange='',
+            routing_key='generators',
+            body=jsonMessage,
+            properties=pika.BasicProperties(
+                delivery_mode=pika.spec.PERSISTENT_DELIVERY_MODE
+            )
+        )
+
+
+    def connect_websocket(self):
+        self.ws = websocket.WebSocket()
+        self.ws.connect("ws://localhost:8765")
+
+
+    def check_temperature(self, temperature):
+        """returns 0 if temperature is ok, 1 if temperature is too low, 2 if temperature is too high"""
+        if temperature > 30:
+            return 2
+        elif temperature < 0:
+            return 1
+        return 0
+
+    def check_humidity(self, humidity):
+        """returns 0 if humidity is ok, 1 if humidity is too low, 2 if humidity is too high"""
+        if humidity > 30:
+            return 2
+        elif humidity < 10:
+            return 1
+        return 0
+
+    def get_warning(self, type, low_high):
+        if type=="temperatura":
+            if low_high == 1:
+                warning= "Temperatura demasiado baixa!"
+            else:
+                warning= "Temperatura demasiado alta!"
+        else:
+            if low_high == 1:
+                warning= "Humidade demasiado baixa!"
+            else:
+                warning= "Humidade demasiado alta!"
+        return warning
+
+
+    def warn_user(self, type, low_high, timestamp, value):
+        
+        warning= self.get_warning(type, low_high)
+
+        alert_message= json.dumps({
+            "type": "alert",
+            "sensor": type,
+            "value": value,
+            "stamp": timestamp,
+            "id_divisao": self.division_id,
+            "mensagem": warning
+        })
+
+        self.connect_websocket()
+        self.ws.send(alert_message)
+        self.ws.close()
+
+
+    def get_temperature_hum(self, t):
+        bad_temperature = self.chance_bad_value("temperatura") # randomly make temperature too low or too high
+        if bad_temperature != 0:
+            temp= self.get_bad_temperature(bad_temperature)
+        else:
+            temp= t + random.randint(0, 10)/50
+
+        bad_humidity = self.chance_bad_value("humidade") # randomly make humidity too low or too high
+        if bad_humidity != 0:
+            humidity= self.get_bad_temperature(bad_humidity)
+        else:
+            humidity= self.temp_base + (self.temp_base - t) + random.randint(0, 10)/50
+
+        return temp, humidity
+
+
+    def get_timestamp(self, hour, minute):
+        h, m= hour, minute
+        if hour < 10:
+            h= f'0{hour}'
+        if minute < 10:
+            m= f'0{minute}'
+        timestamp= f'2022-12-06 {h}:{m}:00'
+        return timestamp
 
     def all_temperatures_humidities_by_minute(self, temperatures):
         for hour in range(0, 24):
@@ -69,29 +178,31 @@ class temp_humi_gen:
             
             minute= 0
             for t in temperatures_minute:
-                temp= t + random.randint(0, 10)/50
 
-                humidity= self.temp_base + (self.temp_base - t) + random.randint(0, 10)/50
-
-                h, m= hour, minute
-                if hour < 10:
-                    h= f'0{hour}'
-                if minute < 10:
-                    m= f'0{minute}'
-                timestamp= f'2022-12-06 {h}:{m}:00' # 'YYYY-MM-DD hh:mm:ss'
+                temp, humidity= self.get_temperature_hum(t)
+                
+                timestamp= self.get_timestamp(hour, minute) # 'YYYY-MM-DD hh:mm:ss'
                 day= timestamp.split(' ')[0]
 
+                jsonMessage= json.dumps({
+                    "division_id": self.division_id,
+                    "type": self.type,
+                    "day": day,
+                    "timestamp": timestamp,
+                    "humidity": humidity,
+                    "temperature": temp,
+                })
 
-                jsonMessage= f'{{"division_id": {self.division_id}, "type": "{self.type}", "day": "{day}", "timestamp": "{timestamp}", "humidity": {humidity}, "temperature": {temp}}}'
+                check_temperature= self.check_temperature(temp)
+                if check_temperature != 0:
+                    self.warn_user("temperatura", check_temperature, timestamp, temp)
 
-                # sending to broker
-                self.channel.basic_publish(
-                    exchange='',
-                    routing_key='generators',
-                    body=jsonMessage,
-                    properties=pika.BasicProperties(
-                        delivery_mode=pika.spec.PERSISTENT_DELIVERY_MODE
-                    ))
+                check_humidity= self.check_humidity(humidity)
+                if check_humidity != 0:
+                    self.warn_user("humidade", check_humidity, timestamp, humidity)
+
+
+                self.send_to_broker(jsonMessage)
                 print(" [x] Sent %r" % jsonMessage)
 
                 time.sleep(self.sleep_time_seconds)
@@ -115,7 +226,6 @@ class temp_humi_gen:
     def run(self):
 
         self.channel= self.connect_to_broker()
-
 
         while(True):
 

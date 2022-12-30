@@ -2,7 +2,6 @@
 import mysql.connector
 import time
 import os
-import random
 from multiprocessing import Process
 
 
@@ -29,6 +28,8 @@ def checkForNewGenerators():
 
 
 def cleanUpDatabase():
+    """clean sensors table to prevent conflicts when users close the app whithout logging out"""
+
     mycursor = mydb.cursor(buffered=True)
     mycursor.execute("USE smarthome")
     mycursor.execute("DELETE * FROM generators")
@@ -54,14 +55,15 @@ def removeGeneratorFromDatabase(generator_id):
 
 def setupGenerator(generator):
     generator_type= generator[1] # --------TODO check with database
+    division_id= str(generator[2])
 
     if generator_type == 1: # temperature and humidity
-        generator_type= "temp_hum_gen_class.py"
-        arguments= str(generator[2]) # division_id
+        generator_type= "temp_hum_gen.py"
+        arguments= division_id
         
     elif generator_type == 2: # air quality
-        generator_type= "air_quality_gen_class.py"
-        arguments= ''
+        generator_type= "carbon_monoxide_gen.py"
+        arguments= division_id
 
     else:
         print("[ERROR] Generator type not supported!")
