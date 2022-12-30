@@ -40,7 +40,7 @@ const validationSchema = Yup.object({
 });
 
 function Cover() {
-    const [responseMessage, setResponseMessage] = useState({type: "", message: ""});
+    const [responseMessage, setResponseMessage] = useState({ type: "", message: "" });
     const formik = useFormik({
         initialValues: {
             name: "",
@@ -49,7 +49,7 @@ function Cover() {
             userType: "",
         },
         validationSchema: validationSchema,
-        onSubmit: (values, {resetForm}) => {
+        onSubmit: (values, { resetForm }) => {
             axios
                 .post("http://localhost:8080/smarthome/public/register", null, {
                     headers: {

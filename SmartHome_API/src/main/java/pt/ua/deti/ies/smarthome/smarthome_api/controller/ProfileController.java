@@ -37,7 +37,7 @@ public class ProfileController {
     }
 
     @GetMapping("/logout")
-    public SuccessfulRequest logout(@PathVariable(value="id") int id){
+    public SuccessfulRequest logout(){
         userService.removeSensorsInfo();
         return new SuccessfulRequest("Logout com sucesso");
     }

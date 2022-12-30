@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 
+import { Link } from "react-router-dom";
+
 // prop-types is a library for typechecking of props.
 import PropTypes from "prop-types";
 
@@ -33,6 +35,8 @@ import {
 // Material Dashboard 2 React context
 import { useMaterialUIController, setTransparentNavbar, setMiniSidenav } from "context";
 
+import findSensorIcon from "./findSensorIcon";
+
 function DashboardNavbar({ absolute, light, isMini }) {
     const token = localStorage.getItem("token");
     const [navbarType, setNavbarType] = useState();
@@ -42,9 +46,12 @@ function DashboardNavbar({ absolute, light, isMini }) {
     const [openUserMenu, setOpenUserMenu] = useState(false);
 
     const [user, setUser] = useState({});
+    const [alerts, setAlerts] = useState([]);
     useEffect(async () => {
         const user = await getUserInfo(token);
         setUser(user);
+        const alerts = await getAlerts(user.casa.id);
+        setAlerts(alerts);
     }, []);
 
     useEffect(() => {
@@ -93,10 +100,24 @@ function DashboardNavbar({ absolute, light, isMini }) {
                 onClose={handleCloseMenu}
                 sx={{ mt: 2 }}
             >
+                <Grid container direction="column" sx={{ p: 2 }}>
+                    <MDTypography variant="h6" fontWeight="bold">
+                        Últimos Alertas
+                    </MDTypography>
+                </Grid>
+                <Grid container direction="column" sx={{ p: 2 }}>
+                    {alerts.slice(0, 5).map((alert) => (
+                        <Link to={"/division/" + alert.div.id}>
+                            <NotificationItem
+                                icon={<Icon>{findSensorIcon(alert.sensor)}</Icon>}
+                                title={"Divisão: " + alert.div.nome + " | " + alert.sensor + " (" + alert.valor + ")"}
+                            />
+                        </Link>
+                    ))}
+                </Grid>
             </Menu>
-        )
+        );
     };
-
 
     const renderUserMenu = () => (
         // menu with profile image, name and email
@@ -123,7 +144,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
                 <MDTypography variant="h6" fontWeight="bold" sx={{ mb: 0.5 }}>
                     {user.nome}
                 </MDTypography>
-                <MDTypography variant="body2" color="textSecondary">
+                <MDTypography variant="body2" color="secondary">
                     {user.email}
                 </MDTypography>
             </Grid>
@@ -193,8 +214,8 @@ function DashboardNavbar({ absolute, light, isMini }) {
                             >
                                 <Icon sx={iconsStyle}>person</Icon>
                             </IconButton>
-                            {renderMenu()}
-                            {renderUserMenu()}
+                            {user.id && renderMenu()}
+                            {user.id && renderUserMenu()}
                         </MDBox>
                     </MDBox>
                 )}

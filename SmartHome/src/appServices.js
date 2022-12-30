@@ -51,21 +51,21 @@ async function getHouseUsers(houseID) {
 }
 
 async function addAlert(alert) {
-    debugger
-    const response = await axios.post(`http://localhost:8080/smarthome/alert/${alert.id_divisao}/addAlert`, 
-        null, 
+    const response = await axios.post(
+        `http://localhost:8080/smarthome/private/division/${alert.id_divisao}/addAlert`,
+        null,
         {
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-        },
-        params: {
-            idDiv: alert.id_divisao,
-            sensor: alert.sensor,
-            valor: alert.valor,
-            stamp: alert.stamp,
-        },
-    });
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            params: {
+                sensor: alert.sensor,
+                valor: alert.value,
+                stamp: alert.stamp,
+            },
+        }
+    );
     if (response.status === 200) {
         return response.data;
     } else {
@@ -73,4 +73,36 @@ async function addAlert(alert) {
     }
 }
 
-export { getUserInfo, getDivisions, getHouseUsers, addAlert };
+async function getAlerts(houseID) {
+    const response = await axios.get(
+        `http://localhost:8080/smarthome/private/house/${houseID}/latestAlerts`,
+        {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+    if (response.status === 200) {
+        return response.data;
+    } else {
+        return null;
+    }
+}
+
+async function logout() {
+    const response = await axios.get(
+        `http://localhost:8080/smarthome/private/user/logout`,
+        {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`,
+            },
+        });
+    if (response.status === 200) {
+        return response.data;
+    }
+    return null;
+}
+
+export { getUserInfo, getDivisions, getHouseUsers, addAlert, getAlerts, logout };

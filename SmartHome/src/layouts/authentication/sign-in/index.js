@@ -49,7 +49,7 @@ function Basic() {
             )
             .then((res) => {
                 localStorage.setItem("token", res.data.jwttoken);
-                navigate("/dashboard");
+                window.location.href = "/dashboard";
             })
             .catch((error) => {
                 setErrorMessage(error.response.data.message);
@@ -116,7 +116,9 @@ function Basic() {
                     </MDBox>
                     {errorMessage && (
                         <MDBox mb={3}>
-                            <MDAlert color="error" fontSize="small" dismissible>{errorMessage}</MDAlert>
+                            <MDAlert color="error" fontSize="small" dismissible>
+                                {errorMessage}
+                            </MDAlert>
                         </MDBox>
                     )}
                     <MDBox mb={3}>

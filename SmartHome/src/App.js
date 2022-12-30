@@ -60,17 +60,16 @@ export default function App() {
         shouldReconnect: (closeEvent) => true,
     });
 
-    useEffect(() => {
+    useEffect(async () => {
         if (lastMessage !== null) {
             setMessageHistory([...messageHistory, JSON.parse(lastMessage.data)]);
             const messageData = JSON.parse(lastMessage.data);
             setLastMessageReceived({
                 title: messageData.sensor,
-                message: messageData.mensagem,
-                dateTime: "now",
-            })
-            const response = addAlert(messageData);
-            console.log(response);
+                message: messageData.mensagem + " " + messageData.value,
+                dateTime: messageData.stamp,
+            });
+            const response = await addAlert(messageData);
         }
     }, [lastMessage]);
 
@@ -196,7 +195,6 @@ export default function App() {
                     />
                 </>
             )}
-            {}
             <Routes>
                 {getRoutes(routes)}
                 {getRoutes(divisionsRoutes)}

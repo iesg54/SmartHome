@@ -114,7 +114,7 @@ class carbon_monoxide_gen:
                     "division_id": self.division_id,
                     "type": self.type,
                     "day": day,
-                    "timestamp": timestamp,
+                    "stamp": timestamp,
                     "value": carbon
                 })
 

@@ -11,45 +11,46 @@ def connectToDatabase():
     global mydb
     mydb = mysql.connector.connect(
         user="springuser",
-        password="Password1#",
+        password="password",
         host="localhost",
-        database= "smarthome"
+        port=3306,
+        database= "SmartHome",
     )
 
 
-def checkForNewGenerators():
+def checkForNewsensors():
     mycursor = mydb.cursor(buffered=True)
-    mycursor.execute("USE smarthome")
-    mycursor.execute("SELECT * FROM generators")
+    mycursor.execute("USE SmartHome")
+    mycursor.execute("SELECT * FROM sensors")
     mydb.commit()
-    generators_needed = mycursor.fetchall()
+    sensors_needed = mycursor.fetchall()
     
-    return generators_needed
+    return sensors_needed
 
 
 def cleanUpDatabase():
     """clean sensors table to prevent conflicts when users close the app whithout logging out"""
 
     mycursor = mydb.cursor(buffered=True)
-    mycursor.execute("USE smarthome")
-    mycursor.execute("DELETE * FROM generators")
+    mycursor.execute("USE SmartHome")
+    mycursor.execute("DELETE * FROM sensors")
     mydb.commit()
 
 
 def checkIfTableExists():
-    """ returns True if the generators table exists, False otherwise"""
+    """ returns True if the sensors table exists, False otherwise"""
 
     mycursor = mydb.cursor(buffered=True)
-    mycursor.execute("USE smarthome")
-    mycursor.execute("SHOW TABLES LIKE 'generators'")
+    mycursor.execute("USE SmartHome")
+    mycursor.execute("SHOW TABLES LIKE 'sensors'")
     mydb.commit()
     return bool(mycursor.fetchall())
 
 
 def removeGeneratorFromDatabase(generator_id):
     mycursor = mydb.cursor(buffered=True)
-    mycursor.execute("USE smarthome")
-    mycursor.execute("DELETE FROM generators WHERE id = %s", (generator_id, ))
+    mycursor.execute("USE SmartHome")
+    mycursor.execute("DELETE FROM sensors WHERE id = %s", (generator_id, ))
     mydb.commit()
 
 
@@ -84,23 +85,23 @@ def main():
 
     #cleanUpDatabase() # clean sensors table to prevent conflicts when users close the app whithout logging out
 
-    generators_needed= []
+    sensors_needed= []
     while True:
-        while not generators_needed:
+        while not sensors_needed:
             if not checkIfTableExists():
-                finish= True #---------------TODO also stop generators
+                finish= True #---------------TODO also stop sensors
                 break
 
-            generators_needed= checkForNewGenerators()
+            sensors_needed= checkForNewsensors()
             time.sleep(5)
             """ print("so am I, still waiting")
         print("omg stuff!") """
 
-        for generator in generators_needed:
+        for generator in sensors_needed:
             setupGenerator(generator)
 
             removeGeneratorFromDatabase(generator[0])
-            generators_needed.remove(generator)
+            sensors_needed.remove(generator)
 
         if finish:
             break

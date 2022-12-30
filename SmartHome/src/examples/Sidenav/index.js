@@ -22,7 +22,7 @@ import SidenavCollapse from "examples/Sidenav/SidenavCollapse";
 import SidenavRoot from "examples/Sidenav/SidenavRoot";
 import sidenavLogoLabel from "examples/Sidenav/styles/sidenav";
 
-import { getUserInfo, getDivisions } from "appServices";
+import { getUserInfo, getDivisions, logout } from "appServices";
 
 // Material Dashboard 2 React context
 import {
@@ -31,9 +31,6 @@ import {
     setTransparentSidenav,
     setWhiteSidenav,
 } from "context";
-
-// Axios
-import axios from "axios";
 
 function Sidenav({ color, brand, brandName, routes, ...rest }) {
     const [controller, dispatch] = useMaterialUIController();
@@ -128,6 +125,12 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
         return returnValue;
     });
 
+    const asyncLogout = async () => {
+        await logout();
+        localStorage.clear();
+        window.location.href = "/login";
+    };
+
     const handleLogout = (e) => {
         e.preventDefault();
         localStorage.clear();
@@ -200,7 +203,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
                 icon={<Icon sx={{ fontWeight: "bold" }}>logout</Icon>}
                 active={false}
                 noCollapse
-                onClick={handleLogout}
+                onClick={asyncLogout}
             />
         </SidenavRoot>
     );
