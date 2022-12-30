@@ -35,13 +35,9 @@ import Division from "layouts/division";
 import AdicionarEquipamento from "layouts/equipamento";
 
 // Material Dashboard 2 React components
-import MDButton from "components/MDButton";
 import MDSnackbar from "components/MDSnackbar";
 
-// Axios
-import axios from "axios";
-
-import { getUserInfo, getDivisions } from "appServices";
+import { getUserInfo, getDivisions, addAlert } from "appServices";
 
 export default function App() {
     const [isLogged, setIsLogged] = useState(null);
@@ -55,25 +51,26 @@ export default function App() {
     }, []);
 
     // Websocket Connection
-    const [socketUrl, setSocketUrl] = useState('ws://localhost:8765');
+    const [socketUrl, setSocketUrl] = useState("ws://localhost:8765");
     const [messageHistory, setMessageHistory] = useState([]);
     const [lastMessageReceived, setLastMessageReceived] = useState(null);
 
-    const {
-        sendMessage,
-        lastMessage,
-        readyState,
-      } = useWebSocket(socketUrl, {
-        onOpen: () => console.log('opened'),
+    const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
+        onOpen: () => console.log("opened"),
         shouldReconnect: (closeEvent) => true,
     });
 
     useEffect(() => {
         if (lastMessage !== null) {
-          setMessageHistory([...messageHistory, lastMessage.data]);
-          setLastMessageReceived(
-            JSON.parse(lastMessage.data)
-          )
+            setMessageHistory([...messageHistory, JSON.parse(lastMessage.data)]);
+            const messageData = JSON.parse(lastMessage.data);
+            setLastMessageReceived({
+                title: messageData.sensor,
+                message: messageData.mensagem,
+                dateTime: "now",
+            })
+            const response = addAlert(messageData);
+            console.log(response);
         }
     }, [lastMessage]);
 
@@ -154,9 +151,7 @@ export default function App() {
             return {
                 key: division.id,
                 route: `/division/${division.id}`,
-                component: (
-                    <Division />
-                ),
+                component: <Division />,
             };
         });
         setDivisionsRoutes(divisionsRoutes);
@@ -210,15 +205,15 @@ export default function App() {
                 <Route path="/logout" element={<SignIn />} />
                 <Route path="/register" element={<SignUp />} />
                 <Route path="/login" element={<SignIn />} />
-                <Route path="/addDivision" element={<AdicionarDivisao/>} />
+                <Route path="/addDivision" element={<AdicionarDivisao />} />
             </Routes>
-            {(isLogged && lastMessageReceived) && (
+            {isLogged && lastMessageReceived && (
                 <MDSnackbar
                     open={showSnackbar}
                     close={toggleSnackbar}
                     color="error"
                     content={lastMessageReceived.message}
-                    title={lastMessageReceived.type}
+                    title={lastMessageReceived.title}
                     dateTime={lastMessageReceived.dateTime}
                     icon="notifications"
                 />

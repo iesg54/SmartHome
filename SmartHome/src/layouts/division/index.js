@@ -51,9 +51,7 @@ function Division() {
                 </Grid>
                 <Grid container mb={4}>
                     {tabIndex === 0 && <DivionStats divisionID={divID} />}
-                    {tabIndex === 1 && (
-                        <DivisionDisp divisionID={divID} />
-                    )}
+                    {tabIndex === 1 && <DivisionDisp divisionID={divID} />}
                 </Grid>
             </MDBox>
             <Divider />

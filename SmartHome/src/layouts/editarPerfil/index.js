@@ -66,20 +66,23 @@ function EditarPerfil() {
         onSubmit: (values, { resetForm }) => {
             setMessageResponse({ type: "", message: "" });
             axios
-                .put(`http://localhost:8080/smarthome/private/user/${userData.id}`, {
-                    id: userData.id,
-                    email: values.email,
-                    nome: values.nome,
-                    password: values.password,
-                    profileImage: image,
-                    admin: userData.admin,
-                },
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`,
+                .put(
+                    `http://localhost:8080/smarthome/private/user/${userData.id}`,
+                    {
+                        id: userData.id,
+                        email: values.email,
+                        nome: values.nome,
+                        password: values.password,
+                        profileImage: image,
+                        admin: userData.admin,
                     },
-                })
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                )
                 .then((response) => {
                     console.log(response);
                     setUserData({
@@ -150,7 +153,7 @@ function EditarPerfil() {
                             {
                                 headers: {
                                     "Content-Type": "application/json",
-                                    "Authorization": `Bearer ${token}`,
+                                    Authorization: `Bearer ${token}`,
                                 },
                                 params: {
                                     profPic: downloadURL,

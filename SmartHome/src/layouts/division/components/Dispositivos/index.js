@@ -38,7 +38,7 @@ function DivisionDevices({ divisionID }) {
             .get(`http://localhost:8080/smarthome/private/division/${divisionID}/devices`, {
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`,
+                    Authorization: `Bearer ${token}`,
                 },
             })
             .then((response) => {
@@ -58,7 +58,7 @@ function DivisionDevices({ divisionID }) {
                     });
                     return newDevicesState;
                 });
-            })
+            });
     }, []);
 
     /* eslint-disable no-param-reassign */
@@ -69,16 +69,16 @@ function DivisionDevices({ divisionID }) {
             }
             return device;
         });
-        axios
-            .post(
-                `http://localhost:8080/smarthome/private/division/${divisionID}/device/${id}`,
-                null, 
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`,
-                    },
-                })
+        axios.post(
+            `http://localhost:8080/smarthome/private/division/${divisionID}/device/${id}`,
+            null,
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
         setDevicesState(newDevicesState);
     };
     /* eslint-disable no-param-reassign */
@@ -101,10 +101,10 @@ function DivisionDevices({ divisionID }) {
     });
     useEffect(() => {
         axios
-            .get(`http://localhost:8080/smarthome/private/division/${divisionID}/energy`,{
+            .get(`http://localhost:8080/smarthome/private/division/${divisionID}/energy`, {
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`,
+                    Authorization: `Bearer ${token}`,
                 },
             })
             .then((response) => {
@@ -118,7 +118,7 @@ function DivisionDevices({ divisionID }) {
 
                     return newEnergyData;
                 });
-            })
+            });
     }, []);
 
     const handleDeviceDialog = (id) => {
@@ -136,16 +136,15 @@ function DivisionDevices({ divisionID }) {
     };
 
     const handleDeleteDevice = (id) => {
-        axios
-            .delete(`http://localhost:8080/smarthome/private/division/${divisionID}/devices`, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`,
-                },
-                params: {
-                    id,
-                },
-            })
+        axios.delete(`http://localhost:8080/smarthome/private/division/${divisionID}/devices`, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            params: {
+                id,
+            },
+        });
         setDevicesState((prev) => {
             const newDevicesState = [...prev];
             const index = newDevicesState.findIndex((device) => device.id === id);

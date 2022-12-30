@@ -15,7 +15,7 @@ function selectDivisionImage(divisionType) {
             return Cozinha;
         default:
             return null;
-    };
-};
+    }
+}
 
 export default selectDivisionImage;

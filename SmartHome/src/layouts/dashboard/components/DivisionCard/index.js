@@ -16,7 +16,7 @@ import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDButton from "components/MDButton";
 
-function DivisionCard({ image, name, energyConsumption, action, handleDeleteDiv}) {
+function DivisionCard({ image, name, energyConsumption, action, handleDeleteDiv }) {
     return (
         <Card
             sx={{
@@ -107,13 +107,9 @@ function DivisionCard({ image, name, energyConsumption, action, handleDeleteDiv}
                                 variant="contained"
                                 color={action.color}
                                 size="small"
-                                component={
-                                    action.type === "external" ? MuiLink : Link
-                                }
+                                component={action.type === "external" ? MuiLink : Link}
                                 to={action.route}
-                                target={
-                                    action.type === "external" ? "_blank" : ""
-                                }
+                                target={action.type === "external" ? "_blank" : ""}
                             >
                                 <Icon
                                     sx={{
@@ -121,9 +117,7 @@ function DivisionCard({ image, name, energyConsumption, action, handleDeleteDiv}
                                         mr: 1,
                                     }}
                                 >
-                                    {action.type === "external"
-                                        ? "open_in_new"
-                                        : "arrow_forward"}
+                                    {action.type === "external" ? "open_in_new" : "arrow_forward"}
                                 </Icon>
                                 {action.label}
                             </MDButton>
@@ -141,7 +135,7 @@ function DivisionCard({ image, name, energyConsumption, action, handleDeleteDiv}
                                 sx={{
                                     fontSize: 16,
                                     mr: 1,
-                                }}  
+                                }}
                             >
                                 delete
                             </Icon>

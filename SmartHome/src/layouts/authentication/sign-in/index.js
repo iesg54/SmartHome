@@ -1,5 +1,5 @@
 // react
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 // react-router-dom components
 import { Link, useNavigate } from "react-router-dom";
@@ -12,6 +12,7 @@ import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
+import MDAlert from "components/MDAlert";
 
 // Authentication layout components
 import BasicLayout from "layouts/authentication/components/BasicLayout";
@@ -33,18 +34,19 @@ function Basic() {
     const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
     const getUserData = (values) => {
-        axios.post(
-            "http://localhost:8080/smarthome/public/login",
-            {
-                email: values.email,
-                password: values.password,
-            },
-            {
-                headers: {
-                    "Content-Type": "application/json",
+        axios
+            .post(
+                "http://localhost:8080/smarthome/public/login",
+                {
+                    email: values.email,
+                    password: values.password,
                 },
-            }
-        )
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            )
             .then((res) => {
                 localStorage.setItem("token", res.data.jwttoken);
                 navigate("/dashboard");
@@ -114,9 +116,7 @@ function Basic() {
                     </MDBox>
                     {errorMessage && (
                         <MDBox mb={3}>
-                            <MDTypography variant="body2" color="error" textAlign="center">
-                                {errorMessage}
-                            </MDTypography>
+                            <MDAlert color="error" fontSize="small" dismissible>{errorMessage}</MDAlert>
                         </MDBox>
                     )}
                     <MDBox mb={3}>

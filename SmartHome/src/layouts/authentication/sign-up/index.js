@@ -1,5 +1,5 @@
 // React
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 // react-router-dom components
 import { Link } from "react-router-dom";
@@ -40,8 +40,7 @@ const validationSchema = Yup.object({
 });
 
 function Cover() {
-    const token = localStorage.getItem("token");
-    const [responseMessage, setResponseMessage] = useState();
+    const [responseMessage, setResponseMessage] = useState({type: "", message: ""});
     const formik = useFormik({
         initialValues: {
             name: "",
@@ -50,13 +49,11 @@ function Cover() {
             userType: "",
         },
         validationSchema: validationSchema,
-        onSubmit: (values) => {
-            console.log(values);
+        onSubmit: (values, {resetForm}) => {
             axios
                 .post("http://localhost:8080/smarthome/public/register", null, {
                     headers: {
                         "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`,
                     },
                     params: {
                         name: values.name,
@@ -66,10 +63,18 @@ function Cover() {
                     },
                 })
                 .then((res) => {
-                    setResponseMessage(res.data.message);
+                    setResponseMessage({
+                        type: "success",
+                        message: res.data.message,
+                    });
+                    resetForm();
                 })
                 .catch((error) => {
-                    console.log(error);
+                    setResponseMessage({
+                        type: "error",
+                        message: error.response.data.message,
+                    });
+                    resetForm();
                 });
         },
     });
@@ -185,13 +190,13 @@ function Cover() {
                             </Grid>
                         </Grid>
                     </form>
+                    {responseMessage.message !== "" && (
+                        <MDAlert color={responseMessage.type} mt={2}>
+                            {responseMessage.message}
+                        </MDAlert>
+                    )}
                 </MDBox>
             </Card>
-            {responseMessage && (
-                <MDAlert color="success" mt={3}>
-                    {responseMessage}
-                </MDAlert>
-            )}
         </CoverLayout>
     );
 }

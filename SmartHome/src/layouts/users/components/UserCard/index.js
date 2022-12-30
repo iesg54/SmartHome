@@ -12,7 +12,6 @@ import MDButton from "components/MDButton";
 import MDAvatar from "components/MDAvatar";
 
 function UserCard({ nome, foto, isAdmin, id, handleDelete, userID }) {
-
     return (
         <Card>
             <MDBox display="flex" flexDirection="column" alignItems="center" p={2}>
