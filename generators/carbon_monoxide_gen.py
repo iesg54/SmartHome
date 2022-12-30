@@ -1,9 +1,10 @@
 import sys
 import pika
 import random
-import matplotlib.pyplot as plt
 import numpy as np
 import time
+import websocket
+import json
 
 class carbon_monoxide_gen:
     def __init__(self, division_id, concentration_base, sleep_time_seconds):
@@ -52,6 +53,45 @@ class carbon_monoxide_gen:
         return carbon_monoxide
 
 
+    
+    def chance_bad_value(self, type):
+        if random.randint(0, 100) == 0: # very low chance
+            print(type+ " demasiado alto!")
+            return 1
+        return 0
+
+    def get_bad_value(self):
+        return random.randint(50, 100)
+
+    def check_monoxide(self, carbon):
+        if carbon >= 50:
+            return 1
+        return 0
+
+
+    def warn_user(self, type, timestamp, value):
+        alert_message= json.dumps({
+            "type": "alert",
+            "sensor": type,
+            "value": value,
+            "stamp": timestamp,
+            "id_divisao": self.division_id,
+            "mensagem": "Monóxido de carbono muito alto!"
+        })
+        self.connect_websocket()
+        self.ws.send(alert_message)
+        self.ws.close()
+
+
+    def get_timestamp(self, hour, minute):
+        h, m= hour, minute
+        if hour < 10:
+            h= f'0{hour}'
+        if minute < 10:
+            m= f'0{minute}'
+        timestamp= f'2022-12-06 {h}:{m}:00'
+        return timestamp
+
 
     def all_carbon_monoxide_by_minute(self, carbon_monoxide):
         for hour in range(0, 24):
@@ -61,18 +101,27 @@ class carbon_monoxide_gen:
             
             minute= 0
             for c in carbon_monoxide_minute:
-                carbon= c + random.randint(0, 10)/50
+                bad_value= self.chance_bad_value("monoxido_carbono")
+                if bad_value != 0:
+                    carbon= self.get_bad_value()
+                else:
+                    carbon= c + random.randint(0, 10)/50
 
-                h, m= hour, minute
-                if hour < 10:
-                    h= f'0{hour}'
-                if minute < 10:
-                    m= f'0{minute}'
-                timestamp= f'2022-12-06 {h}:{m}:00' # 'YYYY-MM-DD hh:mm:ss'
+                timestamp= self.get_timestamp(hour, minute) # 'YYYY-MM-DD hh:mm:ss'
                 day= timestamp.split(' ')[0]
 
+                jsonMessage= json.dumps({
+                    "division_id": self.division_id,
+                    "type": self.type,
+                    "day": day,
+                    "timestamp": timestamp,
+                    "value": carbon
+                })
 
-                jsonMessage= f'{{"division_id": {self.division_id}, "type": "{self.type}", "day": "{day}", "timestamp": "{timestamp}", "value": {carbon}}}'
+                check_monoxide= self.check_monoxide(carbon)
+                if check_monoxide:
+                    self.warn_user("monoxido_carbono", timestamp, carbon)
+                
 
                 # sending to broker
                 self.channel.basic_publish(
@@ -89,6 +138,9 @@ class carbon_monoxide_gen:
                 
 
         
+    def connect_websocket(self):
+        self.ws = websocket.WebSocket()
+        self.ws.connect("ws://localhost:8765")
 
 
     def connect_to_broker(self):
