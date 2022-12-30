@@ -38,15 +38,15 @@ function AdicionarDivisao() {
     const [user, setUser] = useState({});
     useEffect(() => {
         axios
-        .get("http://localhost:8080/smarthome/private/user/info", {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`,
-            },
-        })
-        .then((response) => {
-            setUser(response.data);
-        })
+            .get("http://localhost:8080/smarthome/private/user/info", {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            .then((response) => {
+                setUser(response.data);
+            });
     }, [token]);
 
     const formik = useFormik({
@@ -58,16 +58,20 @@ function AdicionarDivisao() {
         onSubmit: (values, { resetForm }) => {
             setResponseMessage({ type: "", message: "" });
             axios
-                .post(`http://localhost:8080/smarthome/private/house/${user.casa.id}/divisions`, null, {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`,
-                    },
-                    params: {
-                        tipo: values.tipo,
-                        nome: values.nome,
-                    },
-                })
+                .post(
+                    `http://localhost:8080/smarthome/private/house/${user.casa.id}/divisions`,
+                    null,
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`,
+                        },
+                        params: {
+                            tipo: values.tipo,
+                            nome: values.nome,
+                        },
+                    }
+                )
                 .then((response) => {
                     setResponseMessage({ type: "success", message: response.data.message });
                 })

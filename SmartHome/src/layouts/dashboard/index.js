@@ -24,7 +24,12 @@ import HomeStats from "./components/HomeStats";
 import selectDivisionImage from "./selectDivisionImage";
 
 import { getUserInfo, getDivisions } from "appServices";
-import { getEnergyCost, getEnergyCostInfoLastWeek, getEnergyCostInfoLastMonth, deleteDivision } from "./dashboardServices";
+import {
+    getEnergyCost,
+    getEnergyCostInfoLastWeek,
+    getEnergyCostInfoLastMonth,
+    deleteDivision,
+} from "./dashboardServices";
 
 function Dashboard() {
     const navigate = useNavigate();
@@ -60,7 +65,7 @@ function Dashboard() {
     const [lastMonth, setLastMonth] = useState([]);
 
     useEffect(async () => {
-        const user = await getUserInfo()
+        const user = await getUserInfo();
         setUserData(user);
         const divisions = await getDivisions(user.casa.id);
         setDivisions(divisions);
@@ -81,7 +86,6 @@ function Dashboard() {
     const handleTabChange = (event, newTabIndex) => {
         setTabIndex(newTabIndex);
     };
-
 
     const handleDeleteDivision = (divID) => {
         if (deleteDivision(userData.casa.id, divID)) {
@@ -118,11 +122,13 @@ function Dashboard() {
                 </Grid>
                 <Grid container spacing={3} justifyContent="center">
                     <Grid item xs={12} sm={6} md={3}>
-                        <Link to="/addDivision">
-                            <MDButton variant="contained" color="primary" fullWidth>
-                                Adicionar divisão
-                            </MDButton>
-                        </Link>
+                        {userData && userData.admin && (
+                            <Link to="/addDivision">
+                                <MDButton variant="contained" color="primary" fullWidth>
+                                    Adicionar divisão
+                                </MDButton>
+                            </Link>
+                        )}
                     </Grid>
                 </Grid>
                 <Divider />

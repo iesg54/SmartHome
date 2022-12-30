@@ -65,7 +65,7 @@ function ActionModal({
                             {
                                 headers: {
                                     "Content-Type": "application/json",
-                                    "Authorization": `Bearer ${token}`,
+                                    Authorization: `Bearer ${token}`,
                                 },
                                 params: {
                                     start_time: values.startTime,
@@ -76,7 +76,7 @@ function ActionModal({
                         )
                         .then(() => {
                             closeAction();
-                        })
+                        });
                     break;
                 case "AC":
                     axios
@@ -86,7 +86,7 @@ function ActionModal({
                             {
                                 headers: {
                                     "Content-Type": "application/json",
-                                    "Authorization": `Bearer ${token}`,
+                                    Authorization: `Bearer ${token}`,
                                 },
                                 params: {
                                     temp_atual: values.tempAtual,
@@ -97,7 +97,7 @@ function ActionModal({
                         )
                         .then(() => {
                             closeAction();
-                        })
+                        });
                     break;
                 case "REGADOR":
                     axios
@@ -107,7 +107,7 @@ function ActionModal({
                             {
                                 headers: {
                                     "Content-Type": "application/json",
-                                    "Authorization": `Bearer ${token}`,
+                                    Authorization: `Bearer ${token}`,
                                 },
                                 params: {
                                     start_time: values.startTime,
@@ -117,7 +117,7 @@ function ActionModal({
                         )
                         .then(() => {
                             closeAction();
-                        })
+                        });
                     break;
                 default:
                     break;

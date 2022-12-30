@@ -25,17 +25,16 @@ function DivisionStats({ divisionID }) {
     const [sensorsCurrentData, setSensorsCurrentData] = useState([]);
     useEffect(() => {
         axios
-            .get(`http://localhost:8080/smarthome/private/division/${divisionID}/currentInfo`,{
+            .get(`http://localhost:8080/smarthome/private/division/${divisionID}/currentInfo`, {
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                }
+                    Authorization: `Bearer ${token}`,
+                },
             })
             .then((res) => {
                 // set data
                 const sensorsData = [];
                 Object.keys(res.data).map((key) => {
-
                     // calculate time difference
                     let timeDiff = "";
                     if (res.data[key] !== null) {
@@ -169,11 +168,11 @@ function DivisionStats({ divisionID }) {
     ]);
     useEffect(() => {
         axios
-            .get(`http://localhost:8080/smarthome/private/division/${divisionID}/weeklyInfo`,{
+            .get(`http://localhost:8080/smarthome/private/division/${divisionID}/weeklyInfo`, {
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`,
-                }
+                    Authorization: `Bearer ${token}`,
+                },
             })
             .then((res) => {
                 setSensorsWeeklyData((prev) => {
@@ -200,11 +199,11 @@ function DivisionStats({ divisionID }) {
     const [alertsData, setAlertsData] = useState([]);
     useEffect(() => {
         axios
-            .get(`http://localhost:8080/smarthome/private/division/${divisionID}/alerts`,{
+            .get(`http://localhost:8080/smarthome/private/division/${divisionID}/alerts`, {
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`,
-                }
+                    Authorization: `Bearer ${token}`,
+                },
             })
             .then((res) => {
                 res.data.map((alert) => {

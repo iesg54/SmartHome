@@ -1,16 +1,18 @@
 // Axios
-import axios from 'axios'
+import axios from "axios";
 
-const token = localStorage.getItem('token');
+const token = localStorage.getItem("token");
 
 async function getEnergyCost(houseID) {
-    const response = await axios
-    .get(`http://localhost:8080/smarthome/private/house/${houseID}/energy/current`, {
-        headers: {
+    const response = await axios.get(
+        `http://localhost:8080/smarthome/private/house/${houseID}/energy/current`,
+        {
+            headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`,
-        },
-    })
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
     if (response.status === 200) {
         for (const key in response.data) {
             response.data[key] = Math.round(response.data[key] / 10) * 10;
@@ -22,13 +24,12 @@ async function getEnergyCost(houseID) {
 }
 
 async function getEnergyCostInfoLastWeek(houseID) {
-    const res = await axios
-    .get(`http://localhost:8080/smarthome/private/house/1/energy/week`, {
+    const res = await axios.get(`http://localhost:8080/smarthome/private/house/1/energy/week`, {
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
         },
-    })
+    });
     if (res.status === 200) {
         let costPerDay = new Array(Object.keys(res.data[1]).length).fill(0);
         let costPerDivision = [];
@@ -51,20 +52,19 @@ async function getEnergyCostInfoLastWeek(houseID) {
         for (let i = 0; i < costPerDay.length; i++) {
             costPerDay[i] = costPerDay[i] / Object.keys(res.data).length;
         }
-        return { "costPerDay": costPerDay, "costPerDivision": costPerDivision, "lastWeek": lastW.sort() }
+        return { costPerDay: costPerDay, costPerDivision: costPerDivision, lastWeek: lastW.sort() };
     } else {
         return null;
     }
 }
 
 async function getEnergyCostInfoLastMonth(houseID) {
-    const res = await axios
-    .get(`http://localhost:8080/smarthome/private/house/1/energy/month`, {
+    const res = await axios.get(`http://localhost:8080/smarthome/private/house/1/energy/month`, {
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
         },
-    })
+    });
     if (res.status === 200) {
         let costPerDay = new Array(Object.keys(res.data[1]).length).fill(0);
         let costPerDivision = [];
@@ -87,26 +87,31 @@ async function getEnergyCostInfoLastMonth(houseID) {
         for (let i = 0; i < costPerDay.length; i++) {
             costPerDay[i] = costPerDay[i] / Object.keys(res.data).length;
         }
-        return { "costPerDay": costPerDay, "costPerDivision": costPerDivision, "lastMonth": lastW.sort() }
+        return {
+            costPerDay: costPerDay,
+            costPerDivision: costPerDivision,
+            lastMonth: lastW.sort(),
+        };
     } else {
         return null;
     }
 }
 
 async function deleteDivision(houseID, divID) {
-    const response = await axios
-    .delete(`http://localhost:8080/smarthome/private/house/${houseID}/divisions`,
-    {
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
-        },
-        params: {
-            idDiv: divID,
+    const response = await axios.delete(
+        `http://localhost:8080/smarthome/private/house/${houseID}/divisions`,
+        {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            params: {
+                idDiv: divID,
+            },
         }
-    })
+    );
     if (response.status === 200) {
-        return true
+        return true;
     } else {
         return false;
     }

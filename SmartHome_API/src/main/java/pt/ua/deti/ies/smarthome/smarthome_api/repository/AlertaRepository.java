@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface AlertaRepository extends JpaRepository<Alerta, Integer> {
     List<Alerta> findAllByDiv(Divisao div);
+    List<Alerta> findTop10ByOrderByIdDesc();
 }

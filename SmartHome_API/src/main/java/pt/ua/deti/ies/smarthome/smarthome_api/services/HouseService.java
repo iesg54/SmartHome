@@ -38,6 +38,8 @@ public class HouseService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
+    private AlertaRepository alertaRepository;
+    @Autowired
     private SensorMeasurementsSalaRepository sensorMeasurementsSalaRepository;
     @Autowired
     private SensorMeasurementsCozinhaRepository sensorMeasurementsCozinhaRepository;
@@ -91,7 +93,7 @@ public class HouseService {
         // Apagar as instâncias de medições de Sensores ou de Consumo Energético associados com a Divisão
         if(div.getTipo().equals(TipoDivisao.EXTERIOR)){
             consumoExternoRepository.deleteAllByDiv(div);
-            consumoExternoRepository.deleteAllByDiv(div);
+            sensorMeasurementsExternoRepository.deleteAllByDiv(div);
         }else if(div.getTipo().equals(TipoDivisao.SALA)){
             sensorMeasurementsSalaRepository.deleteAllByDiv(div);
             consumoSalaRepository.deleteAllByDiv(div);
@@ -265,6 +267,22 @@ public class HouseService {
         Casa casa = houseRepository.findById(idCasa).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + idCasa));
         Divisao divisao = divisionRepository.findById(idDivisao).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada uma Divisão com o ID: " + idDivisao));
         return new ResponseEntity<Divisao>(divisao, HttpStatus.OK);
+    }
+
+    public List<Alerta> getLatestAlerts(int idCasa) throws ResourceNotFoundException {
+        Casa casa = houseRepository.findById(idCasa).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + idCasa));
+        List<Divisao> divs = divisionRepository.findAllByCasa(casa);
+        List<Alerta> reply = new ArrayList<>();
+
+        List<Alerta> latestAlerts = alertaRepository.findTop10ByOrderByIdDesc();
+
+        for(Alerta al:latestAlerts){
+            if (divs.contains(al.getDiv())){
+                reply.add(al);
+            }
+        }
+
+        return reply;
     }
 
 }

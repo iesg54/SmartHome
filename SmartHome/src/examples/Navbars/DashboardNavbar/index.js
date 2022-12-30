@@ -19,7 +19,7 @@ import MDTypography from "components/MDTypography";
 // Material Dashboard 2 React example components
 import NotificationItem from "examples/Items/NotificationItem";
 
-import { getUserInfo } from "appServices";
+import { getUserInfo, getAlerts } from "appServices";
 
 // Custom styles for DashboardNavbar
 import {
@@ -31,11 +31,7 @@ import {
 } from "examples/Navbars/DashboardNavbar/styles";
 
 // Material Dashboard 2 React context
-import {
-    useMaterialUIController,
-    setTransparentNavbar,
-    setMiniSidenav,
-} from "context";
+import { useMaterialUIController, setTransparentNavbar, setMiniSidenav } from "context";
 
 function DashboardNavbar({ absolute, light, isMini }) {
     const token = localStorage.getItem("token");
@@ -45,11 +41,11 @@ function DashboardNavbar({ absolute, light, isMini }) {
     const [openMenu, setOpenMenu] = useState(false);
     const [openUserMenu, setOpenUserMenu] = useState(false);
 
-    const [user, setUser] = useState({})
+    const [user, setUser] = useState({});
     useEffect(async () => {
-        const user = await getUserInfo(token)
-        setUser(user)
-    }, [])
+        const user = await getUserInfo(token);
+        setUser(user);
+    }, []);
 
     useEffect(() => {
         // Setting the navbar type
@@ -84,26 +80,23 @@ function DashboardNavbar({ absolute, light, isMini }) {
     const handleCloseUserMenu = () => setOpenUserMenu(false);
 
     // Render the notifications menu
-    const renderMenu = () => (
-        <Menu
-            anchorEl={openMenu}
-            anchorReference={null}
-            anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-            }}
-            open={Boolean(openMenu)}
-            onClose={handleCloseMenu}
-            sx={{ mt: 2 }}
-        >
-            <NotificationItem icon={<Icon>email</Icon>} title="Check new messages" />
-            <NotificationItem icon={<Icon>podcasts</Icon>} title="Manage Podcast sessions" />
-            <NotificationItem
-                icon={<Icon>shopping_cart</Icon>}
-                title="Payment successfully completed"
-            />
-        </Menu>
-    );
+    const renderMenu = () => {
+        return (
+            <Menu
+                anchorEl={openMenu}
+                anchorReference={null}
+                anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "left",
+                }}
+                open={Boolean(openMenu)}
+                onClose={handleCloseMenu}
+                sx={{ mt: 2 }}
+            >
+            </Menu>
+        )
+    };
+
 
     const renderUserMenu = () => (
         // menu with profile image, name and email
@@ -122,6 +115,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
                 <MDAvatar
                     alt="User avatar"
                     src={user.profileImage}
+                    bgColor="dark"
                     size="lg"
                     shadow="lg"
                     sx={{ mb: 1 }}
