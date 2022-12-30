@@ -119,7 +119,7 @@ public class DivisionController {
 
     // Adicionar um novo alerta
     @PostMapping("{idDiv}/addAlert")
-    public ResponseEntity<Alerta> addAlert(@PathVariable(name="idDiv") int div,
+    public SuccessfulRequest addAlert(@PathVariable(name="idDiv") int div,
                                            @RequestParam(name="sensor") String sensor,
                                            @RequestParam(name="valor") Double valor,
                                            @RequestParam(name="stamp") Timestamp stamp) throws ResourceNotFoundException{

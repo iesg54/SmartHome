@@ -496,10 +496,17 @@ public class DivisionService {
         return new SuccessfulRequest("updated successfully");
     }
 
-    public ResponseEntity<Alerta> adicionarAlerta(int idDiv, String sensor, Double valor, Timestamp stamp) throws ResourceNotFoundException{
+    public SuccessfulRequest adicionarAlerta(int idDiv, String sensor, Double valor, Timestamp stamp) throws ResourceNotFoundException{
         Divisao div = divisionRepository.findById(idDiv).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada uma divisão com o ID: " + idDiv));
-        Alerta alerta = new Alerta(div, sensor, valor, stamp);
-        return new ResponseEntity<>(alerta, HttpStatus.OK);
+        Alerta alerta = new Alerta();
+
+        alerta.setDiv(div);
+        alerta.setSensor(sensor);
+        alerta.setValor(valor);
+        alerta.setStamp(stamp);
+        alertaRepository.save(alerta);
+
+        return new SuccessfulRequest("updated successfully");
     }
 
 }

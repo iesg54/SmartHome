@@ -26,11 +26,4 @@ public class Alerta {
     private Double valor;
     @Column
     private Timestamp stamp;
-
-    public Alerta(Divisao div, String sensor, Double valor, Timestamp stamp){
-        this.div = div;
-        this.sensor = sensor;
-        this.valor = valor;
-        this.stamp = stamp;
-    }
 }
