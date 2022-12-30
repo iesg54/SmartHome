@@ -21,6 +21,7 @@ import pt.ua.deti.ies.smarthome.smarthome_api.utils.SuccessfulRequest;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.*;
 
 @Slf4j
@@ -493,6 +494,12 @@ public class DivisionService {
 
         divisionRepository.save(div);
         return new SuccessfulRequest("updated successfully");
+    }
+
+    public ResponseEntity<Alerta> adicionarAlerta(int idDiv, String sensor, Double valor, Timestamp stamp) throws ResourceNotFoundException{
+        Divisao div = divisionRepository.findById(idDiv).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada uma divisão com o ID: " + idDiv));
+        Alerta alerta = new Alerta(div, sensor, valor, stamp);
+        return new ResponseEntity<>(alerta, HttpStatus.OK);
     }
 
 }

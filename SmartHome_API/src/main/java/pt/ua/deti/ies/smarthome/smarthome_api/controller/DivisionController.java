@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Date;
 import java.sql.Time;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.InvalidTypeException;
@@ -11,7 +12,6 @@ import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.ResourceNotFoundExcepti
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Alerta;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.dispositivos.Dispositivo;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.measurements.SensorMeasurements;
-import pt.ua.deti.ies.smarthome.smarthome_api.services.AlertsService;
 import pt.ua.deti.ies.smarthome.smarthome_api.services.DivisionService;
 import pt.ua.deti.ies.smarthome.smarthome_api.utils.SuccessfulRequest;
 
@@ -25,8 +25,6 @@ import java.util.Map;
 public class DivisionController {
     @Autowired
     private DivisionService divisionService;
-    @Autowired
-    AlertsService alertaService;
 
     // Division Page API Methods
     // SENSORS SECTION
@@ -125,8 +123,7 @@ public class DivisionController {
                                            @RequestParam(name="sensor") String sensor,
                                            @RequestParam(name="valor") Double valor,
                                            @RequestParam(name="stamp") Timestamp stamp) throws ResourceNotFoundException{
-        return alertaService.adicionarAlerta(div, sensor, valor, stamp);
+        return divisionService.adicionarAlerta(div, sensor, valor, stamp);
     }
-
 }
 
