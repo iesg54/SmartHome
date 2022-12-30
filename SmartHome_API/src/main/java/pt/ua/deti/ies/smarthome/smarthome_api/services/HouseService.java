@@ -261,5 +261,10 @@ public class HouseService {
         }
     }
 
+    public ResponseEntity<Divisao> getDivisionInfo(int idCasa, int idDivisao) throws ResourceNotFoundException {
+        Casa casa = houseRepository.findById(idCasa).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + idCasa));
+        Divisao divisao = divisionRepository.findById(idDivisao).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrada uma Divisão com o ID: " + idDivisao));
+        return new ResponseEntity<Divisao>(divisao, HttpStatus.OK);
+    }
 
 }

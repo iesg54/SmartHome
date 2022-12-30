@@ -1,22 +1,4 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 import { useState, useEffect } from "react";
-
-// react-router components
-import { useLocation, Link } from "react-router-dom";
 
 // prop-types is a library for typechecking of props.
 import PropTypes from "prop-types";
@@ -27,13 +9,17 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import Icon from "@mui/material/Icon";
+import { Grid } from "@mui/material";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
+import MDAvatar from "components/MDAvatar";
+import MDTypography from "components/MDTypography";
 
 // Material Dashboard 2 React example components
-import Breadcrumbs from "examples/Breadcrumbs";
 import NotificationItem from "examples/Items/NotificationItem";
+
+import { getUserInfo } from "appServices";
 
 // Custom styles for DashboardNavbar
 import {
@@ -49,15 +35,21 @@ import {
     useMaterialUIController,
     setTransparentNavbar,
     setMiniSidenav,
-    setOpenConfigurator,
 } from "context";
 
 function DashboardNavbar({ absolute, light, isMini }) {
+    const token = localStorage.getItem("token");
     const [navbarType, setNavbarType] = useState();
     const [controller, dispatch] = useMaterialUIController();
     const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator, darkMode } = controller;
     const [openMenu, setOpenMenu] = useState(false);
-    const route = useLocation().pathname.split("/").slice(1);
+    const [openUserMenu, setOpenUserMenu] = useState(false);
+
+    const [user, setUser] = useState({})
+    useEffect(async () => {
+        const user = await getUserInfo(token)
+        setUser(user)
+    }, [])
 
     useEffect(() => {
         // Setting the navbar type
@@ -86,9 +78,10 @@ function DashboardNavbar({ absolute, light, isMini }) {
     }, [dispatch, fixedNavbar]);
 
     const handleMiniSidenav = () => setMiniSidenav(dispatch, !miniSidenav);
-    const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
     const handleOpenMenu = (event) => setOpenMenu(event.currentTarget);
     const handleCloseMenu = () => setOpenMenu(false);
+    const handleOpenUserMenu = (event) => setOpenUserMenu(event.currentTarget);
+    const handleCloseUserMenu = () => setOpenUserMenu(false);
 
     // Render the notifications menu
     const renderMenu = () => (
@@ -109,6 +102,37 @@ function DashboardNavbar({ absolute, light, isMini }) {
                 icon={<Icon>shopping_cart</Icon>}
                 title="Payment successfully completed"
             />
+        </Menu>
+    );
+
+    const renderUserMenu = () => (
+        // menu with profile image, name and email
+        <Menu
+            anchorEl={openUserMenu}
+            anchorReference={null}
+            anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+            }}
+            open={Boolean(openUserMenu)}
+            onClose={handleCloseUserMenu}
+            sx={{ mt: 2 }}
+        >
+            <Grid container direction="column" alignItems="center" sx={{ p: 2 }}>
+                <MDAvatar
+                    alt="User avatar"
+                    src={user.profileImage}
+                    size="lg"
+                    shadow="lg"
+                    sx={{ mb: 1 }}
+                />
+                <MDTypography variant="h6" fontWeight="bold" sx={{ mb: 0.5 }}>
+                    {user.nome}
+                </MDTypography>
+                <MDTypography variant="body2" color="textSecondary">
+                    {user.email}
+                </MDTypography>
+            </Grid>
         </Menu>
     );
 
@@ -163,12 +187,20 @@ function DashboardNavbar({ absolute, light, isMini }) {
                             >
                                 <Icon sx={iconsStyle}>notifications</Icon>
                             </IconButton>
-                            <Link to="/authentication/sign-in/basic">
-                                <IconButton sx={navbarIconButton} size="small" disableRipple>
-                                    <Icon sx={iconsStyle}>account_circle</Icon>
-                                </IconButton>
-                            </Link>
+                            <IconButton
+                                size="small"
+                                disableRipple
+                                color="inherit"
+                                sx={navbarIconButton}
+                                aria-controls="user-menu"
+                                aria-haspopup="true"
+                                variant="contained"
+                                onClick={handleOpenUserMenu}
+                            >
+                                <Icon sx={iconsStyle}>person</Icon>
+                            </IconButton>
                             {renderMenu()}
+                            {renderUserMenu()}
                         </MDBox>
                     </MDBox>
                 )}

@@ -11,8 +11,7 @@ import MDTypography from "components/MDTypography";
 import MDButton from "components/MDButton";
 import MDAvatar from "components/MDAvatar";
 
-function UserCard({ nome, foto, isAdmin, id, handleDelete }) {
-    const userID = Number(localStorage.getItem("userID"));
+function UserCard({ nome, foto, isAdmin, id, handleDelete, userID }) {
 
     return (
         <Card>
@@ -64,6 +63,7 @@ UserCard.propTypes = {
     isAdmin: PropTypes.bool.isRequired,
     id: PropTypes.number.isRequired,
     handleDelete: PropTypes.func.isRequired,
+    userID: PropTypes.number.isRequired,
 };
 
 export default UserCard;

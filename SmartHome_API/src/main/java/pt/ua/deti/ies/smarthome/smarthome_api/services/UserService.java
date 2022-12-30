@@ -3,8 +3,11 @@ package pt.ua.deti.ies.smarthome.smarthome_api.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import pt.ua.deti.ies.smarthome.smarthome_api.Authentication.AuthenticationHandler;
 import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.ResourceNotFoundException;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Casa;
 import pt.ua.deti.ies.smarthome.smarthome_api.model.Utilizador;
@@ -19,6 +22,10 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private HouseRepository houseRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private AuthenticationHandler authenticationHandler;
 
     public ResponseEntity<Utilizador> getUser(String email, String password) throws ResourceNotFoundException {
         if(userRepository.existsByEmail(email)){
@@ -45,15 +52,16 @@ public class UserService {
         }
         novo.setEmail(email);
         novo.setNome(nome);
-        novo.setPassword(password);
+        novo.setPassword(passwordEncoder.encode(password));
         novo.setProfileImage(profile_image);
         novo.setAdmin(isAdmin);
 
         userRepository.save(novo);
     }
 
-    public ResponseEntity<Utilizador> getUserInfo(int idUser) throws ResourceNotFoundException{
-        Utilizador user = userRepository.findById(idUser).orElseThrow(() -> new ResourceNotFoundException("Não foi encontrado o utilizador com ID " + idUser));
+    public ResponseEntity<Utilizador> getUserInfo() throws ResourceNotFoundException{
+        String email = authenticationHandler.getUserName();
+        Utilizador user = userRepository.findByEmail(email);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 

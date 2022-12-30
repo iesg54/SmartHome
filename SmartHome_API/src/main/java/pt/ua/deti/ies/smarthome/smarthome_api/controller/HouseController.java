@@ -57,6 +57,14 @@ public class HouseController {
         return successfulRequest;
     }
 
+
+    // Return the info about a given division
+    @GetMapping("/{idCasa}/division/{idDiv}")
+    public ResponseEntity<Divisao> getDivisionInfo(@PathVariable(value="idCasa") int idCasa, @PathVariable(value="idDiv") int idDiv)
+            throws ResourceNotFoundException {
+        return ResponseEntity.ok(houseService.getDivisionInfo(idCasa, idDiv).getBody());
+    }
+
     // ENERGY CONSUMPTION
     // Returns the latest information stored in the DB regarding energy consumption. Must return the value for each division associated with the house.
     @GetMapping("/{idCasa}/energy/current")

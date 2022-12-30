@@ -31,13 +31,15 @@ import * as yup from "yup";
 // Axios
 import axios from "axios";
 
+import { getUserInfo, getHouseUsers } from "appServices";
+
 const validationSchema = yup.object({
     email: yup.string().email("Email is not valid!").required("Please add an email!"),
     tipo: yup.string().required("Please select a type!"),
 });
 
 function Users() {
-    const CasaID = localStorage.getItem("CasaID");
+    const token = localStorage.getItem("token");
     const [showForm, toggleForm] = useState(false);
 
     const handleClick = (e) => {
@@ -72,13 +74,22 @@ function Users() {
         cleanForm: true,
     });
 
+    const [userData, setUserData] = useState({});
+    const [users, setUsers] = useState([]);
+    useEffect(async () => {
+        const userInfo = await getUserInfo();
+        setUserData(userInfo);
+        const houseUsers = await getHouseUsers(userInfo.casa.id);
+        setUsers(houseUsers);
+    }, []);
+
     // Implement Method to delete user http://localhost:8080/smarthome/private/house/{houseID}/users
     const [deleteUserMessage, setDeleteUserMessage] = useState("");
     const handleDelete = (id) => {
         setDeleteUserMessage("");
         let user = users.find((user) => user.id === id);
         axios
-            .delete(`http://localhost:8080/smarthome/private/house/${CasaID}/users`, {
+            .delete(`http://localhost:8080/smarthome/private/house/${userData.casa.id}/users`, {
                 params: {
                     email: user.email,
                 },
@@ -88,16 +99,6 @@ function Users() {
             });
         users.splice(users.indexOf(user), 1);
     };
-
-    // Get Users Data from the API and update the state http://localhost:8080/smarthome/private/house/{houseID}/users
-    const [users, setUsers] = useState([]);
-    useEffect(() => {
-        axios
-            .get(`http://localhost:8080/smarthome/private/house/${CasaID}/users`)
-            .then((response) => {
-                setUsers(response.data);
-            });
-    }, [users]);
 
     // check if the user is an admin
     const [isUserAdmin, setIsUserAdmin] = useState(false);
@@ -139,6 +140,7 @@ function Users() {
                                     foto={user.profileImage ? user.profileImage : ""}
                                     id={user.id}
                                     handleDelete={(e) => handleDelete(user.id)}
+                                    userID={userData.id}
                                 />
                             </MDBox>
                         </Grid>
