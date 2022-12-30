@@ -1,4 +1,4 @@
-package pt.ua.deti.ies.smarthome.smarthome_api.Authentication;
+package pt.ua.deti.ies.smarthome.smarthome_api.authentication;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

@@ -17,7 +17,7 @@ public class Sensors {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
     @Column(nullable = false)
-    private Integer generator_type;                   // 1 - Temp_hum 2 - Air
+    private Integer generatorType;                   // 1 - Temp_hum 2 - Air
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="division_id", nullable = false)
     @JsonIgnore

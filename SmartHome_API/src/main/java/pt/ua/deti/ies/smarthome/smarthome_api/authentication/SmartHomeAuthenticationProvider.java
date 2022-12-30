@@ -1,5 +1,5 @@
 
-package pt.ua.deti.ies.smarthome.smarthome_api.Authentication;
+package pt.ua.deti.ies.smarthome.smarthome_api.authentication;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -10,7 +10,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import pt.ua.deti.ies.smarthome.smarthome_api.jwt_handler.JwtUserDetailsService;
+import pt.ua.deti.ies.smarthome.smarthome_api.jwtHandler.JwtUserDetailsService;
 
 @Component
 public class SmartHomeAuthenticationProvider implements AuthenticationProvider {

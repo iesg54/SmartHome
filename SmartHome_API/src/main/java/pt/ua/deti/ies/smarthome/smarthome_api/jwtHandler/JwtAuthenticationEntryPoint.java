@@ -1,4 +1,4 @@
-package pt.ua.deti.ies.smarthome.smarthome_api.jwt_handler;
+package pt.ua.deti.ies.smarthome.smarthome_api.jwtHandler;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

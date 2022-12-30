@@ -35,4 +35,10 @@ public class ProfileController {
     public SuccessfulRequest updateUserPic(@PathVariable(value="id") int id, @RequestParam(value="profPic") String profPic) throws ResourceNotFoundException{
         return userService.updateProfPic(id, profPic);
     }
+
+    @GetMapping("/logout")
+    public SuccessfulRequest logout(@PathVariable(value="id") int id){
+        userService.removeSensorsInfo();
+        return new SuccessfulRequest("Logout com sucesso");
+    }
 }

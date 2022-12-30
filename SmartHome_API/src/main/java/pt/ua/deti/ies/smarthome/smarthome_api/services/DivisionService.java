@@ -164,15 +164,15 @@ public class DivisionService {
         Map<Integer, Map<String, String>> weeklyInfo = new HashMap<>();
 
         // Percorrer os últimos 7 dias, e ir buscar os valores de Tmax, Tmin, Hmedia e COmedio para cada dia
-        Date firstDay = Date.valueOf("2022-12-07");
-        // TODO: Date firstDay = new Date(System.currentTimeMillis());
+        // TODO: Date firstDay = Date.valueOf("2022-12-07");
+        Date firstDay = new Date(System.currentTimeMillis());
         Date lastDay;
         Calendar cal = Calendar.getInstance();
         cal.setTime(firstDay);
 
         for(Integer i = 0; i < 7; i++){
             Map<String, String> dailyInfo = new HashMap<>();
-            cal.add(Calendar.DATE, 1);
+            cal.add(Calendar.DATE, -1);
 
             lastDay = new Date(cal.getTimeInMillis());
 
@@ -365,8 +365,8 @@ public class DivisionService {
         log.debug("got house info");
         Map<Date, Double> lista = new HashMap<>();
 
-        // TODO: Date date1 = new Date(System.currentTimeMillis());
-        Date date1 = Date.valueOf("2022-11-30");
+        Date date1 = new Date(System.currentTimeMillis());
+        // TODO: Date date1 = Date.valueOf("2022-11-30");
         Date date2 = null;
         Calendar cal = Calendar.getInstance();
         cal.setTime(date1);
@@ -374,9 +374,9 @@ public class DivisionService {
 
         if (div.getTipo().toString().equals("COZINHA")){
             for (int i = 1; i<=7; i++){
-                cal.add(Calendar.DATE, 1);
+                cal.add(Calendar.DATE, -1);
                 date2 = new Date(cal.getTimeInMillis());
-                List<ConsumoCozinha> valores = consumoCozinhaRepository.findByDivAndDiaGreaterThanEqualAndDiaLessThan(div, date1, date2);
+                List<ConsumoCozinha> valores = consumoCozinhaRepository.findByDivAndDiaGreaterThanEqualAndDiaLessThan(div, date2, date1);
                 Double soma;
                 soma = valores.stream().mapToDouble(valor -> valor.getValor()).average().orElse(0);
                 lista.put(date1, soma);
@@ -384,9 +384,9 @@ public class DivisionService {
             }
         }else if(div.getTipo().toString().equals("QUARTO")){
             for (int i = 1; i<=7; i++){
-                cal.add(Calendar.DATE, 1);
+                cal.add(Calendar.DATE, -1);
                 date2 = new Date(cal.getTimeInMillis());
-                List<ConsumoQuarto> valores = consumoQuartoRepository.findByDivAndDiaGreaterThanEqualAndDiaLessThan(div, date1, date2);
+                List<ConsumoQuarto> valores = consumoQuartoRepository.findByDivAndDiaGreaterThanEqualAndDiaLessThan(div, date2, date1);
                 Double soma = 0.0;
                 soma = valores.stream().mapToDouble(valor -> valor.getValor()).average().orElse(0);
                 lista.put(date1, soma);
@@ -394,9 +394,9 @@ public class DivisionService {
             }
         }else if(div.getTipo().toString().equals("EXTERIOR")){ //????
             for (int i = 1; i<=7; i++){
-                cal.add(Calendar.DATE, 1);
+                cal.add(Calendar.DATE, -1);
                 date2 = new Date(cal.getTimeInMillis());
-                List<ConsumoExterno> valores = consumoExternoRepository.findByDivAndDiaGreaterThanEqualAndDiaLessThan(div, date1, date2);
+                List<ConsumoExterno> valores = consumoExternoRepository.findByDivAndDiaGreaterThanEqualAndDiaLessThan(div, date2, date1);
                 Double soma = 0.0;
                 soma = valores.stream().mapToDouble(valor -> valor.getValor()).average().orElse(0);
                 lista.put(date1, soma);
@@ -404,9 +404,9 @@ public class DivisionService {
             }
         }else if(div.getTipo().toString().equals("SALA")){
             for (int i = 1; i<=7; i++){
-                cal.add(Calendar.DATE, 1);
+                cal.add(Calendar.DATE, -1);
                 date2 = new Date(cal.getTimeInMillis());
-                List<ConsumoSala> valores = consumoSalaRepository.findByDivAndDiaGreaterThanEqualAndDiaLessThan(div, date1, date2);
+                List<ConsumoSala> valores = consumoSalaRepository.findByDivAndDiaGreaterThanEqualAndDiaLessThan(div, date2, date1);
                 Double soma = 0.0;
                 soma = valores.stream().mapToDouble(valor -> valor.getValor()).average().orElse(0);
                 lista.put(date1, soma);

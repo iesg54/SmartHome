@@ -1,4 +1,4 @@
-package pt.ua.deti.ies.smarthome.smarthome_api.Authentication;
+package pt.ua.deti.ies.smarthome.smarthome_api.authentication;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +15,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import pt.ua.deti.ies.smarthome.smarthome_api.jwt_handler.JwtAuthenticationEntryPoint;
-import pt.ua.deti.ies.smarthome.smarthome_api.jwt_handler.JwtRequestFilter;
+import pt.ua.deti.ies.smarthome.smarthome_api.jwtHandler.JwtAuthenticationEntryPoint;
+import pt.ua.deti.ies.smarthome.smarthome_api.jwtHandler.JwtRequestFilter;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package pt.ua.deti.ies.smarthome.smarthome_api.jwt_handler;
+package pt.ua.deti.ies.smarthome.smarthome_api.jwtHandler;
 
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;

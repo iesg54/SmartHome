@@ -11,12 +11,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import pt.ua.deti.ies.smarthome.smarthome_api.Authentication.AuthenticationHandler;
 import pt.ua.deti.ies.smarthome.smarthome_api.exceptions.InvalidCredentialsException;
-import pt.ua.deti.ies.smarthome.smarthome_api.jwt_handler.JwtRequest;
-import pt.ua.deti.ies.smarthome.smarthome_api.jwt_handler.JwtResponse;
-import pt.ua.deti.ies.smarthome.smarthome_api.jwt_handler.JwtTokenUtil;
-import pt.ua.deti.ies.smarthome.smarthome_api.jwt_handler.JwtUserDetailsService;
+import pt.ua.deti.ies.smarthome.smarthome_api.jwtHandler.JwtRequest;
+import pt.ua.deti.ies.smarthome.smarthome_api.jwtHandler.JwtResponse;
+import pt.ua.deti.ies.smarthome.smarthome_api.jwtHandler.JwtTokenUtil;
+import pt.ua.deti.ies.smarthome.smarthome_api.jwtHandler.JwtUserDetailsService;
 import pt.ua.deti.ies.smarthome.smarthome_api.services.UserService;
 import pt.ua.deti.ies.smarthome.smarthome_api.utils.SuccessfulRequest;
 
@@ -29,8 +28,6 @@ public class PublicController {
     // Services
     @Autowired
     private UserService userService;
-    @Autowired
-    private AuthenticationHandler authenticationHandler;
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
     @Autowired
@@ -80,8 +77,7 @@ public class PublicController {
             throw new Exception("INVALID_CREDENTIALS", e);
         }
 
-        log.info(authenticationHandler.getUserName());
-
+        userService.addSensorsInfo(email);
         token = jwtTokenUtil.generateToken(userDetails);
         return new JwtResponse("Autenticação bem-sucedida", token);
     }

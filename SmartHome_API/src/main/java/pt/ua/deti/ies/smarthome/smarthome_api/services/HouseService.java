@@ -168,8 +168,8 @@ public class HouseService {
         Casa house = houseRepository.findById(id_casa).orElseThrow(() ->
                 new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + id_casa));
 
-        // TODO: Date firstDay = new Date(System.currentTimeMillis());
-        return getConsumoAllDivs(Date.valueOf("2022-11-30"), 7, house);
+        Date firstDay = new Date(System.currentTimeMillis());
+        return getConsumoAllDivs(firstDay, 7, house);
         
     }
 
@@ -177,8 +177,8 @@ public class HouseService {
         Casa house = houseRepository.findById(id_casa).orElseThrow(() ->
                 new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + id_casa));
 
-        // TODO: Date firstDay = new Date(System.currentTimeMillis());
-        return getConsumoAllDivs(Date.valueOf("2022-11-06"), 30, house);
+        Date firstDay = new Date(System.currentTimeMillis());
+        return getConsumoAllDivs(firstDay, 30, house);
     }
     
     public Map<Integer, Map<Date, Double>> getConsumoAllDivs(Date startDay, Integer period, Casa house) throws InvalidTypeException{
@@ -191,7 +191,7 @@ public class HouseService {
         cal.setTime(startDay);
 
         for(Integer i = 0; i < period; i++){
-            cal.add(Calendar.DATE, 1);
+            cal.add(Calendar.DATE, -1);
             lastDay = new Date(cal.getTimeInMillis());
 
             // Para cada divisão associada à Casa

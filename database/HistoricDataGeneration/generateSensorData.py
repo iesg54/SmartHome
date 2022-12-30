@@ -55,6 +55,7 @@ def all_temperatures_humidities_by_minute(base_temperature, temperatures, id_div
         sys.stdout = f
 
         today = date.today()
+        today -= timedelta(days=simulatedDays)
         for i in range(0, simulatedDays):
             if i != 0:
                 today += timedelta(days=1)
