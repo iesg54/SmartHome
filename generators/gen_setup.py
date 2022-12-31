@@ -12,7 +12,7 @@ def connectToDatabase():
     mydb = mysql.connector.connect(
         user="springuser",
         password="password",
-        host="localhost",
+        host="db",
         port=3306,
         database= "SmartHome",
     )

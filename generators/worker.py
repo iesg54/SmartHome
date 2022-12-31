@@ -6,9 +6,10 @@ def connect_to_database():
     global mydb
     mydb = mysql.connector.connect(
     user="springuser",
-    password="Password1#",
-    host="localhost",
-    database= "smarthome"
+    password="password",
+    host="db",
+    port=3306,
+    database= "SmartHome"
     )
 
 
