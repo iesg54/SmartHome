@@ -11,7 +11,7 @@ services:
       - "8080:8080"
     restart: unless-stopped
     environment: # Pass environment variables to the service
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/SmartHome?useSSL=false #TODO: Update Port
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/SmartHome?allowPublicKeyRetrieval=true&useSSL=false
       SPRING_DATASOURCE_USERNAME: springuser
       SPRING_DATASOURCE_PASSWORD: password 
     depends_on:
@@ -21,26 +21,26 @@ services:
       - backend
 
 
-  # # FrontEnd
-  # frontend:
-  #   build:
-  #     context: SmartHome
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - #TODO
-  #   restart: unless-stopped
-  #   depends_on:
-  #     - api
-  #     - db
-  #   networks:
-  #     #TODO
+  # FrontEnd
+  frontend:
+    build:
+      context: SmartHome
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    depends_on:
+      - api
+      - db
+    networks:
+      - frontend
 
 
   # Database
   db:
     image: mysql
     ports:
-      - "3306:3306"
+      - "3307:3306"
     restart: always
     environment:
       MYSQL_DATABASE: SmartHome
@@ -53,21 +53,34 @@ services:
       - backend
 
 
-  # # Message Queue
-  # rabbitmq:
-  #   #TODO
+  # Message Queue
+  rabbitmq:
+    image: rabbitmq:3.11.5-alpine
+    volumes:
+      - ./.docker/rabbitmq/etc/:/etc/rabbitmq/
+      - ./.docker/rabbitmq/data/:/var/lib/rabbitmq/mnesia
+      - ./.docker/rabbitmq/logs/:/var/log/rabbitmq/mnesia
+    ports:
+      - 5672:5672
+      - 15672:15672
+      - 15674:15674
+    networks:
+      - backend
 
 
-  # # Geração de dados
-  # data_generators:
-  #   build:
-  #     context: generators
-  #     dockerfile: Dockerfile
-  #   depends_on:
-  #     - rabbitmq
-  #     - db
-  #   networks:
-  #     #TODO
+  # Geração de dados
+  data_generators:
+    build:
+      context: generators
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      - rabbitmq
+      - db
+    networks:
+      - backend
+      
 
 networks: 
   backend:
+  frontend:
