@@ -5,9 +5,14 @@ RUN pip install --upgrade pip
 WORKDIR /data
 COPY . .
 
-RUN pip install -r requirements.txt
+ENV RABBITMQ_PORT=5672
+ENV RABBITMQ_USER=test
+ENV RABBITMQ_PASS=test
 
-RUN chmod +x wait-for-it.sh
+RUN pip install -r requirements.txt
+RUN chmod +x run.sh
+#RUN chmod +x wait-for-it.sh
 
 ENTRYPOINT [ "/bin/bash", "-c" ]
-CMD ["./wait-for-it.sh" , "db:3306" , "--strict" , "--timeout=300" , "--" , "RUN ./run.sh"]
+#CMD ["./wait-for-it.sh" , "db:3306" , "--strict" , "--timeout=30" , "--" , "./run.sh"]
+CMD ["./run.sh"]

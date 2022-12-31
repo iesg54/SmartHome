@@ -1,6 +1,7 @@
 import pika
 import mysql.connector
 import json
+import os
 
 def connect_to_database():
     global mydb
@@ -90,9 +91,13 @@ def callback(ch, method, properties, body):
 
 
 def connect_to_pika():
+    rabbitmq_address = os.environ.get('RABBITMQ_ADDRESS')
+    rabbitmq_port = os.environ.get('RABBITMQ_PORT')
+    rabbitmq_user = os.environ.get('RABBITMQ_USER')
+    rabbitmq_pass = os.environ.get('RABBITMQ_PASS')
 
-    connection = pika.BlockingConnection(
-        pika.ConnectionParameters(host='localhost'))
+    credentials = pika.PlainCredentials(rabbitmq_user, rabbitmq_pass)
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host="rmq", port=rabbitmq_port, credentials=credentials))
     channel = connection.channel()
     channel.queue_delete(queue='generators') # delete queue that was made before the worker was started
 

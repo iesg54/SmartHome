@@ -51,10 +51,11 @@ services:
       - ./database:/docker-entrypoint-initdb.d/:ro
     networks:
       - backend
+      - data_gen
 
 
   # Message Queue
-  rabbitmq:
+  rmq:
     image: rabbitmq:3.11.5-alpine
     volumes:
       - ./.docker/rabbitmq/etc/:/etc/rabbitmq/
@@ -64,6 +65,10 @@ services:
       - 5672:5672
       - 15672:15672
       - 15674:15674
+    environment:
+     - RABBITMQ_DEFAULT_PASS=test
+     - RABBITMQ_DEFAULT_USER=test
+     - RABBITMQ_DEFAULT_VHOST=/
     networks:
       - backend
 
@@ -75,12 +80,29 @@ services:
       dockerfile: Dockerfile
     restart: always
     depends_on:
-      - rabbitmq
+      - rmq
       - db
     networks:
       - backend
+      - data_gen
+
+  
+  # Servidor Python
+  server:
+    build:
+      context: backend
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 8765:8765
+    depends_on:
+      - db
+    networks:
+      - frontend
+      - data_gen
       
 
 networks: 
   backend:
   frontend:
+  data_gen:
