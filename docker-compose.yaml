@@ -8,66 +8,66 @@ services:
       context: SmartHome_API
       dockerfile: Dockerfile
     ports: 
-      - #TODO
+      - "8080:8080"
     restart: unless-stopped
     environment: # Pass environment variables to the service
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/SmartHome #TODO: Update Port
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/SmartHome?useSSL=false #TODO: Update Port
       SPRING_DATASOURCE_USERNAME: springuser
       SPRING_DATASOURCE_PASSWORD: password 
     depends_on:
       - db
-      - data_generators
+      # - data_generators
     networks:
-      #TODO
+      - backend
 
 
-  # FrontEnd
-  frontend:
-    build:
-      context: SmartHome
-      dockerfile: Dockerfile
-    ports:
-      - #TODO
-    restart: unless-stopped
-    depends_on:
-      - api
-      - db
-    networks:
-      #TODO
+  # # FrontEnd
+  # frontend:
+  #   build:
+  #     context: SmartHome
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - #TODO
+  #   restart: unless-stopped
+  #   depends_on:
+  #     - api
+  #     - db
+  #   networks:
+  #     #TODO
 
 
   # Database
   db:
     image: mysql
     ports:
-      - #TODO
+      - "3306:3306"
     restart: always
     environment:
       MYSQL_DATABASE: SmartHome
       MYSQL_USER: springuser
       MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: root
     volumes:
-      - db-data:/var/lib/mysql
+      - ./database:/docker-entrypoint-initdb.d/:ro
     networks:
-      #TODO
+      - backend
 
 
-  # Message Queue
-  rabbitmq:
-    #TODO
+  # # Message Queue
+  # rabbitmq:
+  #   #TODO
 
 
-  # Geração de dados
-  data_generators:
-    build:
-      context: generators
-      dockerfile: Dockerfile
-    depends_on:
-      - rabbitmq
-      - db
-    networks:
-      #TODO
-
+  # # Geração de dados
+  # data_generators:
+  #   build:
+  #     context: generators
+  #     dockerfile: Dockerfile
+  #   depends_on:
+  #     - rabbitmq
+  #     - db
+  #   networks:
+  #     #TODO
 
 networks: 
-  #TODO
+  backend:
