@@ -38,6 +38,7 @@ class carbon_monoxide_gen:
 
         return carbon_hour
 
+
     def carbon_monoxide_by_minute(self, carbon_monoxide_hour, next_carbon_monoxide_hour):
         carbon= np.linspace(carbon_monoxide_hour, next_carbon_monoxide_hour, 60)
 
@@ -54,15 +55,16 @@ class carbon_monoxide_gen:
         return carbon_monoxide
 
 
-    
     def chance_bad_value(self, type):
         if random.randint(0, 100) == 0: # very low chance
             print(type+ " demasiado alto!")
             return 1
         return 0
 
+
     def get_bad_value(self):
         return random.randint(50, 100)
+
 
     def check_monoxide(self, carbon):
         if carbon >= 50:
@@ -90,7 +92,7 @@ class carbon_monoxide_gen:
             h= f'0{hour}'
         if minute < 10:
             m= f'0{minute}'
-        timestamp= f'2022-12-06 {h}:{m}:00'
+        timestamp= f'2022-12-30 {h}:{m}:00'
         return timestamp
 
 
@@ -137,7 +139,6 @@ class carbon_monoxide_gen:
                 time.sleep(self.sleep_time_seconds)
                 minute+= 1
                 
-
         
     def connect_websocket(self):
         self.ws = websocket.WebSocket()
@@ -154,9 +155,6 @@ class carbon_monoxide_gen:
         return channel
 
 
-
-
-
     def run(self):
 
         self.channel= self.connect_to_broker()
@@ -167,12 +165,6 @@ class carbon_monoxide_gen:
             carbon_by_hour= self.all_carbon_monoxide_by_hour()
 
             self.all_carbon_monoxide_by_minute(carbon_by_hour)
-
-
-
-
-
-
 
 
 def parseArgs(argv):
@@ -191,15 +183,11 @@ def parseArgs(argv):
 
 
 def main():
-
-
     division_id, carbon_base, sleep_time= parseArgs(sys.argv)
     
     gen= carbon_monoxide_gen(division_id, carbon_base, sleep_time)
 
     gen.run()
-
-
 
 
 if __name__ == '__main__':
