@@ -4,9 +4,6 @@ import time
 import os
 from multiprocessing import Process
 
-
-
-
 def connectToDatabase():
     global mydb
     mydb = mysql.connector.connect(
@@ -86,6 +83,7 @@ def main():
     #cleanUpDatabase() # clean sensors table to prevent conflicts when users close the app whithout logging out
 
     sensors_needed= []
+    finish = False
     while True:
         while not sensors_needed:
             if not checkIfTableExists():

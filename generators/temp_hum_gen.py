@@ -5,15 +5,16 @@ import time
 import pika
 import numpy as np
 import websocket
+import os
 
 
 class temp_humi_gen:
     def __init__(self, division_id, temp_base, sleep_time_seconds):
         
-        #self.rabbitmq_address = os.environ.get('RABBITMQ_ADDRESS')
-        #self.rabbitmq_port = os.environ.get('RABBITMQ_PORT')
-        #self.rabbitmq_user = os.environ.get('RABBITMQ_USER')
-        #self.rabbitmq_pass = os.environ.get('RABBITMQ_PASSWORD')
+        self.rabbitmq_address = os.environ.get('RABBITMQ_ADDRESS')
+        self.rabbitmq_port = os.environ.get('RABBITMQ_PORT')
+        self.rabbitmq_user = os.environ.get('RABBITMQ_USER')
+        self.rabbitmq_pass = os.environ.get('RABBITMQ_PASS')
 
 
         if not temp_base:
@@ -94,7 +95,7 @@ class temp_humi_gen:
 
     def connect_websocket(self):
         self.ws = websocket.WebSocket()
-        self.ws.connect("ws://localhost:8765")
+        self.ws.connect("ws://server:8765")
 
 
     def check_temperature(self, temperature):
@@ -212,7 +213,8 @@ class temp_humi_gen:
 
 
     def connect_to_broker(self):
-        connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+        credentials = pika.PlainCredentials(self.rabbitmq_user, self.rabbitmq_pass)
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host="rmq", port=self.rabbitmq_port, credentials=credentials))
         
         channel = connection.channel()
         channel.queue_declare(queue='generators', durable=True)

@@ -41,12 +41,16 @@ def getSensorsTable(division_id):
     """ returns the name of the table where the sensors of the division are stored"""
 
     mycursor = mydb.cursor(buffered=True)
-    mycursor.execute("USE smarthome")
-    mycursor.execute("SELECT * FROM divisao WHERE id = %s", (division_id, ))
+    mycursor.execute("USE SmartHome")
+    mycursor.execute("SELECT tipo FROM divisao WHERE id = %s", (division_id, ))
     mydb.commit()
     result= mycursor.fetchone()
-    room= result[1]
-    sensor_table_name= "sensor_measurements_" + room
+    room= result[0]
+
+    if room == "EXTERIOR":
+        sensor_table_name = "sensor_measurements_externo"
+    else:
+        sensor_table_name= "sensor_measurements_" + room.lower()
 
     return sensor_table_name
 
@@ -55,7 +59,7 @@ def getNextInsertionId(sensor_table_name):
     """ returns the next id to be used in the table where the sensors of the division are stored"""
 
     mycursor = mydb.cursor(buffered=True)
-    mycursor.execute("USE smarthome")
+    mycursor.execute("USE SmartHome")
     query= "SELECT * FROM " + sensor_table_name + " ORDER BY id DESC LIMIT 1".replace("'", "`")
     mycursor.execute(query)
     mydb.commit()
@@ -71,7 +75,7 @@ def store_in_database(division_id, generator_type, day, timestamp, value):
     insertion_id= getNextInsertionId(sensor_table_name) 
 
     mycursor = mydb.cursor(buffered=True)
-    mycursor.execute("USE smarthome")
+    mycursor.execute("USE SmartHome")
     
 
 
