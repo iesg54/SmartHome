@@ -154,7 +154,7 @@ class temp_humi_gen:
         if bad_temperature != 0:
             temp= self.get_bad_temperature(bad_temperature)
         else:
-            temp= t + random.randint(0, 10)/50
+            temp= t + random.randint(0, 100)/50
 
         bad_humidity = self.chance_bad_value("humidade") # randomly make humidity too low or too high
         if bad_humidity != 0:
