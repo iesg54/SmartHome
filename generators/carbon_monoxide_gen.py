@@ -104,7 +104,7 @@ class carbon_monoxide_gen:
             
             minute= 0
             for c in carbon_monoxide_minute:
-                bad_value= self.chance_bad_value("monoxido_carbono")
+                bad_value= self.chance_bad_value("ar")
                 if bad_value != 0:
                     carbon= self.get_bad_value()
                 else:
@@ -123,7 +123,7 @@ class carbon_monoxide_gen:
 
                 check_monoxide= self.check_monoxide(carbon)
                 if check_monoxide:
-                    self.warn_user("monoxido_carbono", timestamp, carbon)
+                    self.warn_user("ar", timestamp, carbon)
                 
 
                 # sending to broker
