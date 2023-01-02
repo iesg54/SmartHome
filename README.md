@@ -33,13 +33,13 @@ docker compose up
 
 #1. Access project folder
 
-````
+```
 cd proj/IES_Proj_G54
 ```
 
 #2. Run the containers:
 
-````
+```
 docker compose up
 ```
 
