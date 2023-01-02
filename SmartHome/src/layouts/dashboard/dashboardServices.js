@@ -5,7 +5,7 @@ const token = localStorage.getItem("token");
 
 async function getEnergyCost(houseID) {
     const response = await axios.get(
-        `http://localhost:8080/smarthome/private/house/${houseID}/energy/current`,
+        `http://192.168.160.238:8080/smarthome/private/house/${houseID}/energy/current`,
         {
             headers: {
                 "Content-Type": "application/json",
@@ -24,7 +24,7 @@ async function getEnergyCost(houseID) {
 }
 
 async function getEnergyCostInfoLastWeek(houseID) {
-    const res = await axios.get(`http://localhost:8080/smarthome/private/house/1/energy/week`, {
+    const res = await axios.get(`http://192.168.160.238:8080/smarthome/private/house/1/energy/week`, {
         headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -59,7 +59,7 @@ async function getEnergyCostInfoLastWeek(houseID) {
 }
 
 async function getEnergyCostInfoLastMonth(houseID) {
-    const res = await axios.get(`http://localhost:8080/smarthome/private/house/1/energy/month`, {
+    const res = await axios.get(`http://192.168.160.238:8080/smarthome/private/house/1/energy/month`, {
         headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -99,7 +99,7 @@ async function getEnergyCostInfoLastMonth(houseID) {
 
 async function deleteDivision(houseID, divID) {
     const response = await axios.delete(
-        `http://localhost:8080/smarthome/private/house/${houseID}/divisions`,
+        `http://192.168.160.238:8080/smarthome/private/house/${houseID}/divisions`,
         {
             headers: {
                 "Content-Type": "application/json",

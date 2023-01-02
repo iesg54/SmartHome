@@ -51,7 +51,7 @@ export default function App() {
     }, []);
 
     // Websocket Connection
-    const [socketUrl, setSocketUrl] = useState("ws://localhost:8765");
+    const [socketUrl, setSocketUrl] = useState("ws://192.168.160.238:8765");
     const [messageHistory, setMessageHistory] = useState([]);
     const [lastMessageReceived, setLastMessageReceived] = useState(null);
 
@@ -135,7 +135,7 @@ export default function App() {
             return null;
         });
 
-    // get divisions from API and add to routes http://localhost:8080/smarthome/private/house/1/divisions
+    // get divisions from API and add to routes http://192.168.160.238:8080/smarthome/private/house/1/divisions
     const [user, setUser] = useState({});
     const [divisionsRoutes, setDivisionsRoutes] = useState([]);
     const [addDeviceRoutes, setAddDeviceRoutes] = useState([]);
@@ -204,6 +204,7 @@ export default function App() {
                 <Route path="/register" element={<SignUp />} />
                 <Route path="/login" element={<SignIn />} />
                 <Route path="/addDivision" element={<AdicionarDivisao />} />
+                <Route path="/login" element={<SignIn />} />
             </Routes>
             {isLogged && lastMessageReceived && (
                 <MDSnackbar

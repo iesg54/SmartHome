@@ -3,7 +3,7 @@ import axios from "axios";
 const token = localStorage.getItem("token");
 
 async function getUserInfo() {
-    const response = await axios.get("http://localhost:8080/smarthome/private/user/info", {
+    const response = await axios.get("http://192.168.160.238:8080/smarthome/private/user/info", {
         headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -18,7 +18,7 @@ async function getUserInfo() {
 
 async function getDivisions(houseID) {
     const response = await axios.get(
-        `http://localhost:8080/smarthome/private/house/${houseID}/divisions`,
+        `http://192.168.160.238:8080/smarthome/private/house/${houseID}/divisions`,
         {
             headers: {
                 "Content-Type": "application/json",
@@ -35,7 +35,7 @@ async function getDivisions(houseID) {
 
 async function getHouseUsers(houseID) {
     const response = await axios.get(
-        `http://localhost:8080/smarthome/private/house/${houseID}/users`,
+        `http://192.168.160.238:8080/smarthome/private/house/${houseID}/users`,
         {
             headers: {
                 "Content-Type": "application/json",
@@ -52,7 +52,7 @@ async function getHouseUsers(houseID) {
 
 async function addAlert(alert) {
     const response = await axios.post(
-        `http://localhost:8080/smarthome/private/division/${alert.id_divisao}/addAlert`,
+        `http://192.168.160.238:8080/smarthome/private/division/${alert.id_divisao}/addAlert`,
         null,
         {
             headers: {
@@ -75,7 +75,7 @@ async function addAlert(alert) {
 
 async function getAlerts(houseID) {
     const response = await axios.get(
-        `http://localhost:8080/smarthome/private/house/${houseID}/latestAlerts`,
+        `http://192.168.160.238:8080/smarthome/private/house/${houseID}/latestAlerts`,
         {
             headers: {
                 "Content-Type": "application/json",
@@ -92,7 +92,7 @@ async function getAlerts(houseID) {
 
 async function logout() {
     const response = await axios.get(
-        `http://localhost:8080/smarthome/private/user/logout`,
+        `http://192.168.160.238:8080/smarthome/private/user/logout`,
         {
             headers: {
                 "Content-Type": "application/json",

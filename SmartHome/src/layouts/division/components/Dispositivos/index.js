@@ -31,11 +31,11 @@ function DivisionDevices({ divisionID }) {
     const token = localStorage.getItem("token");
     const [deviceOpen, setDeviceOpen] = useState({});
 
-    // Get Devices Data from the API and update the state http://localhost:8080/smarthome/private/division/{divisionID}/devices
+    // Get Devices Data from the API and update the state http://192.168.160.238:8080/smarthome/private/division/{divisionID}/devices
     const [devicesState, setDevicesState] = useState([]);
     useEffect(() => {
         axios
-            .get(`http://localhost:8080/smarthome/private/division/${divisionID}/devices`, {
+            .get(`http://192.168.160.238:8080/smarthome/private/division/${divisionID}/devices`, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
@@ -70,7 +70,7 @@ function DivisionDevices({ divisionID }) {
             return device;
         });
         axios.post(
-            `http://localhost:8080/smarthome/private/division/${divisionID}/device/${id}`,
+            `http://192.168.160.238:8080/smarthome/private/division/${divisionID}/device/${id}`,
             null,
             {
                 headers: {
@@ -83,7 +83,7 @@ function DivisionDevices({ divisionID }) {
     };
     /* eslint-disable no-param-reassign */
 
-    // Get Energy Data from te API and update the state http://localhost:8080/smarthome/private/division/{divisionID}/energy
+    // Get Energy Data from te API and update the state http://192.168.160.238:8080/smarthome/private/division/{divisionID}/energy
     const [energyData, setEnergyData] = useState({
         icon: { color: "warning", component: "bolt" },
         title: "Energia Consumida",
@@ -101,7 +101,7 @@ function DivisionDevices({ divisionID }) {
     });
     useEffect(() => {
         axios
-            .get(`http://localhost:8080/smarthome/private/division/${divisionID}/energy`, {
+            .get(`http://192.168.160.238:8080/smarthome/private/division/${divisionID}/energy`, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
@@ -136,7 +136,7 @@ function DivisionDevices({ divisionID }) {
     };
 
     const handleDeleteDevice = (id) => {
-        axios.delete(`http://localhost:8080/smarthome/private/division/${divisionID}/devices`, {
+        axios.delete(`http://192.168.160.238:8080/smarthome/private/division/${divisionID}/devices`, {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,

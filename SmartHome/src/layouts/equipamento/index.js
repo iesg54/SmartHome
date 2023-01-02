@@ -50,7 +50,7 @@ function AdicionarEquipamento() {
         onSubmit: (values, { resetForm }) => {
             axios
                 .post(
-                    `http://localhost:8080/smarthome/private/division/${divisionID}/devices`,
+                    `http://192.168.160.238:8080/smarthome/private/division/${divisionID}/devices`,
                     null,
                     {
                         headers: {

@@ -57,7 +57,7 @@ function Users() {
         onSubmit: (values, { resetForm }) => {
             setDeleteUserMessage("");
             axios
-                .post("http://localhost:8080/smarthome/private/house/1/users", null, {
+                .post("http://192.168.160.238:8080/smarthome/private/house/1/users", null, {
                     params: {
                         email: values.email,
                     },
@@ -83,13 +83,13 @@ function Users() {
         setUsers(houseUsers);
     }, []);
 
-    // Implement Method to delete user http://localhost:8080/smarthome/private/house/{houseID}/users
+    // Implement Method to delete user http://192.168.160.238:8080/smarthome/private/house/{houseID}/users
     const [deleteUserMessage, setDeleteUserMessage] = useState("");
     const handleDelete = (id) => {
         setDeleteUserMessage("");
         let user = users.find((user) => user.id === id);
         axios
-            .delete(`http://localhost:8080/smarthome/private/house/${userData.casa.id}/users`, {
+            .delete(`http://192.168.160.238:8080/smarthome/private/house/${userData.casa.id}/users`, {
                 params: {
                     email: user.email,
                 },

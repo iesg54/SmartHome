@@ -36,7 +36,7 @@ function Basic() {
     const getUserData = (values) => {
         axios
             .post(
-                "http://localhost:8080/smarthome/public/login",
+                "http://192.168.160.238:8080/smarthome/public/login",
                 {
                     email: values.email,
                     password: values.password,

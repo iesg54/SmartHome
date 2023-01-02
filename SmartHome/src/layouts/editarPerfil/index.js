@@ -49,7 +49,7 @@ function EditarPerfil() {
         setEditButtons(!editButtons);
     };
 
-    // get user data from the API and set it to the state http://localhost:8080/smarthome/private/user/{userID}
+    // get user data from the API and set it to the state http://192.168.160.238:8080/smarthome/private/user/{userID}
     const [userData, setUserData] = useState({});
     useEffect(async () => {
         const user = await getUserInfo(token);
@@ -67,7 +67,7 @@ function EditarPerfil() {
             setMessageResponse({ type: "", message: "" });
             axios
                 .put(
-                    `http://localhost:8080/smarthome/private/user/${userData.id}`,
+                    `http://192.168.160.238:8080/smarthome/private/user/${userData.id}`,
                     {
                         id: userData.id,
                         email: values.email,
@@ -148,7 +148,7 @@ function EditarPerfil() {
                     setImage(downloadURL);
                     axios
                         .put(
-                            `http://localhost:8080/smarthome/private/user/profilePic/${userData.id}`,
+                            `http://192.168.160.238:8080/smarthome/private/user/profilePic/${userData.id}`,
                             null,
                             {
                                 headers: {

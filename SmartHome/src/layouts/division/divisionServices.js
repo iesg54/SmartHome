@@ -4,7 +4,7 @@ const token = localStorage.getItem("token");
 
 async function getDivisionInfo(houseID, divID) {
     const response = await axios.get(
-        `http://localhost:8080/smarthome/private/house/${houseID}/division/${divID}`,
+        `http://192.168.160.238:8080/smarthome/private/house/${houseID}/division/${divID}`,
         {
             headers: {
                 "Content-Type": "application/json",

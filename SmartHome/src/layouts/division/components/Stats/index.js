@@ -21,11 +21,11 @@ import getAlertMessage from "./getAlertMessage";
 function DivisionStats({ divisionID }) {
     const token = localStorage.getItem("token");
 
-    // Get sensors data from API http://localhost:8080/smarthome/private/division/{divisionID}/currentInfo
+    // Get sensors data from API http://192.168.160.238:8080/smarthome/private/division/{divisionID}/currentInfo
     const [sensorsCurrentData, setSensorsCurrentData] = useState([]);
     useEffect(() => {
         axios
-            .get(`http://localhost:8080/smarthome/private/division/${divisionID}/currentInfo`, {
+            .get(`http://192.168.160.238:8080/smarthome/private/division/${divisionID}/currentInfo`, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
@@ -110,7 +110,7 @@ function DivisionStats({ divisionID }) {
             });
     }, []);
 
-    // Get weekly sensors data from API http://localhost:8080/smarthome/private/division/{divisionID}/weeklyInfo
+    // Get weekly sensors data from API http://192.168.160.238:8080/smarthome/private/division/{divisionID}/weeklyInfo
     const [sensorsWeeklyData, setSensorsWeeklyData] = useState([
         {
             id: 1,
@@ -168,7 +168,7 @@ function DivisionStats({ divisionID }) {
     ]);
     useEffect(() => {
         axios
-            .get(`http://localhost:8080/smarthome/private/division/${divisionID}/weeklyInfo`, {
+            .get(`http://192.168.160.238:8080/smarthome/private/division/${divisionID}/weeklyInfo`, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
@@ -195,11 +195,11 @@ function DivisionStats({ divisionID }) {
             });
     }, []);
 
-    // Get alerts data from API http://localhost:8080/smarthome/private/division/{divisionID}/alerts
+    // Get alerts data from API http://192.168.160.238:8080/smarthome/private/division/{divisionID}/alerts
     const [alertsData, setAlertsData] = useState([]);
     useEffect(() => {
         axios
-            .get(`http://localhost:8080/smarthome/private/division/${divisionID}/alerts`, {
+            .get(`http://192.168.160.238:8080/smarthome/private/division/${divisionID}/alerts`, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,

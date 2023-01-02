@@ -51,7 +51,7 @@ function Cover() {
         validationSchema: validationSchema,
         onSubmit: (values, { resetForm }) => {
             axios
-                .post("http://localhost:8080/smarthome/public/register", null, {
+                .post("http://192.168.160.238:8080/smarthome/public/register", null, {
                     headers: {
                         "Content-Type": "application/json",
                     },

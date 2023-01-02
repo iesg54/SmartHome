@@ -60,7 +60,7 @@ function ActionModal({
                 case "LAMPADA":
                     axios
                         .put(
-                            `http://localhost:8080/smarthome/private/division/${idDivision}/lampadas/${idDisp}`,
+                            `http://192.168.160.238:8080/smarthome/private/division/${idDivision}/lampadas/${idDisp}`,
                             null,
                             {
                                 headers: {
@@ -81,7 +81,7 @@ function ActionModal({
                 case "AC":
                     axios
                         .put(
-                            `http://localhost:8080/smarthome/private/division/${idDivision}/AC/${idDisp}`,
+                            `http://192.168.160.238:8080/smarthome/private/division/${idDivision}/AC/${idDisp}`,
                             null,
                             {
                                 headers: {
@@ -102,7 +102,7 @@ function ActionModal({
                 case "REGADOR":
                     axios
                         .put(
-                            `http://localhost:8080/smarthome/private/division/${idDivision}/regadores/${idDisp}`,
+                            `http://192.168.160.238:8080/smarthome/private/division/${idDivision}/regadores/${idDisp}`,
                             null,
                             {
                                 headers: {

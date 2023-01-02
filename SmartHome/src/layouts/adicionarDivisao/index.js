@@ -38,7 +38,7 @@ function AdicionarDivisao() {
     const [user, setUser] = useState({});
     useEffect(() => {
         axios
-            .get("http://localhost:8080/smarthome/private/user/info", {
+            .get("http://192.168.160.238:8080/smarthome/private/user/info", {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
@@ -59,7 +59,7 @@ function AdicionarDivisao() {
             setResponseMessage({ type: "", message: "" });
             axios
                 .post(
-                    `http://localhost:8080/smarthome/private/house/${user.casa.id}/divisions`,
+                    `http://192.168.160.238:8080/smarthome/private/house/${user.casa.id}/divisions`,
                     null,
                     {
                         headers: {
