@@ -137,13 +137,6 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
         window.location.href = "/login";
     };
 
-    const [divisions, setDivisions] = useState([]);
-    useEffect(async () => {
-        const user = await getUserInfo();
-        const divisions = await getDivisions(user.casa.id);
-        setDivisions(divisions);
-    }, []);
-
     return (
         <SidenavRoot
             {...rest}
@@ -188,16 +181,6 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
                 }
             />
             <List>{renderRoutes}</List>
-            {divisions.map((division) => (
-                <Link key={division.id} to={`/division/${division.id}`}>
-                    <SidenavCollapse
-                        name={division.nome}
-                        icon={<Icon sx={{ fontWeight: "bold" }}>home</Icon>}
-                        active={"division/" + division.id == collapseName}
-                        noCollapse
-                    />
-                </Link>
-            ))}
             <SidenavCollapse
                 name="Logout"
                 icon={<Icon sx={{ fontWeight: "bold" }}>logout</Icon>}

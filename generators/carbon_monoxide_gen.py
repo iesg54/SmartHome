@@ -108,7 +108,7 @@ class carbon_monoxide_gen:
                 if bad_value != 0:
                     carbon= self.get_bad_value()
                 else:
-                    carbon= c + random.randint(0, 10)/50
+                    carbon= c + random.randint(0, 100)/50
 
                 timestamp= self.get_timestamp(hour, minute) # 'YYYY-MM-DD hh:mm:ss'
                 day= timestamp.split(' ')[0]
