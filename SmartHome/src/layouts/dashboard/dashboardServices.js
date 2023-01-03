@@ -24,7 +24,7 @@ async function getEnergyCost(houseID) {
 }
 
 async function getEnergyCostInfoLastWeek(houseID) {
-    const res = await axios.get(`http://192.168.160.238:8080/smarthome/private/house/1/energy/week`, {
+    const res = await axios.get(`http://192.168.160.238:8080/smarthome/private/house/${houseID}/energy/week`, {
         headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -59,7 +59,7 @@ async function getEnergyCostInfoLastWeek(houseID) {
 }
 
 async function getEnergyCostInfoLastMonth(houseID) {
-    const res = await axios.get(`http://192.168.160.238:8080/smarthome/private/house/1/energy/month`, {
+    const res = await axios.get(`http://192.168.160.238:8080/smarthome/private/house/${houseID}/energy/month`, {
         headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
