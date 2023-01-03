@@ -2,7 +2,7 @@
 
 Smart Home is a web app developed to provide users with the ability to monitor and manage the sensors and devices they have installed in their smart home. In particular, it's able to monitor values of variables such as the temperautre, humidity and CO levels in different division of the house, as well as control different devices, such as the AC, lights, etc. SmartHome also allows the control of resources improtant for the Home, such as the energy used in each division by each equipment.Besides this, another main feature of the app is the notification of the user about the state of their home along the day, in particular the existance of alerts in the case when the associated sensors measure unusual or unexpected values.
 
-## Team
+## TEAM
 
 - **Team Manager**: Daniel Carvalho
 - **Product Owner**: Diogo Alves
@@ -29,21 +29,26 @@ docker compose up
 3. After all the containers have started up, and are running, open the project in the following URL:
     - http://localhost:3000
     
-# HOW TO RUN SMARTHOME IN THE VIRTUAL MACHINE
+4. In order to test all the functionalities of the app, log into an already existing account with historical data associated with it in the database:
+    - Email: alberto.matias000@gmail.com
+    - Pass: admin
+Or just register a new account.
+    
+## HOW TO RUN SMARTHOME IN THE VIRTUAL MACHINE
 
-#1. Access project folder
+1. Access the project folder
 
 ```
 cd proj/IES_Proj_G54
 ```
 
-#2. Run the containers:
+2. Run the containers:
 
 ```
 docker compose up
 ```
 
-#3. After the containers have started, we can open the project outside the virtual machine, using the URL:
+3. After the containers have started, we can open the project outside the virtual machine, using the URL:
     - http://192.168.160.238:3000/
 
 
@@ -51,3 +56,5 @@ docker compose up
     - Email: alberto.matias000@gmail.com
     - Pass: admin
 Or just register a new account.
+
+NOTE: The version available on the VM is located in the VM_Branch of this repository. The only difference to the version in the main branch is the use of different addresses for contacting the API in the frontend's files (as the VM machine has it's own IP)
