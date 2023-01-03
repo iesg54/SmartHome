@@ -16,6 +16,7 @@ Everyone is in the developer team!
 - [JIRA Project Board](https://ies-smarthome.atlassian.net/jira/software/projects/SMAR/boards/1)
 - [API Documentation](https://documenter.getpostman.com/view/24060738/2s8Z6yXYY5)
 - [Reports and Presentations](https://github.com/iesg54/IES_Proj_G54/tree/main/reports)
+- [Demo] (https://uapt33090-my.sharepoint.com/:v:/g/personal/art_afo_ua_pt/EWlbYyi2DRNErx9k-f7ropsB3yGhGPqZEFlYhvxfBSLhsA?e=b2PIoy)
 
 ## HOW TO RUN SMARTHOME LOCALLY
 
