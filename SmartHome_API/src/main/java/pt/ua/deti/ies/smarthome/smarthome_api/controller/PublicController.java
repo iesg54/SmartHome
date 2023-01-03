@@ -89,7 +89,7 @@ public class PublicController {
                                         @RequestParam(name="password", required = true) String password, 
                                         @RequestParam(name="prof-pic", required = false) String profile_pic,
                                         @RequestParam(name="isAdmin", required = true) Boolean admin){
-        userService.registerUser(name, email, password, profile_pic, admin);
+        userService.registerUser(email, name, password, profile_pic, admin);
         return new SuccessfulRequest("Registered with success");
     }
 }
