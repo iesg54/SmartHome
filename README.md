@@ -1,48 +1,60 @@
 # SMART HOME
 
-Smart Home is a web app that focuses on giving the user the possibility to monitor (information about the temperature, humidity, CO2 levels, etc) and control (heaters, AC, windows, etc) their home optimize their confort experience. The app will also have a message system to notify the user about the state of the home along the day.
+Smart Home is a web app developed to provide users with the ability to monitor and manage the sensors and devices they have installed in their smart home. In particular, it's able to monitor values of variables such as the temperautre, humidity and CO levels in different division of the house, as well as control different devices, such as the AC, lights, etc. SmartHome also allows the control of resources improtant for the Home, such as the energy used in each division by each equipment.Besides this, another main feature of the app is the notification of the user about the state of their home along the day, in particular the existance of alerts in the case when the associated sensors measure unusual or unexpected values.
 
-## Team
+## TEAM
 
 - **Team Manager**: Daniel Carvalho
 - **Product Owner**: Diogo Alves
 - **Architect**: Bruna Simões
-- **DevOps master**: Artur Correia
+- **DevOps Master**: Artur Correia
 
 Everyone is in the developer team!
 
-## INSTALLING RABBIT MQ:
+## IMPORTANT LINKS
 
-1. Instalar o rabbitmq:
-```
-sudo apt-get update
-sudo apt-get install erlang
-sudo apt-get install rabbitmq-server
-```
+- [JIRA Project Board](https://ies-smarthome.atlassian.net/jira/software/projects/SMAR/boards/1)
+- [API Documentation](https://documenter.getpostman.com/view/24060738/2s8Z6yXYY5)
+- [Reports and Presentations](https://github.com/iesg54/IES_Proj_G54/tree/main/reports)
 
-2. Inicializar o servidor:
-```
-sudo systemctl enable rabbitmq-server
-sudo systemctl start rabbitmq-server
-```
+## HOW TO RUN SMARTHOME LOCALLY
 
-3. Verificar se o rabbitmq esta a correr:
+1. Install [Docker Compose](https://docs.docker.com/compose/) 
+2. Run, in the root of the project:
+
 ```
-sudo systemctl status rabbitmq-server
+docker compose up
 ```
 
+3. After all the containers have started up, and are running, open the project in the following URL:
+    - http://localhost:3000
+    
+4. In order to test all the functionalities of the app, log into an already existing account with historical data associated with it in the database:
+    - Email: alberto.matias000@gmail.com
+    - Pass: admin
+Or just register a new account.
+    
+## HOW TO RUN SMARTHOME IN THE VIRTUAL MACHINE
 
-## HOW TO RUN SMARTHOME
+1. Access the project folder
 
-1. Install NodeJS:
-https://github.com/nvm-sh/nvm
-
-2. Run this commands
 ```
-cd SmartHome/
-npm install
-npm start
+cd proj/IES_Proj_G54
 ```
 
-3. App should be available at:
-https://localhost:3000
+2. Run the containers:
+
+```
+docker compose up
+```
+
+3. After the containers have started, we can open the project outside the virtual machine, using the URL:
+    - http://192.168.160.238:3000/
+
+
+4. In order to test all the functionalities of the app, log into an already existing account with historical data associated with it in the database:
+    - Email: alberto.matias000@gmail.com
+    - Pass: admin
+Or just register a new account.
+
+NOTE: The version available on the VM is located in the VM_Branch of this repository. The only difference to the version in the main branch is the use of different addresses for contacting the API in the frontend's files (as the VM machine has it's own IP)

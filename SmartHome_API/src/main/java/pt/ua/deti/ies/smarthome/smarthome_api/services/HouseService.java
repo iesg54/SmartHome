@@ -168,7 +168,7 @@ public class HouseService {
         Casa house = houseRepository.findById(id_casa).orElseThrow(() ->
                 new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + id_casa));
 
-        Date firstDay = new Date(System.currentTimeMillis());
+        Date firstDay = Date.valueOf("2022-12-29");
         return getConsumoAllDivs(firstDay, 7, house);
         
     }
@@ -177,7 +177,7 @@ public class HouseService {
         Casa house = houseRepository.findById(id_casa).orElseThrow(() ->
                 new ResourceNotFoundException("Não foi encontrada uma Casa com o ID: " + id_casa));
 
-        Date firstDay = new Date(System.currentTimeMillis());
+        Date firstDay = Date.valueOf("2022-12-29");
         return getConsumoAllDivs(firstDay, 30, house);
     }
     

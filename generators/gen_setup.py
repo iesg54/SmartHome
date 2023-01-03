@@ -75,8 +75,6 @@ def startGenerator(generator_type, arguments):
     os.system('python3 ' + generator_type +  ' ' + arguments)
 
 
-
-
 def main():
     connectToDatabase()
 

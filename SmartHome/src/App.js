@@ -204,6 +204,7 @@ export default function App() {
                 <Route path="/register" element={<SignUp />} />
                 <Route path="/login" element={<SignIn />} />
                 <Route path="/addDivision" element={<AdicionarDivisao />} />
+                <Route path="/" element={<SignIn />} />
             </Routes>
             {isLogged && lastMessageReceived && (
                 <MDSnackbar

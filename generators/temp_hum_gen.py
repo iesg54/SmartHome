@@ -47,6 +47,7 @@ class temp_humi_gen:
 
         return temp_hour
 
+
     def temperature_by_minute(self, temperature_hour, next_temperature_hour):
         temps= np.linspace(temperature_hour, next_temperature_hour, 60)
 
@@ -106,6 +107,7 @@ class temp_humi_gen:
             return 1
         return 0
 
+
     def check_humidity(self, humidity):
         """returns 0 if humidity is ok, 1 if humidity is too low, 2 if humidity is too high"""
         if humidity > 30:
@@ -113,6 +115,7 @@ class temp_humi_gen:
         elif humidity < 10:
             return 1
         return 0
+
 
     def get_warning(self, type, low_high):
         if type=="temperatura":
@@ -151,7 +154,7 @@ class temp_humi_gen:
         if bad_temperature != 0:
             temp= self.get_bad_temperature(bad_temperature)
         else:
-            temp= t + random.randint(0, 10)/50
+            temp= t + random.randint(0, 100)/50
 
         bad_humidity = self.chance_bad_value("humidade") # randomly make humidity too low or too high
         if bad_humidity != 0:
@@ -168,8 +171,9 @@ class temp_humi_gen:
             h= f'0{hour}'
         if minute < 10:
             m= f'0{minute}'
-        timestamp= f'2022-12-06 {h}:{m}:00'
+        timestamp= f'2022-12-30 {h}:{m}:00'
         return timestamp
+
 
     def all_temperatures_humidities_by_minute(self, temperatures):
         for hour in range(0, 24):
@@ -189,7 +193,7 @@ class temp_humi_gen:
                     "division_id": self.division_id,
                     "type": self.type,
                     "day": day,
-                    "timestamp": timestamp,
+                    "stamp": timestamp,
                     "humidity": humidity,
                     "temperature": temp,
                 })
@@ -209,8 +213,6 @@ class temp_humi_gen:
                 time.sleep(self.sleep_time_seconds)
                 minute+= 1
 
-        
-
 
     def connect_to_broker(self):
         credentials = pika.PlainCredentials(self.rabbitmq_user, self.rabbitmq_pass)
@@ -220,9 +222,6 @@ class temp_humi_gen:
         channel.queue_declare(queue='generators', durable=True)
 
         return channel
-
-
-
 
 
     def run(self):

@@ -40,7 +40,7 @@ function DivisionStats({ divisionID }) {
                     if (res.data[key] !== null) {
                         const stamp = new Date(res.data[key].stamp);
                         const now = new Date();
-                        const diff = now - stamp;
+                        const diff = new Date(2022-12-30) - stamp;
                         const diffInMinutes = Math.floor(diff / 1000 / 60);
                         const diffInHours = Math.floor(diffInMinutes / 60);
                         const diffInDays = Math.floor(diffInHours / 24);
