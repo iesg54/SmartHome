@@ -1,8 +1,8 @@
-
+import signal
 import mysql.connector
 import time
 import os
-from multiprocessing import Process
+from multiprocessing import Process, Pipe
 
 def connectToDatabase():
     global mydb
@@ -15,12 +15,18 @@ def connectToDatabase():
     )
 
 
-def checkForNewsensors():
+def checkForNewsensors(sensors_running):
     mycursor = mydb.cursor(buffered=True)
     mycursor.execute("USE SmartHome")
     mycursor.execute("SELECT * FROM sensors")
     mydb.commit()
-    sensors_needed = mycursor.fetchall()
+    possible_sensors_needed = mycursor.fetchall()
+
+    sensors_needed= []
+    for sensor in possible_sensors_needed:
+        if sensor in sensors_running:
+            continue
+        sensors_needed.append(sensor)
     
     return sensors_needed
 
@@ -34,14 +40,14 @@ def cleanUpDatabase():
     mydb.commit()
 
 
-def checkIfTableExists():
-    """ returns True if the sensors table exists, False otherwise"""
+def checkIfTableIsEmpty():
+    """ returns True if the sensors table has no values, False otherwise"""
 
     mycursor = mydb.cursor(buffered=True)
     mycursor.execute("USE SmartHome")
-    mycursor.execute("SHOW TABLES LIKE 'sensors'")
+    mycursor.execute("SELECT * FROM sensors")
     mydb.commit()
-    return bool(mycursor.fetchall())
+    return not bool(mycursor.fetchall())
 
 
 def removeGeneratorFromDatabase(generator_id):
@@ -52,7 +58,7 @@ def removeGeneratorFromDatabase(generator_id):
 
 
 def setupGenerator(generator):
-    generator_type= generator[1] # --------TODO check with database
+    generator_type= generator[1]
     division_id= str(generator[2])
 
     if generator_type == 1: # temperature and humidity
@@ -74,18 +80,29 @@ def startGenerator(generator_type, arguments):
     print("Starting generator: " + generator_type)
     os.system('python3 ' + generator_type +  ' ' + arguments)
 
+    
+def finishGenerators(running_processes):
+    for process in running_processes:
+        print("terminating process: ", process) 
+        process.terminate()
+
+        os.kill(process, signal.SIGINT) # ---TODO the pid (process) is not the correct one, it should be given by the child via pipe/socket
+   
 
 def main():
     connectToDatabase()
 
     #cleanUpDatabase() # clean sensors table to prevent conflicts when users close the app whithout logging out
 
+    running_processes= []
     sensors_needed= []
+    sensors_running= []
     finish = False
     while True:
         while not sensors_needed:
-            if not checkIfTableExists():
-                finish= True #---------------TODO also stop sensors
+            if checkIfTableIsEmpty() and sensors_running:
+                finish= True
+                finishGenerators(running_processes) #---TODO fix this
                 break
 
             sensors_needed= checkForNewsensors()
@@ -94,14 +111,13 @@ def main():
         print("omg stuff!") """
 
         for generator in sensors_needed:
-            setupGenerator(generator)
-
-            removeGeneratorFromDatabase(generator[0])
+            running_processes= setupGenerator(generator, running_processes)
             sensors_needed.remove(generator)
+            sensors_running.append(generator)
 
         if finish:
+            print("Terminating")
             break
-
 
 
 if __name__ == "__main__":
