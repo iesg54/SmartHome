@@ -6,6 +6,7 @@ import pika
 import numpy as np
 import websocket
 import os
+import signal
 
 
 class temp_humi_gen:
@@ -25,14 +26,6 @@ class temp_humi_gen:
         self.type= "temp_hum"
 
         #coeficient of temperature deviation for each 3 hours
-        # 0 - 3 am cold af
-        # 3 - 6 am
-        # 6 - 9 pm
-        # 9 - 12 pm
-        # 12 - 15 pm hot af
-        # 15 - 18 pm
-        # 18 - 21 pm
-        # 21 - 24 pm
         self.coefficients= [-3, -2, -1, 1, 2, 1, 0, -2]
 
 
@@ -166,12 +159,14 @@ class temp_humi_gen:
 
 
     def get_timestamp(self, hour, minute):
-        h, m= hour, minute
-        if hour < 10:
-            h= f'0{hour}'
-        if minute < 10:
-            m= f'0{minute}'
-        timestamp= f'2022-12-30 {h}:{m}:00'
+        """YYYY-MM-DD hh:mm:ss"""
+        timestamp = time.time()
+
+        # Convert the timestamp to a tuple containing the local time
+        time_tuple = time.localtime(timestamp)
+
+        # Format the time tuple as a string in the desired format
+        timestamp = time.strftime("%Y-%m-%d %H:%M:%S", time_tuple)
         return timestamp
 
 
@@ -186,7 +181,7 @@ class temp_humi_gen:
 
                 temp, humidity= self.get_temperature_hum(t)
                 
-                timestamp= self.get_timestamp(hour, minute) # 'YYYY-MM-DD hh:mm:ss'
+                timestamp= self.get_timestamp(hour, minute)
                 day= timestamp.split(' ')[0]
 
                 jsonMessage= json.dumps({
@@ -224,15 +219,23 @@ class temp_humi_gen:
         return channel
 
 
+    def signal_handler(self, sig, frame):
+        raise KeyboardInterrupt
+
     def run(self):
-
         self.channel= self.connect_to_broker()
-
+        signal.signal(signal.SIGINT, self.signal_handler)
+        
+        signal.signal(signal.SIGINT, self.signal_handler)
         while(True):
+            try:
+                temps_by_hour= self.all_temperatures_by_hour()
 
-            temps_by_hour= self.all_temperatures_by_hour()
-
-            self.all_temperatures_humidities_by_minute(temps_by_hour)
+                self.all_temperatures_humidities_by_minute(temps_by_hour)
+            except KeyboardInterrupt:
+                print("Exiting...")
+                self.channel.close()
+                sys.exit(0)
 
 
 def parseArgs(argv):
