@@ -104,7 +104,7 @@ function Users() {
     const [isUserAdmin, setIsUserAdmin] = useState(false);
     useEffect(() => {
         users.forEach((user) => {
-            if (user.id === Number(localStorage.getItem("userID")) && user.admin === true) {
+            if (user.id === userData.id && user.admin) {
                 setIsUserAdmin(true);
             }
         });
