@@ -6,6 +6,7 @@ import time
 import websocket
 import json
 import os
+import signal
 
 class carbon_monoxide_gen:
     def __init__(self, division_id, concentration_base, sleep_time_seconds):
@@ -87,12 +88,14 @@ class carbon_monoxide_gen:
 
 
     def get_timestamp(self, hour, minute):
-        h, m= hour, minute
-        if hour < 10:
-            h= f'0{hour}'
-        if minute < 10:
-            m= f'0{minute}'
-        timestamp= f'2022-12-30 {h}:{m}:00'
+        """YYYY-MM-DD hh:mm:ss"""
+        timestamp = time.time()
+
+        # Convert the timestamp to a tuple containing the local time
+        time_tuple = time.localtime(timestamp)
+
+        # Format the time tuple as a string in the desired format
+        timestamp = time.strftime("%Y-%m-%d %H:%M:%S", time_tuple)
         return timestamp
 
 
@@ -110,7 +113,7 @@ class carbon_monoxide_gen:
                 else:
                     carbon= c + random.randint(0, 100)/50
 
-                timestamp= self.get_timestamp(hour, minute) # 'YYYY-MM-DD hh:mm:ss'
+                timestamp= self.get_timestamp(hour, minute)
                 day= timestamp.split(' ')[0]
 
                 jsonMessage= json.dumps({
@@ -155,16 +158,23 @@ class carbon_monoxide_gen:
         return channel
 
 
+    def signal_handler(self, sig, frame):
+        raise KeyboardInterrupt
+        
+        
     def run(self):
-
         self.channel= self.connect_to_broker()
-
-
+        signal.signal(signal.SIGINT, self.signal_handler)
+        
         while(True):
+            try:
+                carbon_by_hour= self.all_carbon_monoxide_by_hour()
 
-            carbon_by_hour= self.all_carbon_monoxide_by_hour()
-
-            self.all_carbon_monoxide_by_minute(carbon_by_hour)
+                self.all_carbon_monoxide_by_minute(carbon_by_hour)
+            except KeyboardInterrupt:
+                print("Exiting...")
+                self.channel.close()
+                sys.exit(0)
 
 
 def parseArgs(argv):
