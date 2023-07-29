@@ -4,10 +4,10 @@ Smart Home is a web app developed to provide users with the ability to monitor a
 
 ## TEAM
 
-- [Artur Correia (DevOps Master)](https://github.com/afarturc) (art.afo@ua.pt)
-- [Bruna Simões (Architect)](https://github.com/Brums21) (brunams21@ua.pt)
-- [Daniel Carvalho (Team Manager)](https://github.com/danielfcarvalho) (dl.carvalho@ua.pt)
-- [Diogo Alves (Product Owner)](https://github.com/DiogoAlves002) (diogoasilva@ua.pt)
+- [Artur Correia (art.afo@ua.pt)](https://github.com/afarturc) (DevOps Master)
+- [Bruna Simões (brunams21@ua.pt)](https://github.com/Brums21) (Architect)
+- [Daniel Carvalho (dl.carvalho@ua.pt)](https://github.com/danielfcarvalho) (Team Manager)
+- [Diogo Alves (diogoasilva@ua.pt)](https://github.com/DiogoAlves002) (Product Owner)
 
 Everyone is in the developer team!
 
